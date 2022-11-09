@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Form, Input, Button, Avatar, message, Upload, Select } from "antd";
 import * as Yup from "yup";
 import 'antd/dist/antd.css';

@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button } from "antd";
 import * as Yup from "yup";
 import 'antd/dist/antd.css';
-import { GoogleSquareFilled, FacebookFilled, GoogleOutlined } from "@ant-design/icons";
+import { FacebookFilled, GoogleOutlined } from "@ant-design/icons";
 
 const schema = Yup.object().shape({
     email: Yup.string()
