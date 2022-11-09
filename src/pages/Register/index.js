@@ -12,7 +12,7 @@ const schema = Yup.object().shape({
     password: Yup.string().required("Password is required"),
 });
 
-export default function Login() {
+export default function Register() {
     function handleSubmit(data) {
         console.tron.log(data);
     }
@@ -28,8 +28,8 @@ export default function Login() {
                 <div className="decorate absolute bg-gray-200 right-[1200px] w-[560px] h-[560px] -rotate-12 z-10 " />
 
                 <div className="login w-full bg-red justify-center flex z-20" >
-                    <div className="login container w-80 h-[490px] text-center justify-center items-center text-lg bg-white p-5 rounded-md shadow-lg">
-                        <h1 className="text-3xl font-bold">Login</h1>
+                    <div className="login container w-80 h-[570px] text-center justify-center items-center text-lg bg-white p-5 rounded-md shadow-lg">
+                        <h1 className="text-3xl font-bold">Register</h1>
                         <Form
                             name="basic"
                             layout="vertical"
@@ -64,12 +64,24 @@ export default function Login() {
                             >
                                 <Input.Password />
                             </Form.Item>
+                            <Form.Item
+                                label="Retype Password"
+                                name="retype-password"
+                                rules={[
+                                    {
+                                        required: true,
+                                        message: "Please input your password!",
+                                    },
+                                ]}
+                            >
+                                <Input.Password />
+                            </Form.Item>
 
                             <Form.Item
 
                             >
                                 <Button type="primary" htmlType="submit">
-                                    Login
+                                    Register
                                 </Button>
                             </Form.Item>
                         </Form>
@@ -84,7 +96,7 @@ export default function Login() {
                             Facebook
                         </Button>
                         <div className="my-12" />
-                        <Link to="/register" className="text-blue-500 underline mx-2">Register</Link>
+                        <Link to="/login" className="text-blue-500 underline mx-2">Login</Link>
                         <Link to="/forgot-password" className="text-blue-500 underline mx-2">Forgot Password</Link>
                     </div>
                     <p className="absolute bottom-6 text-center text-gray-500">HCMUS Kahoot</p>
