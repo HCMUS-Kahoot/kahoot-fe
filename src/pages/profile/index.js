@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Input, Button, Avatar, message, Upload, Select } from "antd";
 import * as Yup from "yup";
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import { UserOutlined } from "@ant-design/icons";
 const schema = Yup.object().shape({
     email: Yup.string()
