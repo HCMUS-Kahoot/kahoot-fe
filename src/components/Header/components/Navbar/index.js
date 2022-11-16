@@ -24,8 +24,8 @@ function Navbar(){
   }
 ]
   return(<div className="h-full flex items-center">
-    {isLogged.map(data=>{
-      return(<NavLink content={data.content} icon={data.icon} />)
+    {isLogged.map((data, index)=>{
+      return(<NavLink content={data.content} icon={data.icon} key={index} />)
     })}
   </div>)
 }

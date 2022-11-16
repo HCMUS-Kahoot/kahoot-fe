@@ -9,7 +9,7 @@ const { Content } = Layout;
 function PrivateRouter() {
   return (
     <Layout>
-      <Header/>
+      <Header />
       <Content className="content">
         <Routes>
           <Route exact path="/" element={<Home />} />

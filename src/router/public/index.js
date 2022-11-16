@@ -14,8 +14,8 @@ const { Content } = Layout;
 function PublicRouter() {
   return (
     <Layout>
-      <Header/>
-      <Content className="content">
+      <Header />
+      <Content className="content w-4/5 self-center mt-2">
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
