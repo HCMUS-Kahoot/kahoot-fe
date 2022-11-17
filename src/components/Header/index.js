@@ -44,7 +44,7 @@ const profileOption = [
 ]
 function Header(){
   return(
-  <Layout.Header className="color-white">
+  <Layout.Header className="color-white bg-white">
     <Row justify="space-between" align="middle" className="bg-white h-full">
       <Col className="h-full">
         <Row className="h-full">
