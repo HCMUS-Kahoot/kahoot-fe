@@ -1,6 +1,6 @@
 import React from "react";
 import { Form, Input } from "antd";
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 
 export default function CreateGroupForm() {
 

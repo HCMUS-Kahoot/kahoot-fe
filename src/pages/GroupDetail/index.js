@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Menu, Modal, Row, Col, Card } from "antd";
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import { ExpandOutlined, CopyOutlined } from "@ant-design/icons";
 
 export default function GroupDetail() {

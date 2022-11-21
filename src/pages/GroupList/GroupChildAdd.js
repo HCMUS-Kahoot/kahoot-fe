@@ -1,7 +1,7 @@
 import React from "react";
 import { Card } from "antd";
 import { PlusOutlined } from '@ant-design/icons';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 const { Meta } = Card;
 
 export default function GroupChildAdd() {

@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, Card } from "antd";
 import { EditOutlined, SettingOutlined } from '@ant-design/icons';
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 const { Meta } = Card;
 
 export default function GroupChild({ groupName, groupDescription, groupImageSrc, creatorAvtarSrc }) {

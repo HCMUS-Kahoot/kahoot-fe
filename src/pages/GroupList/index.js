@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Input, Menu, Modal } from "antd";
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import GroupChild from "./GroupChild";
 import GroupChildAdd from "./GroupChildAdd";
 import CreateGroupForm from "./CreateGroupForm";
