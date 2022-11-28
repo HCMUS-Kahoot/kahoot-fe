@@ -1,19 +1,37 @@
-// api/axiosClient.js
 import axios from 'axios';
 import queryString from 'query-string';
 
-const axiosClient = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    'content-type': 'application/json',
-  },
-  // withCredentials: true,
-  paramsSerializer: (params) => queryString.stringify(params),
-});
-
+let axiosClient;
+const accessToken=localStorage.getItem("accessToken")
+if(accessToken)
+{
+  axiosClient = axios.create({
+    baseURL: process.env.REACT_APP_API_URL,
+    headers: {
+      'content-type': 'application/json',
+      'Authorization': `Bearer ${accessToken}`
+    },
+    withCredentials: true,
+    paramsSerializer: (params) => queryString.stringify(params),
+  });
+}
+else{
+  axiosClient = axios.create({
+    baseURL: process.env.REACT_APP_API_URL,
+    headers: {
+      'content-type': 'application/json',
+    },
+    withCredentials: true,
+    paramsSerializer: (params) => queryString.stringify(params),
+  });
+}
 // This request interceptor will add the cookies to the request header
-/*
 const refreshHandle = axios.create()
+const refreshToken=localStorage.getItem("refreshToken")
+if(refreshToken)
+{
+  refreshHandle.defaults.headers.common={'Authorization': `Bearer ${refreshToken}`}
+}
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -48,7 +66,7 @@ axiosClient.interceptors.response.use((resp) => {
     isRefreshing = true;
 
     return new Promise((resolve, reject) => {
-      refreshHandle.post(`${process.env.REACT_APP_API_URL}/auth/refresh`, {}, { withCredentials: true })
+      refreshHandle.post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, {}, { withCredentials: true })
         .then(({ data }) => {
           processQueue(null, data);
           resolve(axiosClient(originalRequest));
@@ -62,6 +80,5 @@ axiosClient.interceptors.response.use((resp) => {
   }
 
   return Promise.reject(error);
-});*/
-
-export default axiosClient;
+});
+export default axiosClient

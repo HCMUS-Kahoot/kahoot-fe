@@ -50,7 +50,7 @@ export default function Profile() {
                             initialValues={{
                                 remember: true,
                             }}
-                            validationSchema={schema}
+                            validationschema={schema}
                         >
                             <Form.Item
                                 label="Username"
