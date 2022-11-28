@@ -17,7 +17,15 @@ class AuthApi {
       return error;
     }
   }
-  protectedTest = async (user) =>{
+  logout = async() => {
+    try{
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+    }catch (error) {
+      return error;
+    }
+  }
+  protectedTest = async () =>{
     try {
       const res = await axiosClient.get("api/auth/protected")
       console.log(res)

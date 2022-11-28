@@ -63,7 +63,7 @@ axiosClient.interceptors.response.use((resp) => {
     isRefreshing = true;
 
     return new Promise((resolve, reject) => {
-      const refreshToken=localStorage.getItem("refreshToken");
+      const refreshToken= localStorage.getItem("refreshToken");
       refreshHandle = axios.create({
         baseURL: process.env.REACT_APP_API_URL,
         headers: {
@@ -73,8 +73,9 @@ axiosClient.interceptors.response.use((resp) => {
         withCredentials: true,
       });
       refreshHandle.post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, {}, { withCredentials: true })
-        .then(({ data }) => {
-          processQueue(null, data);
+        .then(({ headers }) => {
+          localStorage.setItem("accessToken", headers["access-token"])
+          processQueue(null, headers["access-token"]);
           resolve(axiosClient(originalRequest));
         })
         .catch((err) => {

@@ -30,6 +30,9 @@ export default function Login() {
     const handleSubmit = async () => {
         await authApi.loginUser(formData)
     }
+    const handleTest = async () => {
+        await authApi.protectedTest()
+    }
     //disble scroll on body
     document.body.style.overflow = "hidden";
 
@@ -47,7 +50,6 @@ export default function Login() {
                         <Form
                             name="basic"
                             layout="vertical"
-                            onFinish={handleSubmit}
                             initialValues={{
                                 remember: true,
                             }}
@@ -82,11 +84,14 @@ export default function Login() {
                             <Form.Item
 
                             >
-                                <Button type="primary" htmlType="submit" onClick={handleSubmit}>
+                                <Button type="primary" onClick={handleSubmit}>
                                     Login
                                 </Button>
                             </Form.Item>
                         </Form>
+                        <Button type="primary" htmlType="submit" onClick={handleTest}>
+                            Test protected link
+                        </Button>
                         <div className="my-7" />
 
                         <h1>Or login with</h1>
