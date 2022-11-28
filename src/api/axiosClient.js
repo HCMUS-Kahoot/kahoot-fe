@@ -1,37 +1,18 @@
 import axios from 'axios';
-import queryString from 'query-string';
+import * as Qs from 'qs'
 
 let axiosClient;
-const accessToken=localStorage.getItem("accessToken")
-if(accessToken)
-{
-  axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-      'content-type': 'application/json',
-      'Authorization': `Bearer ${accessToken}`
-    },
-    withCredentials: true,
-    paramsSerializer: (params) => queryString.stringify(params),
-  });
-}
-else{
-  axiosClient = axios.create({
-    baseURL: process.env.REACT_APP_API_URL,
-    headers: {
-      'content-type': 'application/json',
-    },
-    withCredentials: true,
-    paramsSerializer: (params) => queryString.stringify(params),
-  });
-}
+axiosClient = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+  headers: {
+    'content-type': 'application/json',
+  },
+  withCredentials: true,
+  paramsSerializer: (params) => Qs.stringify(params),
+});
+
 // This request interceptor will add the cookies to the request header
-const refreshHandle = axios.create()
-const refreshToken=localStorage.getItem("refreshToken")
-if(refreshToken)
-{
-  refreshHandle.defaults.headers.common={'Authorization': `Bearer ${refreshToken}`}
-}
+let refreshHandle = axios.create()
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -45,7 +26,23 @@ const processQueue = (error, token = null) => {
   })
   failedQueue = [];
 }
+axiosClient.interceptors.request.use((config)=>{
+  const accessToken=localStorage.getItem("accessToken");
+  if(accessToken)
+  {
+    config.headers.Authorization=`Bearer ${accessToken}`;
+  }
+  return config
+})
 axiosClient.interceptors.response.use((resp) => {
+  if(resp.headers["access-token"])
+  {
+    localStorage.setItem("accessToken", resp.headers["access-token"])
+  }
+  if(resp.headers["refresh-token"])
+  {
+    localStorage.setItem("refreshToken", resp.headers["refresh-token"])
+  }
   if (resp && resp.data) {
     return resp.data;
   }
@@ -66,6 +63,15 @@ axiosClient.interceptors.response.use((resp) => {
     isRefreshing = true;
 
     return new Promise((resolve, reject) => {
+      const refreshToken=localStorage.getItem("refreshToken");
+      refreshHandle = axios.create({
+        baseURL: process.env.REACT_APP_API_URL,
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': `Bearer ${refreshToken}`
+        },
+        withCredentials: true,
+      });
       refreshHandle.post(`${process.env.REACT_APP_API_URL}/api/auth/refresh`, {}, { withCredentials: true })
         .then(({ data }) => {
           processQueue(null, data);

@@ -10,7 +10,16 @@ class AuthApi {
   }
   registerUser = async (user) => {
     try {
-      const res = await axiosClient.post("api/auth/local/signup", {...user})
+      const res = await axiosClient.post("api/auth/local/signup", user)
+      console.log(res)
+    } catch (error) {
+      console.log("Register error", error)
+      return error;
+    }
+  }
+  protectedTest = async (user) =>{
+    try {
+      const res = await axiosClient.get("api/auth/protected")
       console.log(res)
     } catch (error) {
       console.log("Register error", error)
