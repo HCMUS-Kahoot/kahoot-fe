@@ -11,6 +11,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import GroupList from '../../pages/GroupList'
 import GroupDetail from '../../pages/GroupDetail'
+import HelloUser from '../../pages/helloUser'
 const { Content } = Layout;
 
 function PublicRouter() {
@@ -25,6 +26,9 @@ function PublicRouter() {
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/groups" element={<GroupList />} />
           <Route exact path="/groups/:id" element={<GroupDetail />} />
+          <Route exact path="/hello" element={<HelloUser />} />
+          <Route exact path="/hello/yes" element={<HelloUser activated={true} />} />
+
         </Routes>
       </Content>
       <Footer />
