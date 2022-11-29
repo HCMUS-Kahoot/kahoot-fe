@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import * as Yup from "yup";
 import 'antd/dist/antd.min.css';
 import { FacebookFilled, GoogleOutlined } from "@ant-design/icons";
+import authApi from "../../api/authAPI";
 
 const schema = Yup.object().shape({
     email: Yup.string()
@@ -13,12 +14,26 @@ const schema = Yup.object().shape({
 });
 
 export default function Register() {
-    function handleSubmit(data) {
-        console.tron.log(data);
-    }
     //disble scroll on body
     document.body.style.overflow = "hidden";
 
+    const [formData, setFormData]=useState({
+        email: "",
+        password: "",
+        confirmPassword: "",
+    })
+
+    function handleChange(event){
+        setFormData((prevFormData)=>({
+            ...prevFormData,
+            [event.target.name]: event.target.value
+        }))
+    }
+
+    const handleSubmit = async () => {
+        await authApi.registerUser(formData)
+    }
+    
     return (
         <>
             <div className="login bg-gray-100 w-full h-full overflow-hidden">
@@ -33,11 +48,10 @@ export default function Register() {
                         <Form
                             name="basic"
                             layout="vertical"
-                            onFinish={handleSubmit}
                             initialValues={{
                                 remember: true,
                             }}
-                            validationSchema={schema}
+                            validationschema={schema}
                         >
                             <Form.Item
                                 label="Email"
@@ -49,7 +63,7 @@ export default function Register() {
                                     },
                                 ]}
                             >
-                                <Input />
+                                <Input value={formData.email} name="email" onChange={handleChange}/>
                             </Form.Item>
 
                             <Form.Item
@@ -62,7 +76,7 @@ export default function Register() {
                                     },
                                 ]}
                             >
-                                <Input.Password />
+                                <Input.Password value={formData.password} name="password" onChange={handleChange}/>
                             </Form.Item>
                             <Form.Item
                                 label="Retype Password"
@@ -74,13 +88,11 @@ export default function Register() {
                                     },
                                 ]}
                             >
-                                <Input.Password />
+                                <Input.Password value={formData.confirmPassword} name="confirmPassword" onChange={handleChange}/>
                             </Form.Item>
 
-                            <Form.Item
-
-                            >
-                                <Button type="primary" htmlType="submit">
+                            <Form.Item>
+                                <Button type="primary" htmlType="submit" onClick={handleSubmit}>
                                     Register
                                 </Button>
                             </Form.Item>
@@ -88,7 +100,7 @@ export default function Register() {
                         <div className="my-7" />
 
                         <h1>Or login with</h1>
-                        <Button type="danger" shape="round" size="large" className="mx-1">
+                        <Button type="danger" shape="round" size="large" className="mx-1" href="http://localhost:5000/api/auth/google/login">
                             <GoogleOutlined className="relative bottom-[3px]" />  Google
                         </Button>
 
@@ -99,8 +111,6 @@ export default function Register() {
                         <Link to="/login" className="text-blue-500 underline mx-2">Login</Link>
                         <Link to="/forgot-password" className="text-blue-500 underline mx-2">Forgot Password</Link>
                     </div>
-                    <p className="absolute bottom-6 text-center text-gray-500">HCMUS Kahoot</p>
-                    <p className="absolute bottom-0 text-center text-gray-500">© 2022 All Rights Reserved</p>
 
                 </div>
                 <div className="decorate absolute bg-gray-200 right-1 w-72 h-96 rotate-45 z-10 " />

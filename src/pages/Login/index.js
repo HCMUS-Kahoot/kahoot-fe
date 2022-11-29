@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import * as Yup from "yup";
 import 'antd/dist/antd.min.css';
 import { FacebookFilled, GoogleOutlined } from "@ant-design/icons";
+import authApi from "../../api/authAPI";
 
 const schema = Yup.object().shape({
     email: Yup.string()
@@ -13,9 +14,26 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
-    function handleSubmit(data) {
-        console.tron.log(data);
+    const [formData, setFormData]=useState({
+        email: "",
+        password: ""
+    })
+
+    function handleChange(event)
+    {
+        setFormData((prevFormData)=>({
+            ...prevFormData,
+            [event.target.name]: event.target.value
+        }))
     }
+
+    const handleSubmit = async () => {
+        await authApi.loginUser(formData)
+    }
+    const handleTest = async () => {
+        await authApi.protectedTest()
+    }
+    
     //disble scroll on body
     document.body.style.overflow = "hidden";
 
@@ -33,11 +51,10 @@ export default function Login() {
                         <Form
                             name="basic"
                             layout="vertical"
-                            onFinish={handleSubmit}
                             initialValues={{
                                 remember: true,
                             }}
-                            validationSchema={schema}
+                            validationschema={schema}
                         >
                             <Form.Item
                                 label="Email"
@@ -49,7 +66,7 @@ export default function Login() {
                                     },
                                 ]}
                             >
-                                <Input />
+                                <Input name="email" value={formData.email} onChange={handleChange} />
                             </Form.Item>
 
                             <Form.Item
@@ -62,21 +79,24 @@ export default function Login() {
                                     },
                                 ]}
                             >
-                                <Input.Password />
+                                <Input.Password name="password" value={formData.password} onChange={handleChange} />
                             </Form.Item>
 
                             <Form.Item
 
                             >
-                                <Button type="primary" htmlType="submit">
+                                <Button type="primary" onClick={handleSubmit}>
                                     Login
                                 </Button>
                             </Form.Item>
                         </Form>
+                        <Button type="primary" htmlType="submit" onClick={handleTest}>
+                            Test protected link
+                        </Button>
                         <div className="my-7" />
 
                         <h1>Or login with</h1>
-                        <Button type="danger" shape="round" size="large" className="mx-1">
+                        <Button type="danger" shape="round" size="large" className="mx-1" href="http://localhost:5000/api/auth/google/login">
                             <GoogleOutlined className="relative bottom-[3px]" />  Google
                         </Button>
 
@@ -87,8 +107,6 @@ export default function Login() {
                         <Link to="/register" className="text-blue-500 underline mx-2">Register</Link>
                         <Link to="/forgot-password" className="text-blue-500 underline mx-2">Forgot Password</Link>
                     </div>
-                    <p className="absolute bottom-6 text-center text-gray-500">HCMUS Kahoot</p>
-                    <p className="absolute bottom-0 text-center text-gray-500">© 2022 All Rights Reserved</p>
 
                 </div>
                 <div className="decorate absolute bg-gray-200 right-1 w-72 h-96 rotate-45 z-10 " />
