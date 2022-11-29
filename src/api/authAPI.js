@@ -34,6 +34,15 @@ class AuthApi {
       return error;
     }
   }
+  loginWithGoogle = async() => {
+    try {
+      const res = await axiosClient.get("api/auth/google/login")
+      console.log(res)
+    } catch (error) {
+      console.log("Register error", error)
+      return error;
+    }
+  }
 }
 const authApi=new AuthApi();
 export default authApi;

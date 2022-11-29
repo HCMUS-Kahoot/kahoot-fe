@@ -33,6 +33,7 @@ export default function Login() {
     const handleTest = async () => {
         await authApi.protectedTest()
     }
+    
     //disble scroll on body
     document.body.style.overflow = "hidden";
 
@@ -95,7 +96,7 @@ export default function Login() {
                         <div className="my-7" />
 
                         <h1>Or login with</h1>
-                        <Button type="danger" shape="round" size="large" className="mx-1">
+                        <Button type="danger" shape="round" size="large" className="mx-1" href="http://localhost:5000/api/auth/google/login">
                             <GoogleOutlined className="relative bottom-[3px]" />  Google
                         </Button>
 
