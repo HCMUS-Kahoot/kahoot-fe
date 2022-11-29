@@ -1,42 +1,65 @@
 import axiosClient from "./axiosClient";
+import {
+  loginFailed, loginStart, loginSucess,
+} from "../store/auth";
 class AuthApi {
-  loginUser = async (user) => {
+  loginUser = async (user, dispatch, navigate) => {
+    dispatch(loginStart());
     try {
-      const res = await axiosClient.post("api/auth/local/signin", user)
-      console.log(res)
+      const res = await axiosClient.post("/auth/local/signin", user)
+      console.log("res from get current user, ", res)
+      if (res.email) {
+        await dispatch(loginSucess(res))
+        navigate("/")
+      } else {
+        dispatch(loginFailed(res))
+      }
     } catch (error) {
-      return error
+      dispatch(loginFailed());
+    }
+  }
+  getCurrentUser = async (dispatch) => {
+    try {
+      const res = await axiosClient.get("/auth/current-user")
+      console.log("res from get current user, ", res)
+      // if (res.id) {
+      //   await dispatch(loginSucess(res))
+      // } else {
+      //   dispatch(loginFailed(res))
+      // }
+    } catch (error) {
+      dispatch(loginFailed());
     }
   }
   registerUser = async (user) => {
     try {
-      const res = await axiosClient.post("api/auth/local/signup", user)
+      const res = await axiosClient.post("/auth/local/signup", user)
       console.log(res)
     } catch (error) {
       console.log("Register error", error)
       return error;
     }
   }
-  logout = async() => {
-    try{
+  logout = async () => {
+    try {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-    }catch (error) {
+    } catch (error) {
       return error;
     }
   }
-  protectedTest = async () =>{
+  protectedTest = async () => {
     try {
-      const res = await axiosClient.get("api/auth/protected")
+      const res = await axiosClient.get("/auth/protected")
       console.log(res)
     } catch (error) {
       console.log("Register error", error)
       return error;
     }
   }
-  loginWithGoogle = async() => {
+  loginWithGoogle = async () => {
     try {
-      const res = await axiosClient.get("api/auth/google/login")
+      const res = await axiosClient.get("/auth/google/login")
       console.log(res)
     } catch (error) {
       console.log("Register error", error)
@@ -44,5 +67,5 @@ class AuthApi {
     }
   }
 }
-const authApi=new AuthApi();
+const authApi = new AuthApi();
 export default authApi;

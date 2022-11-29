@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Form, Input, Button } from "antd";
+import { useDispatch } from 'react-redux'
 import * as Yup from "yup";
 import 'antd/dist/antd.min.css';
 import { FacebookFilled, GoogleOutlined } from "@ant-design/icons";
@@ -14,26 +15,31 @@ const schema = Yup.object().shape({
 });
 
 export default function Login() {
-    const [formData, setFormData]=useState({
+    const [formData, setFormData] = useState({
         email: "",
         password: ""
     })
 
-    function handleChange(event)
-    {
-        setFormData((prevFormData)=>({
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    function handleChange(event) {
+        setFormData((prevFormData) => ({
             ...prevFormData,
             [event.target.name]: event.target.value
         }))
     }
 
     const handleSubmit = async () => {
-        await authApi.loginUser(formData)
+        try {
+            await authApi.loginUser(formData, dispatch, navigate)
+        } catch (error) {
+            console.log("Login error", error)
+        }
     }
     const handleTest = async () => {
         await authApi.protectedTest()
     }
-    
+
     //disble scroll on body
     document.body.style.overflow = "hidden";
 
