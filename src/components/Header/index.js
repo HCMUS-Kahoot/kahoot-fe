@@ -1,7 +1,8 @@
 import { UserOutlined } from "@ant-design/icons";
 import { Button, Col, Dropdown, Image, Layout, Row, Space } from "antd";
+import authApi from "../../api/authAPI";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./header.css";
 const createItemOptions = [
@@ -30,11 +31,12 @@ const createItemOptions = [
     ),
   },
 ];
-const profileOption = [
+const profileOption = (handleLogout, handleProfile) => {
+  return [
   {
     key: "1",
     label: (
-      <div>
+      <div onClick={handleProfile}>
         <p>Profile setting</p>
       </div>
     ),
@@ -42,13 +44,21 @@ const profileOption = [
   {
     key: "2",
     label: (
-      <div>
+      <div onClick={handleLogout}>
         <p className="text-color-red">Logout</p>
       </div>
     ),
   },
-];
+];}
 function Header() {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    authApi.logout();
+    navigate("")
+  }
+  const handleProfile = () => {
+    navigate("/profile")
+  }
   return (
     <Layout.Header className="color-white bg-white">
       <Row justify="space-between" align="middle" className="bg-white h-full">
@@ -92,7 +102,7 @@ function Header() {
             <Space wrap>
               <Dropdown
                 menu={{
-                  items: profileOption,
+                  items: profileOption(handleLogout,handleProfile),
                 }}
                 placement="bottomRight"
               >

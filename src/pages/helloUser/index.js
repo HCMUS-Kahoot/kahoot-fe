@@ -1,15 +1,7 @@
 import React from "react";
-import { Form, Input, Button, Avatar, message, Upload, Select } from "antd";
-import * as Yup from "yup";
+import { Button } from "antd";
 import "antd/dist/antd.min.css";
 import { Link } from "react-router-dom";
-
-const schema = Yup.object().shape({
-  email: Yup.string()
-    .email("Invalid email address")
-    .required("Email is required"),
-  password: Yup.string().required("Password is required"),
-});
 
 export default function HelloUser({ activated }) {
   document.body.style.overflow = "hidden";
