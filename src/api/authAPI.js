@@ -1,5 +1,5 @@
 import axiosClient from "./axiosClient";
-import { loginFailed, loginStart, loginSucess } from "../store/auth";
+import { loginFailed, loginStart, loginSucess, logOutFailed, logOutStart, logOutSucess } from "../store/auth";
 class AuthApi {
   loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
@@ -38,11 +38,14 @@ class AuthApi {
       return error;
     }
   };
-  logout = async () => {
+  logout = async (dispatch, navigate) => {
+    dispatch(logOutStart())
     try {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      dispatch(logOutSucess())
     } catch (error) {
+      dispatch(logOutFailed())
       return error;
     }
   };

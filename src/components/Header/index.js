@@ -5,6 +5,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import "./header.css";
+import { useDispatch } from "react-redux";
 const createItemOptions = [
   {
     key: "1",
@@ -52,9 +53,13 @@ const profileOption = (handleLogout, handleProfile) => {
 ];}
 function Header() {
   const navigate = useNavigate();
-  const handleLogout = () => {
-    authApi.logout();
-    navigate("")
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    try{
+      await authApi.logout(dispatch, navigate);
+    }catch(error){
+      console.log(error)
+    }
   }
   const handleProfile = () => {
     navigate("/profile")
