@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Input, Menu, Modal } from "antd";
+import { Input, Menu, Modal, Button, message } from "antd";
 import "antd/dist/antd.min.css";
 import GroupChild from "./GroupChild";
 import GroupChildAdd from "./GroupChildAdd";
@@ -19,12 +19,24 @@ export default function GroupList() {
     };
     const createGroup = async (values) => {
         console.log(values)
-        // try {
-        //     const res = await groupApi.createGroup(values);
-        //     setGroups([...groups, res.data]);
-        // } catch (error) {
-        //     console.log("Create group error", error);
-        // }
+        if (values.groupname === "") {
+            message.error("Group name can't be empty");
+            return;
+        }
+        if (values.groupdes === "") {
+            message.error("Group description can't be empty");
+            return;
+        }
+        const res = { status: 404 }// await groupApi.createGroup(values); //hoang anh handle here
+        if (res.status === 200) {
+            message.success("Create group successfully");
+            setIsModalOpen(false);
+            const newGroups = [...groups];
+            newGroups.push(res.data);
+            setGroups(newGroups);
+        } else {
+            message.error("Create group failed");
+        }
     };
     useEffect(() => {
         const getGroups = async () => {
