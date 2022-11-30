@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Image, Row, Button } from "antd";
 import { Link } from "react-router-dom";
+import '../Home/home.css'
 function Home() {
   const groupList = [
     {
