@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Form, Input, Button, Avatar, message, Upload, Select } from "antd";
+import { useSelector } from 'react-redux';
+import ProfileApi from "../../api/profileAPI";
 import * as Yup from "yup";
 import "antd/dist/antd.min.css";
 import { UserOutlined } from "@ant-design/icons";
@@ -11,6 +13,23 @@ const schema = Yup.object().shape({
 });
 
 export default function Profile() {
+  const user = useSelector((state) => state.auth.login.currentUser);
+  const userid = user?._id || user?.id;
+  const [profile, setProfile] = React.useState({});
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await profileApi.getProfileByUser(userid);
+        setProfile(res);
+      } catch (error) {
+        console.log("Get profile error", error);
+      }
+    };
+    fetchProfile();
+  }, [userid]);
+
+
   const props = {
     beforeUpload: (file) => {
       const isPNG = file.type === "image/png";
@@ -26,6 +45,12 @@ export default function Profile() {
 
   function handleSubmit(data) {
     console.log(data);
+    try {
+      profileApi.updateOrCreateByUserId(userid, data);
+      message.success("Update profile successfully");
+    } catch (error) {
+      console.log("Update profile error", error);
+    }
   }
   document.body.style.overflow = "hidden";
 
