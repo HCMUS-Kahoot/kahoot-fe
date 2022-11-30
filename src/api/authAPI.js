@@ -1,45 +1,43 @@
 import axiosClient from "./axiosClient";
-import {
-  loginFailed, loginStart, loginSucess,
-} from "../store/auth";
+import { loginFailed, loginStart, loginSucess } from "../store/auth";
 class AuthApi {
   loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-      const res = await axiosClient.post("/auth/local/signin", user)
-      console.log("res from get current user, ", res)
+      const res = await axiosClient.post("/auth/local/signin", user);
+      console.log("res from get current user, ", res);
       if (res.email) {
-        await dispatch(loginSucess(res))
-        navigate("/")
+        await dispatch(loginSucess(res));
+        navigate("/");
       } else {
-        dispatch(loginFailed(res))
+        dispatch(loginFailed(res));
       }
     } catch (error) {
       dispatch(loginFailed());
     }
-  }
+  };
   getCurrentUser = async (dispatch) => {
     try {
-      const res = await axiosClient.get("/auth/current-user")
-      console.log("res from get current user, ", res)
-      // if (res.id) {
-      //   await dispatch(loginSucess(res))
-      // } else {
-      //   dispatch(loginFailed(res))
-      // }
+      const res = await axiosClient.get("/auth/current-user");
+      console.log("res from get current user, ", res);
+      if (res.email) {
+        await dispatch(loginSucess(res));
+      } else {
+        dispatch(loginFailed(res));
+      }
     } catch (error) {
       dispatch(loginFailed());
     }
-  }
+  };
   registerUser = async (user) => {
     try {
-      const res = await axiosClient.post("/auth/local/signup", user)
-      console.log(res)
+      const res = await axiosClient.post("/auth/local/signup", user);
+      console.log(res);
     } catch (error) {
-      console.log("Register error", error)
+      console.log("Register error", error);
       return error;
     }
-  }
+  };
   logout = async () => {
     try {
       localStorage.removeItem("accessToken");
@@ -47,25 +45,25 @@ class AuthApi {
     } catch (error) {
       return error;
     }
-  }
+  };
   protectedTest = async () => {
     try {
-      const res = await axiosClient.get("/auth/protected")
-      console.log(res)
+      const res = await axiosClient.get("/auth/protected");
+      console.log(res);
     } catch (error) {
-      console.log("Register error", error)
+      console.log("Register error", error);
       return error;
     }
-  }
+  };
   loginWithGoogle = async () => {
     try {
-      const res = await axiosClient.get("/auth/google/login")
-      console.log(res)
+      const res = await axiosClient.get("/auth/google/login");
+      console.log(res);
     } catch (error) {
-      console.log("Register error", error)
+      console.log("Register error", error);
       return error;
     }
-  }
+  };
 }
 const authApi = new AuthApi();
 export default authApi;

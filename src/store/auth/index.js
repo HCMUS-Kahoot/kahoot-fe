@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice } from "@reduxjs/toolkit";
 
 const authSlice = createSlice({
   name: "auth",
@@ -15,7 +15,7 @@ const authSlice = createSlice({
     },
     loginSucess: (state, action) => {
       state.login.isFetching = false;
-      console.log("login success paypload user, ", action.payload)
+      console.log("login success paypload user, ", action.payload);
       state.login.currentUser = action.payload;
       state.login.error = false;
     },
@@ -50,7 +50,7 @@ const authSlice = createSlice({
       state.login.currentUser.avatar = action.payload.data.avatar;
     },
   },
-})
+});
 
 export const {
   loginStart,
@@ -63,4 +63,4 @@ export const {
   refreshUser,
 } = authSlice.actions;
 
-export default authSlice.reducer
+export default authSlice.reducer;

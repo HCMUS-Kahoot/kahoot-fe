@@ -1,17 +1,11 @@
-import React from 'react'
-import {
-  Route, Routes,
-} from 'react-router-dom'
-import { Layout } from 'antd'
-import Home from '../../pages/Home'
-import Login from '../../pages/Login'
-import Register from '../../pages/Register'
-import Profile from '../../pages/profile'
-import Header from '../../components/Header'
-import Footer from '../../components/Footer'
-import GroupList from '../../pages/GroupList'
-import GroupDetail from '../../pages/GroupDetail'
-import HelloUser from '../../pages/helloUser'
+import React from "react";
+import { Route, Routes, Navigate } from "react-router-dom";
+import { Layout } from "antd";
+import Home from "../../pages/Home";
+import Login from "../../pages/Login";
+import Register from "../../pages/Register";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 const { Content } = Layout;
 
 function PublicRouter() {
@@ -23,12 +17,7 @@ function PublicRouter() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/groups" element={<GroupList />} />
-          <Route exact path="/groups/:id" element={<GroupDetail />} />
-          <Route exact path="/hello" element={<HelloUser />} />
-          <Route exact path="/hello/yes" element={<HelloUser activated={true} />} />
-
+          <Route path="*" element={<Navigate replace to="/login" />} />
         </Routes>
       </Content>
       <Footer />
