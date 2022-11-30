@@ -18,31 +18,38 @@ export default function GroupList() {
         setIsModalOpen(false);
     };
     const createGroup = async (values) => {
-        console.log(values)
-        if (values.groupname === "") {
-            message.error("Group name can't be empty");
-            return;
-        }
-        if (values.groupdes === "") {
-            message.error("Group description can't be empty");
-            return;
-        }
-        const res = { status: 404 }// await groupApi.createGroup(values); //hoang anh handle here
-        if (res.status === 200) {
+        try {
+            console.log(values)
+            if (values.groupname === "") {
+                message.error("Group name can't be empty");
+                return;
+            }
+            if (values.groupdes === "") {
+                message.error("Group description can't be empty");
+                return;
+            }
+            const res = await groupApi.createGroup(values);
+            console.log(res);
+            // if (res.status === 400) {
+            //     message.error("Create group failed");
+            // } else {
             message.success("Create group successfully");
             setIsModalOpen(false);
             const newGroups = [...groups];
-            newGroups.push(res.data);
+            newGroups.push(res);
             setGroups(newGroups);
-        } else {
-            message.error("Create group failed");
+            // }
+        } catch (error) {
+            message.error(error.message);
         }
+
     };
     useEffect(() => {
         const getGroups = async () => {
             try {
                 const res = await groupApi.getGroups();
                 console.log(res);
+                setGroups(res);
             } catch (error) {
                 console.log("Get current user GROUP error", error);
             }
