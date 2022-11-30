@@ -47,6 +47,15 @@ class GroupApi {
       return error;
     }
   }
+  acceptInvitaion = async (data) => {
+    try {
+      const res = await axiosClient.get(`/groups/${data.id}/invitations`);
+      return res;
+    } catch (error) {
+      console.log("Accept invitation error", error);
+      return error;
+    }
+  }
 }
 
 const groupApi = new GroupApi();
