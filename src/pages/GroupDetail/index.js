@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Menu, Modal, Row, Col, Card } from "antd";
+import { Menu, Modal, Row, Col, Card, message } from "antd";
 import 'antd/dist/antd.css';
 import { ExpandOutlined, CopyOutlined } from "@ant-design/icons";
 import PostList from "./postList";
@@ -19,6 +19,7 @@ export default function GroupDetail({ tab = "members" }) {
   };
   const id = window.location.pathname.split("/")[2];
   const navigate = useNavigate();
+
   return (
     <>
       <div className="mx-72">
@@ -59,7 +60,10 @@ export default function GroupDetail({ tab = "members" }) {
         <div className="text-center text-green-600">
           <h1 className="font-bold text-5xl text-green-600">dhtpdt</h1>
           <hr />
-          <span className="text-green-600"> copy code <CopyOutlined /> </span>
+          <span onClick={() => {
+            navigator.clipboard.writeText(`${window.location.href}/invitation`);
+            message.success("Copied to clipboard");
+          }} className="text-green-600"> copy code <CopyOutlined /> </span>
         </div>
       </Modal>
     </>
