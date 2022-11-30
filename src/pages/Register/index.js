@@ -152,7 +152,7 @@ export default function Register() {
               shape="round"
               size="large"
               className="mx-1"
-              href="http://localhost:5000/api/auth/google/login"
+              href={`${process.env.REACT_APP_API_URL}/auth/google/login`}
             >
               <GoogleOutlined className="relative bottom-[3px]" /> Google
             </Button>
