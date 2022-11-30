@@ -14,6 +14,7 @@ class ProfileApi {
         try {
             const res = await axiosClient.post(`/profiles/user/${id}`, profile);
             console.log(res);
+            return res;
         } catch (error) {
             console.log("Update error", error);
             return error;
