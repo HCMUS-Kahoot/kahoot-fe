@@ -25,7 +25,7 @@ export default function Profile() {
   };
 
   function handleSubmit(data) {
-    console.tron.log(data);
+    console.log(data);
   }
   document.body.style.overflow = "hidden";
 
@@ -71,12 +71,12 @@ export default function Profile() {
               <Form.Item label="Workplace" name="workplace">
                 <Input />
               </Form.Item>
-              <Form.Item label="Type" name="type">
+              {/* <Form.Item label="Type" name="type">
                 <Select defaultValue="Student">
                   <Select.Option value="Student">Student</Select.Option>
                   <Select.Option value="Teacher">Teacher</Select.Option>
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
 
               <Form.Item>
                 <Button type="primary" htmlType="submit">
