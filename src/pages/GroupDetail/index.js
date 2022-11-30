@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Menu, Modal, Row, Col, Card } from "antd";
+import { Menu, Modal, Row, Col, Card, message } from "antd";
 import 'antd/dist/antd.css';
 import { ExpandOutlined, CopyOutlined } from "@ant-design/icons";
 import PostList from "./postList";

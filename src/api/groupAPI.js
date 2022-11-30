@@ -56,6 +56,24 @@ class GroupApi {
       return error;
     }
   }
+  deleteMember = async (data) => {
+    try {
+      const res = await axiosClient.delete(`/groups/${data.groupId}/members/${data.userId}`);
+      return res;
+    } catch (error) {
+      console.log("Delete member error", error);
+      return error;
+    }
+  }
+  changeRole = async (data) => {
+    try {
+      const res = await axiosClient.put(`/group-members`, data);
+      return res;
+    } catch (error) {
+      console.log("Change role error", error);
+      return error;
+    }
+  }
 }
 
 const groupApi = new GroupApi();

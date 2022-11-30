@@ -2,6 +2,20 @@ import React, { useState, useEffect } from "react";
 import { Button, Space, Table, Tag, Select, message } from 'antd'; import 'antd/dist/antd.css';
 import groupApi from "../../api/groupAPI";
 
+const handleChangeRole = async (value, record) => {
+    try {
+        console.log(value, record);
+        const res = await groupApi.changeRole({
+            groupId: record.groupId,
+            memberEmail: record.email,
+            role: value,
+        });
+        console.log(res);
+        message.success("Change role successfully");
+    } catch (error) {
+        message.error(error.message);
+    }
+};
 
 const columns = [
     {
@@ -27,6 +41,9 @@ const columns = [
                     console.log("change rolde: ", record, "to:", v);
                     if (record?.role === 'owner' && (v === 'member' || v === 'cohost')) {
                         message.error("Owner can't change to member or cohost");
+                    }
+                    else {
+                        handleChangeRole(v, record);
                     }
                 }}
                     options={[
@@ -85,6 +102,7 @@ const MemberList = ({ groupId }) => {
                     email: data.email,
                     name: (data.firstName || "") + " " + (data.lastName || ""),
                     role: data.role,
+                    groupId: groupId.id
                 }));
                 setMembers(data);
             } catch (error) {
