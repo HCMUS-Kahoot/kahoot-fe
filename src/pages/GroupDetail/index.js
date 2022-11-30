@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Menu, Modal, Row, Col, Card } from "antd";
 import 'antd/dist/antd.css';
 import { ExpandOutlined, CopyOutlined } from "@ant-design/icons";
@@ -7,6 +7,7 @@ import PostList from "./postList";
 import MemberList from "./memberList";
 export default function GroupDetail({ tab = "members" }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const params = useParams('id');
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -47,7 +48,7 @@ export default function GroupDetail({ tab = "members" }) {
             </Col>
             <Col span={18}>
               <div className="m-2 bg-white p-2 shadow-md rounded-md">
-                {tab === "members" ? <MemberList /> : <PostList />}
+                {tab === "members" ? <MemberList groupId={params} /> : <PostList />}
               </div>
             </Col>
           </Row>
