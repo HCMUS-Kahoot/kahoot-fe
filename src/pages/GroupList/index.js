@@ -13,9 +13,7 @@ export default function GroupList() {
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
+
     const handleCancel = () => {
         setIsModalOpen(false);
     };
@@ -84,8 +82,8 @@ export default function GroupList() {
             <Modal
                 title="Create group"
                 open={isModalOpen}
-                onOk={handleOk}
                 onCancel={handleCancel}
+                footer={null}
             >
                 <CreateGroupForm handleSubmit={createGroup} />
             </Modal>
