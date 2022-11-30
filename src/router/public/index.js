@@ -6,6 +6,7 @@ import Login from "../../pages/Login";
 import Register from "../../pages/Register";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import RedirectPage from '../../pages/RedirectPage'
 const { Content } = Layout;
 
 function PublicRouter() {
@@ -17,6 +18,7 @@ function PublicRouter() {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
+          <Route exact path="/redirectPage/:accessToken/:refreshToken" element={<RedirectPage/>} />
           <Route path="*" element={<Navigate replace to="/login" />} />
         </Routes>
       </Content>
