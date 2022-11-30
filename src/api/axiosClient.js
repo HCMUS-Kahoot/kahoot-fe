@@ -76,7 +76,7 @@ axiosClient.interceptors.response.use(
         });
         refreshHandle
           .post(
-            `${process.env.REACT_APP_API_URL}/api/auth/refresh`,
+            `${process.env.REACT_APP_API_URL}/auth/refresh`,
             {},
             { withCredentials: true }
           )
