@@ -37,6 +37,25 @@ class GroupApi {
       return error;
     }
   };
+
+  getUserInGroup = async (data) => {
+    try {
+      const res = await axiosClient.get(`/groups/${data.id}/members`);
+      return res;
+    } catch (error) {
+      console.log("Get user in group error", error);
+      return error;
+    }
+  }
+  acceptInvitaion = async (data) => {
+    try {
+      const res = await axiosClient.get(`/groups/${data.id}/invitations`);
+      return res;
+    } catch (error) {
+      console.log("Accept invitation error", error);
+      return error;
+    }
+  }
 }
 
 const groupApi = new GroupApi();

@@ -5,6 +5,8 @@ import profileApi from "../../api/profileAPI";
 import * as Yup from "yup";
 import "antd/dist/antd.min.css";
 import { UserOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+
 const schema = Yup.object().shape({
   email: Yup.string()
     .email("Invalid email address")
@@ -15,15 +17,19 @@ const schema = Yup.object().shape({
 export default function Profile() {
   const user = useSelector((state) => state.auth.login.currentUser);
   const userid = user?._id || user?.id;
+  const navigate = useNavigate();
   const [profile, setProfile] = React.useState({});
+  const [loaded, setLoaded] = React.useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         const res = await profileApi.getProfileByUser(userid);
         setProfile(res);
+        setLoaded(true);
       } catch (error) {
         console.log("Get profile error", error);
+        setLoaded(true);
       }
     };
     fetchProfile();
@@ -43,78 +49,88 @@ export default function Profile() {
     },
   };
 
-  function handleSubmit(data) {
+  const handleSubmit = async (data) => {
     console.log(data);
     try {
-      profileApi.updateOrCreateByUserId(userid, data);
-      message.success("Update profile successfully");
+      const res = await profileApi.updateOrCreateByUserId(userid, data);
+      console.log(res);
+      if (res) {
+        message.success("Update profile successfully");
+        navigate("/profile");
+      }
+      else {
+        message.error("Update profile failed");
+      }
+
     } catch (error) {
       console.log("Update profile error", error);
     }
   }
   document.body.style.overflow = "hidden";
+  if (loaded) {
+    return (
+      <>
+        <div className="login bg-gray-100 w-full h-full overflow-hidden">
+          <div className="header text-center">
+            <div className="space p-5 pt-24 bg-gray-100" />
+          </div>
+          <div className="decorate absolute bg-gray-200 right-[1200px] w-[560px] h-[560px] -rotate-12 z-10 " />
 
-  return (
-    <>
-      <div className="login bg-gray-100 w-full h-full overflow-hidden">
-        <div className="header text-center">
-          <div className="space p-5 pt-24 bg-gray-100" />
-        </div>
-        <div className="decorate absolute bg-gray-200 right-[1200px] w-[560px] h-[560px] -rotate-12 z-10 " />
-
-        <div className="login w-full bg-red justify-center flex z-20">
-          <div className="login container w-80 h-[560px] text-center justify-center items-center text-lg bg-white p-5 rounded-md shadow-lg">
-            <h1 className="text-3xl font-bold">Profile</h1>
-            <Upload {...props}>
-              <Avatar size={64} icon={<UserOutlined />} />
-            </Upload>
-            <Form
-              name="basic"
-              layout="vertical"
-              onFinish={handleSubmit}
-              initialValues={{
-                remember: true,
-              }}
-              validationschema={schema}
-            >
-              <Form.Item
-                label="Username"
-                name="username"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your username!",
-                  },
-                ]}
-                initialValue="user7976"
+          <div className="login w-full bg-red justify-center flex z-20">
+            <div className="login container w-80 h-[560px] text-center justify-center items-center text-lg bg-white p-5 rounded-md shadow-lg">
+              <h1 className="text-3xl font-bold">Profile</h1>
+              <Upload {...props}>
+                <Avatar size={64} icon={<UserOutlined />} />
+              </Upload>
+              <Form
+                name="basic"
+                layout="vertical"
+                onFinish={async (data) => {
+                  await handleSubmit(data);
+                }}
+                initialValues={{
+                  remember: true,
+                }}
+                validationschema={schema}
               >
-                <Input />
-              </Form.Item>
-              <Form.Item label="Organization" name="organization">
-                <Input />
-              </Form.Item>
-              <Form.Item label="Workplace" name="workplace">
-                <Input />
-              </Form.Item>
-              {/* <Form.Item label="Type" name="type">
+                <Form.Item
+                  label="Username"
+                  name="name"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input your username!",
+                    },
+                  ]}
+                  initialValue={profile?.name}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Organization" name="organization" initialValue={profile?.organization}>
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Workplace" name="workplace" initialValue={profile?.workplace}>
+                  <Input />
+                </Form.Item>
+                {/* <Form.Item label="Type" name="type">
                 <Select defaultValue="Student">
                   <Select.Option value="Student">Student</Select.Option>
                   <Select.Option value="Teacher">Teacher</Select.Option>
                 </Select>
               </Form.Item> */}
-
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Save
-                </Button>
-              </Form.Item>
-            </Form>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Save
+                  </Button>
+                </Form.Item>
+              </Form>
+            </div>
           </div>
-        </div>
-        <div className="decorate absolute bg-gray-200 right-1 w-72 h-96 rotate-45 z-10 " />
+          <div className="decorate absolute bg-gray-200 right-1 w-72 h-96 rotate-45 z-10 " />
 
-        <div className="bg-gray-100 pb-96"></div>
-      </div>
-    </>
-  );
+          <div className="bg-gray-100 pb-96"></div>
+        </div>
+      </>
+    );
+  }
 }

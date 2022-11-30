@@ -8,6 +8,7 @@ import Profile from "../../pages/profile";
 import GroupList from "../../pages/GroupList";
 import GroupDetail from "../../pages/GroupDetail";
 import HelloUser from "../../pages/helloUser";
+import Invitation from "../../pages/Invitation";
 
 const { Content } = Layout;
 
@@ -21,6 +22,7 @@ function PrivateRouter() {
           <Route exact path="/profile" element={<Profile />} />
           <Route exact path="/groups" element={<GroupList />} />
           <Route exact path="/groups/:id" element={<GroupDetail />} />
+          <Route exact path="/groups/:id/invitation" element={<Invitation />} />
           <Route exact path="/groups/:id/posts" element={<GroupDetail tab='posts' />} />
           <Route exact path="/hello" element={<HelloUser />} />
           <Route
