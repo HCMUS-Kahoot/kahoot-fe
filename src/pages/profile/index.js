@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { Form, Input, Button, Avatar, message, Upload, Select } from "antd";
 import { useSelector } from 'react-redux';
-import ProfileApi from "../../api/profileAPI";
+import profileApi from "../../api/profileAPI";
 import * as Yup from "yup";
 import "antd/dist/antd.min.css";
 import { UserOutlined } from "@ant-design/icons";

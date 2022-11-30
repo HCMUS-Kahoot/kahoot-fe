@@ -21,6 +21,8 @@ export default function Register() {
     email: "",
     password: "",
     confirmPassword: "",
+    firstName: "",
+    lastName: "",
   });
 
   function handleChange(event) {
@@ -36,11 +38,10 @@ export default function Register() {
 
   return (
     <>
-      <div className="login bg-gray-100 w-full h-full overflow-hidden">
+      <div className="login bg-gray-100 w-full h-full">
         <div className="header text-center">
-          <div className="space p-5 pt-32 bg-gray-100" />
+          <div className="space bg-gray-100" />
         </div>
-        <div className="decorate absolute bg-gray-200 right-[1200px] w-[560px] h-[560px] -rotate-12 z-10 " />
 
         <div className="login w-full bg-red justify-center flex z-20">
           <div className="login container w-80 h-[570px] text-center justify-center items-center text-lg bg-white p-5 rounded-md shadow-lg">
@@ -103,6 +104,40 @@ export default function Register() {
                 />
               </Form.Item>
 
+              <Form.Item
+                label="First Name"
+                name="firstName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your firstName!",
+                  },
+                ]}
+              >
+                <Input.Password
+                  value={formData.firstName}
+                  name="firstName"
+                  onChange={handleChange}
+                />
+              </Form.Item>
+
+              <Form.Item
+                label="Last Name"
+                name="lastName"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input your lastName!",
+                  },
+                ]}
+              >
+                <Input.Password
+                  value={formData.lastName}
+                  name="lastName"
+                  onChange={handleChange}
+                />
+              </Form.Item>
+
               <Form.Item>
                 <Button type="primary" htmlType="submit" onClick={handleSubmit}>
                   Register
@@ -131,7 +166,6 @@ export default function Register() {
             >
               Facebook
             </Button>
-            <div className="my-12" />
             <Link to="/login" className="text-blue-500 underline mx-2">
               Login
             </Link>
