@@ -15,22 +15,6 @@ function Navbar() {
       icon: <HomeOutlined />,
     },
     {
-      content: "Discover",
-      icon: <CompassOutlined />,
-    },
-    {
-      content: "Library",
-      icon: <MenuOutlined />,
-    },
-    {
-      content: "Reports",
-      icon: <PieChartOutlined />,
-    },
-    {
-      content: "Marketplace",
-      icon: <ShopOutlined />,
-    },
-    {
       content: "Groups",
       icon: <TeamOutlined />,
       to: "/groups",
