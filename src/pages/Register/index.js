@@ -114,7 +114,7 @@ export default function Register() {
                   },
                 ]}
               >
-                <Input.Password
+                <Input
                   value={formData.firstName}
                   name="firstName"
                   onChange={handleChange}
@@ -131,7 +131,7 @@ export default function Register() {
                   },
                 ]}
               >
-                <Input.Password
+                <Input
                   value={formData.lastName}
                   name="lastName"
                   onChange={handleChange}
