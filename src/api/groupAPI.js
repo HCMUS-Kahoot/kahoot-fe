@@ -4,7 +4,7 @@ class GroupApi {
   createGroup = async (group) => {
     try {
       const res = await axiosClient.post("/groups", group);
-      console.log(res);
+      return res;
     } catch (error) {
       console.log("Create group error", error);
       return error;
@@ -13,7 +13,7 @@ class GroupApi {
   getGroups = async () => {
     try {
       const res = await axiosClient.get("/groups/current-user-groups");
-      console.log(res);
+      return res;
     } catch (error) {
       console.log("Get groups error", error);
       return error;

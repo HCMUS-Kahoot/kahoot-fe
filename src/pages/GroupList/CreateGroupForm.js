@@ -9,10 +9,10 @@ export default function CreateGroupForm({ handleSubmit }) {
         <Form layout="vertical" name="basic" onFinish={
           handleSubmit
         }>
-          <Form.Item label="Group Name" name="groupname" initialValue={""} >
+          <Form.Item label="Group Name" name="name" initialValue={""} >
             <Input placeholder="Group Name" />
           </Form.Item>
-          <Form.Item label="Group Description" name="groupdes" initialValue={""} >
+          <Form.Item label="Group Description" name="description" initialValue={""} >
             <Input.TextArea rows={5} placeholder="Group Description" />
           </Form.Item>
           <Button type="primary" htmlType="submit" style={{
