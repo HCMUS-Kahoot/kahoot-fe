@@ -14,7 +14,12 @@ function Invitation() {
       try {
         const res = await groupApi.acceptInvitaion(params)
         console.log(res)
-        navigate(`/groups/${res.groupId}`);
+        if (res.groupId) {
+          navigate(`/groups/${res.groupId}`);
+        }
+        else {
+          navigate(`/groups`);
+        }
       } catch (error) {
         dispatch(loginSucess(null));
         navigate('/login')

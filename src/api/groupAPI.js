@@ -49,6 +49,7 @@ class GroupApi {
   }
   acceptInvitaion = async (data) => {
     try {
+      console.log(data)
       const res = await axiosClient.get(`/groups/${data.id}/invitations`);
       return res;
     } catch (error) {
