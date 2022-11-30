@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Button, Space, Table, Tag } from 'antd'; import 'antd/dist/antd.css';
+import { Button, Space, Table, Tag, Select, message } from 'antd'; import 'antd/dist/antd.css';
 import groupApi from "../../api/groupAPI";
+
 
 const columns = [
     {
@@ -17,12 +18,25 @@ const columns = [
         title: 'Role',
         key: 'role',
         dataIndex: 'role',
-        render: (_, { role }) => (
+        render: (_, record) => (
             <>
-                <Tag color={role == 'member' ? 'geekblue' : 'volcano'} key={role}>
-                    {role.toUpperCase()}
-                </Tag>
+                {/* <Tag color={record?.role == 'member' ? 'geekblue' : 'volcano'} key={record?.role}>
+                    {record?.role.toUpperCase()}
+                </Tag> */}
+                <Select disabled={record?.role === 'owner'} defaultValue={record?.role} style={{ width: 120 }} onChange={(v) => {
+                    console.log("change rolde: ", record, "to:", v);
+                    if (record?.role === 'owner' && (v === 'member' || v === 'cohost')) {
+                        message.error("Owner can't change to member or cohost");
+                    }
+                }}
+                    options={[
+                        { label: 'Member', value: 'member' },
+                        { label: 'Owner', value: 'owner' },
+                        { label: 'Co-host', value: 'cohost' },
+                    ]}
+                >
 
+                </Select>
             </>
         ),
     },
