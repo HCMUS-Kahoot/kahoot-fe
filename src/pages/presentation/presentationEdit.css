@@ -1,0 +1,28 @@
+html,
+main body {
+    height: 100%;
+}
+
+.full-height {
+    height: 100%;
+}
+
+.fh {
+    height: 100%;
+}
+
+section {
+    height: 100%;
+}
+
+.root {
+    height: 100%;
+}
+
+#root {
+    height: 100%;
+}
+
+.ant-layout-footer {
+    background-color: white;
+}

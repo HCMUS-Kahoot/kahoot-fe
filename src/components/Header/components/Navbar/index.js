@@ -6,6 +6,7 @@ import {
   PieChartOutlined,
   ShopOutlined,
   TeamOutlined,
+  FundOutlined
 } from "@ant-design/icons";
 import NavLink from "../NavLink";
 function Navbar() {
@@ -18,6 +19,11 @@ function Navbar() {
       content: "Groups",
       icon: <TeamOutlined />,
       to: "/groups",
+    },
+    {
+      content: "Presentation",
+      icon: <FundOutlined />,
+      to: "/presentations",
     },
   ];
   return (

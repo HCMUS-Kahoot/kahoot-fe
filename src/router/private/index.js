@@ -9,7 +9,10 @@ import GroupList from "../../pages/GroupList";
 import GroupDetail from "../../pages/GroupDetail";
 import HelloUser from "../../pages/helloUser";
 import Invitation from "../../pages/Invitation";
-
+import PresentationEdit from "../../pages/presentation/presentationEdit";
+import PresentationList from "../../pages/presentationList";
+import PresentationShow from "../../pages/presentation/presentationShow";
+import PresentationChoose from "../../pages/presentation/presentationChoose";
 const { Content } = Layout;
 
 function PrivateRouter() {
@@ -30,6 +33,10 @@ function PrivateRouter() {
             path="/hello/yes"
             element={<HelloUser activated={true} />}
           />
+          <Route exact path="/presentations" element={<PresentationList />} />
+          <Route exact path="/presentations/:id" element={<PresentationEdit />} />
+          <Route exact path="/presentations/:id/show" element={<PresentationShow />} />
+          <Route exact path="/presentations/:id/choose" element={<PresentationChoose />} />
         </Routes>
       </Content>
       <Footer />
