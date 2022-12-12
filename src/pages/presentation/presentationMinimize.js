@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import { Form, Input, Button, Row, Col, Select } from "antd";
 import { DeleteOutlined, CopyOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
-import Title from "antd/lib/skeleton/Title";
 
 
 export default function PresentationMinimize({ SelectSlide, DuplicateSlide, RemoveSlide, index, type, title, content }) {

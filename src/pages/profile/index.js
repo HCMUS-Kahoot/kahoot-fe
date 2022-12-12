@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Form, Input, Button, Avatar, message, Upload, Select } from "antd";
+import { Form, Input, Button, Avatar, message, Upload, } from "antd";
 import { useSelector } from 'react-redux';
 import profileApi from "../../api/profileAPI";
 import * as Yup from "yup";
