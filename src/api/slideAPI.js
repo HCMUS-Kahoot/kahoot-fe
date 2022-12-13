@@ -1,10 +1,10 @@
 import axiosClient from "./axiosClient";
 class SlideApi {
-  saveSlidesChange=async (presentationsId, slides) => {
+  saveSlidesChange=async (presentationId, slides) => {
     try {
         const sentData={
-          presentationsId,
-          slides
+          presentationId,
+          slideContent: slides,
         }
         const res = await axiosClient.post(`/slides/createOrUpdateListOfSlides`,sentData);
         return res;

@@ -35,7 +35,7 @@ export default function Slide({ index, slide, setSlide }) {
                             // slide.type = value
                             setSlide(slideIndex, { ...slide, slideType: value })
                         }} value={slide.slideType}>
-                            <Select.Option value="Multiple Choice">Multiple Choice</Select.Option>
+                            <Select.Option value="MultipleChoice">Multiple Choice</Select.Option>
                             <Select.Option value="Heading">Heading</Select.Option>
                             <Select.Option value="Paragraph">Paragraph</Select.Option>
                         </Select>
