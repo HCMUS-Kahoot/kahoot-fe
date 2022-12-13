@@ -9,6 +9,15 @@ class SlideApi {
         const res = await axiosClient.post(`/slides/createOrUpdateListOfSlides`,sentData);
         return res;
     } catch (error) {
+        console.log("createOrUpdateListOfSlides error", error);
+        return error;
+    }
+  }
+  getSlideByPresentationId = async (presentationId) => {
+    try {
+        const res = await axiosClient.get(`/slides/getSlidesByPresentationId/${presentationId}`);
+        return res;
+    } catch (error) {
         console.log("Get error", error);
         return error;
     }
