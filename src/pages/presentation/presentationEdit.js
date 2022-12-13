@@ -10,7 +10,7 @@ import slideApi from "../../api/slideAPI";
 
 
 export default function PresentationEdit() {
-    const presentationId=useParams().id;
+    const presentationId = useParams().id;
     const navigation = useNavigate();
     const [slides, setSlides] = useState([
         {
@@ -33,12 +33,22 @@ export default function PresentationEdit() {
         }]);
     const [selectedSlide, setSelectedSlide] = useState(0);
     const RemoveSlide = (index) => {
+        console.log("delete is index: ", index);
+        console.log("selectedSlide: ", selectedSlide)
+
+        if (selectedSlide === index) {
+            SelectSlide(index - 1 >= 0 ? index - 1 : 0);
+        }
+
         const newSlides = slides.filter((slide, i) => i !== index);
         setSlides(newSlides);
-        if(selectedSlide===index)
-        {
-            setSelectedSlide(prevSelectedSlide=>prevSelectedSlide-1)
+        if (selectedSlide !== index) {
+            setSelectedSlide(selectedSlide - 1 >= 0 ? selectedSlide - 1 : 0);
         }
+
+        console.log("delete after is index: ", index);
+        console.log("selectedSlide after: ", selectedSlide)
+        console.log("slides after: ", newSlides)
     }
     const DuplicateSlide = (index) => {
         const newSlides = [...slides];
@@ -53,7 +63,7 @@ export default function PresentationEdit() {
         newSlides[index] = newSlide;
         setSlides(newSlides);
     }
-    const backToPresentationsList =() => {
+    const backToPresentationsList = () => {
         navigation("/presentations")
     }
     function getSentDate(){
@@ -90,19 +100,19 @@ export default function PresentationEdit() {
                         document.body.style.overflow = "auto";
                         navigation("/presentations/as/show");
                     }}>Present</Button>
-                    <Button className="float-left m-2 w-28 justify-self-end" onClick={handleSaveEditSlide}><CheckOutlined className="relative bottom-[4px]"/>Save</Button>
+                    <Button className="float-left m-2 w-28 justify-self-end" onClick={handleSaveEditSlide}><CheckOutlined className="relative bottom-[4px]" />Save</Button>
                 </div>
                 <Row className="fh">
                     <Col span={4} className="list-slides h-[100%] bg-white border-1 border-gray-600" >
                         <div className="list-slides-container overflow-auto h-[100%]">
                             {slides.map((slide, index) => (
-                                <PresentationMinimize SelectSlide={SelectSlide} DuplicateSlide={DuplicateSlide} RemoveSlide={RemoveSlide} key={index} index={index} type={slide.slideType} title={slide.title?slide.title:"test"} content={slide.content} />
+                                <PresentationMinimize SelectSlide={SelectSlide} DuplicateSlide={DuplicateSlide} RemoveSlide={RemoveSlide} key={index} index={index} type={slide.slideType} title={slide.title ? slide.title : "test"} content={slide.content} selectedIndex={selectedSlide} />
                             ))}
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
                                 () => {
                                     setSlides([...slides, {
                                         slideType: "header",
-                                        title: `Slide ${slides.length+1}`,
+                                        title: `Slide ${slides.length + 1}`,
                                         content: {
                                             data: [
                                                 {
