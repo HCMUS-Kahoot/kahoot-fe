@@ -3,17 +3,22 @@ import { DeleteOutlined, CopyOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 
 
-export default function PresentationMinimize({ SelectSlide, DuplicateSlide, RemoveSlide, index, type, title, content }) {
+export default function PresentationMinimize({ SelectSlide, DuplicateSlide, RemoveSlide, index, type, title, content, selectedIndex }) {
     const [showIcons, setShowIcons] = useState(false);
+    const isSelecting = selectedIndex === index;
+
     return (
         <>
-            <div className="bg-white my-2 shadow-sm" onMouseOver={
+            <div className="bg-white my-2 shadow-sm cursor-pointer" onMouseOver={
                 () => setShowIcons(true)
             }
                 onMouseLeave={
                     () => setShowIcons(false)
                 }
                 onClick={() => SelectSlide(index)}
+                style={{
+                    backgroundColor: isSelecting ? "#e6f7ff" : "white",
+                }}
             >
 
                 <div className="font-bold pl-3"> {title} </div>
