@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Row, Col, } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import "./presentationEdit.css";
@@ -12,25 +12,68 @@ import slideApi from "../../api/slideAPI";
 export default function PresentationEdit() {
     const presentationId = useParams().id;
     const navigation = useNavigate();
-    const [slides, setSlides] = useState([
-        {
-            slideType: "header",
-            title: "Slide 1",
-            content: {
-                data: [
-                    {
-                        name: 'Choice 1', pv: 1
-                    },
-                    {
-                        name: 'Choice 2', pv: 2,
-                    },
-                    {
-                        name: 'Choice 3', pv: 12,
-                    },
-                ],
-                choices: ["Choice 1", "Choice 2", "Choice 3"]
+    const [slides, setSlides] = useState([]);
+    
+    function getSentDate(){
+        return slides.map(data=>{
+            const dataItem=data
+            delete dataItem.content.data
+            dataItem.content.detail=[]
+            dataItem.content.choices.map(choiceData=>{
+                dataItem.content.detail.push({choiceContent: choiceData})
+            })
+            delete dataItem.content.choices
+            dataItem.content.correctAnswer=1;
+            return dataItem
+        })
+    }
+
+    function convertResDataToSlides(resData)
+    {
+        return resData.map((data)=>{
+            const dataItem=data;
+            dataItem.content.choices=[]
+            data.content.data=[]
+            dataItem.content.detail.map((choiceData,index)=>{
+                dataItem.content.choices.push(choiceData.choiceContent)
+                dataItem.content.data.push({name: choiceData.choiceContent, pv: index})
+            })
+            delete dataItem.content.detail
+            return dataItem
+        })
+    }
+    useEffect(()=>{
+        const getData = async () => {
+            const resData = await slideApi.getSlideByPresentationId(presentationId)
+            const presentationData=convertResDataToSlides(resData)
+            console.log("This is presentationData: ", presentationData)
+            if(presentationData.length)
+            {
+                setSlides([...presentationData])
             }
-        }]);
+            else
+            {
+                setSlides([{
+                    slideType: "header",
+                    title: "Slide 1",
+                    content: {
+                        data: [
+                            {
+                                name: 'Choice 1', pv: 1
+                            },
+                            {
+                                name: 'Choice 2', pv: 2,
+                            },
+                            {
+                                name: 'Choice 3', pv: 12,
+                            },
+                        ],
+                        choices: ["Choice 1", "Choice 2", "Choice 3"]}}])
+            }
+            
+        }
+        getData();
+    },[])
     const [selectedSlide, setSelectedSlide] = useState(0);
     const RemoveSlide = (index) => {
         console.log("delete is index: ", index);
@@ -66,21 +109,7 @@ export default function PresentationEdit() {
     const backToPresentationsList = () => {
         navigation("/presentations")
     }
-    function getSentDate(){
-        return slides.map(data=>{
-            const dataItem=data
-            delete dataItem.content.data
-            dataItem.content.detail=[]
-            dataItem.content.choices.map(choiceData=>{
-                dataItem.content.detail.push({choiceContent: choiceData})
-            })
-            delete dataItem.content.choices
-            dataItem.content.correctAnswer=1;
-            return dataItem
-        })
-    }
     const handleSaveEditSlide = async () => {
-        console.log("This is slide before handle: ", slides)
         let sentData=getSentDate()
         await slideApi.saveSlidesChange(presentationId,sentData)
     }
@@ -105,7 +134,7 @@ export default function PresentationEdit() {
                 <Row className="fh">
                     <Col span={4} className="list-slides h-[100%] bg-white border-1 border-gray-600" >
                         <div className="list-slides-container overflow-auto h-[100%]">
-                            {slides.map((slide, index) => (
+                            {slides.length && slides.map((slide, index) => (
                                 <PresentationMinimize SelectSlide={SelectSlide} DuplicateSlide={DuplicateSlide} RemoveSlide={RemoveSlide} key={index} index={index} type={slide.slideType} title={slide.title ? slide.title : "test"} content={slide.content} selectedIndex={selectedSlide} />
                             ))}
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
@@ -134,7 +163,7 @@ export default function PresentationEdit() {
                             </div>
                         </div>
                     </Col>
-                    <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />
+                    {slides.length && <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />}
                 </Row>
             </div>
         </>
