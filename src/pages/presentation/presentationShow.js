@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Drawer, Modal, Form, Input, Button, Row, Col, Select } from "antd";
 import { DeleteOutlined, CopyOutlined, DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-
+import { Context as RealtimeContext } from "../../store/context/realtimeContext";
+import { useSelector } from "react-redux";
 
 export default function PresentationShow() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -74,6 +75,20 @@ export default function PresentationShow() {
         },
     ])
     const [questionIndex, setQuestionIndex] = useState(0)
+
+    const { initialize_socket, create_room } = useContext(RealtimeContext)
+    const user = useSelector((state) => state.auth.login.currentUser);
+
+    useEffect(() => {
+        const handleInitializeRoom = async () => {
+            await initialize_socket()
+            await create_room({
+                hostId: user._id,
+            })
+        }
+        handleInitializeRoom()
+    }, [])
+
     return (
         <>
             <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
