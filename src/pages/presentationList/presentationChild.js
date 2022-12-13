@@ -1,8 +1,7 @@
 import React from "react";
-import { Avatar, Card, Row, Col, Button } from "antd";
-import { EditOutlined, SettingOutlined, PlayCircleOutlined } from "@ant-design/icons";
+import { Row, Col, Button } from "antd";
+import { SettingOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
-const { Meta } = Card;
 
 export default function PresentationChild({
     presentationName,
@@ -13,7 +12,7 @@ export default function PresentationChild({
 }) {
     return (
         <>
-            <div class="m-1 hover:bg-gray-200 w-[98%] h-12 pt-2">
+            <div className="m-1 hover:bg-gray-200 w-[98%] h-12 pt-2">
                 {/* one row of presentation, with 4 collums to show presentation properties and one play button */}
                 <Row>
                     <Col span={6} className="text-center font-bold text-black">

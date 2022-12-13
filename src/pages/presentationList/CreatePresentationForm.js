@@ -5,7 +5,7 @@ import "antd/dist/antd.min.css";
 export default function CreatePresentationForm({ handleSubmit }) {
   return (
     <>
-      <div class="create-presentation-form">
+      <div className="create-presentation-form">
         <Form layout="vertical" name="basic" onFinish={
           handleSubmit
         }>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Drawer, Modal, Form, Input, Button, Row, Col, Select } from "antd";
-import { DeleteOutlined, CopyOutlined, DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
+import { useNavigate, useParams } from "react-router-dom";
+import { Drawer, Modal, Input, Button, Col, } from "antd";
+import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
@@ -30,7 +30,7 @@ export default function PresentationShow() {
         slides: [
             {
                 title: "Slide 1",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -42,7 +42,7 @@ export default function PresentationShow() {
             },
             {
                 title: "Slide 2",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [

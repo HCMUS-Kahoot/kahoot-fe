@@ -7,7 +7,7 @@ const { Meta } = Card;
 export default function PresentationChildAdd() {
   return (
     <>
-      <div class="m-3 shadow-md hover:shadow-2xl w-[90%]">
+      <div className="m-3 shadow-md hover:shadow-2xl w-[90%]">
         add
       </div>
     </>
