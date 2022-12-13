@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { Button, Row, Col, } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./presentationEdit.css";
 import "antd/dist/antd.min.css";
 import PresentationMinimize from "./presentationMinimize";
 import { PlusOutlined, ArrowLeftOutlined, CheckOutlined } from "@ant-design/icons";
 import Slide from "./slide";
+import slideApi from "../../api/slideAPI";
 
 
 export default function PresentationEdit() {
+    const presentationId=useParams().id;
     const navigation = useNavigate();
     const [slides, setSlides] = useState([
         {
-            type: "header",
+            slideType: "header",
             title: "Slide 1",
             content: {
                 data: [
@@ -54,8 +56,9 @@ export default function PresentationEdit() {
     const backToPresentationsList =() => {
         navigation("/presentations")
     }
-    const handleSaveEditSlide = () => {
+    const handleSaveEditSlide = async () => {
         console.log("This is slide before handle: ", slides)
+        await slideApi.saveSlidesChange(presentationId,slides)
     }
 
 
@@ -79,12 +82,12 @@ export default function PresentationEdit() {
                     <Col span={4} className="list-slides h-[100%] bg-white border-1 border-gray-600" >
                         <div className="list-slides-container overflow-auto h-[100%]">
                             {slides.map((slide, index) => (
-                                <PresentationMinimize SelectSlide={SelectSlide} DuplicateSlide={DuplicateSlide} RemoveSlide={RemoveSlide} key={index} index={index} type={slide.type} title={slide.title?slide.title:"test"} content={slide.content} />
+                                <PresentationMinimize SelectSlide={SelectSlide} DuplicateSlide={DuplicateSlide} RemoveSlide={RemoveSlide} key={index} index={index} type={slide.slideType} title={slide.title?slide.title:"test"} content={slide.content} />
                             ))}
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
                                 () => {
                                     setSlides([...slides, {
-                                        type: "header",
+                                        slideType: "header",
                                         title: `Slide ${slides.length+1}`,
                                         content: {
                                             data: [

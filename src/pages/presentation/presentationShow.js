@@ -30,7 +30,7 @@ export default function PresentationShow() {
         slides: [
             {
                 title: "Slide 1",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -42,7 +42,7 @@ export default function PresentationShow() {
             },
             {
                 title: "Slide 2",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [

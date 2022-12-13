@@ -5,8 +5,6 @@ import "antd/dist/antd.min.css";
 
 export default function PresentationMinimize({ SelectSlide, DuplicateSlide, RemoveSlide, index, type, title, content }) {
     const [showIcons, setShowIcons] = useState(false);
-
-
     return (
         <>
             <div className="bg-white my-2 shadow-sm" onMouseOver={
@@ -18,9 +16,9 @@ export default function PresentationMinimize({ SelectSlide, DuplicateSlide, Remo
                 onClick={() => SelectSlide(index)}
             >
 
-                <div className="font-bold pl-3"> {index + 1} {type} </div>
+                <div className="font-bold pl-3"> {title} </div>
                 <div className=" m-3 rounded-sm shadow-md text-center bg-gray-100 ml-5">
-                    <div>{title}</div>
+                    <div>{type}</div>
                 </div>
                 <div className="h-6 flex justify-items-start justify-start ml-3"  >
                     <DeleteOutlined style={{
