@@ -56,9 +56,23 @@ export default function PresentationEdit() {
     const backToPresentationsList =() => {
         navigation("/presentations")
     }
+    function getSentDate(){
+        return slides.map(data=>{
+            const dataItem=data
+            delete dataItem.content.data
+            dataItem.content.detail=[]
+            dataItem.content.choices.map(choiceData=>{
+                dataItem.content.detail.push({choiceContent: choiceData})
+            })
+            delete dataItem.content.choices
+            dataItem.content.correctAnswer=1;
+            return dataItem
+        })
+    }
     const handleSaveEditSlide = async () => {
         console.log("This is slide before handle: ", slides)
-        await slideApi.saveSlidesChange(presentationId,slides)
+        let sentData=getSentDate()
+        await slideApi.saveSlidesChange(presentationId,sentData)
     }
 
 
