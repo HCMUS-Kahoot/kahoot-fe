@@ -7,7 +7,7 @@ const { Meta } = Card;
 export default function GroupChildAdd() {
   return (
     <>
-      <div class="m-3 shadow-md hover:shadow-2xl">
+      <div className="m-3 shadow-md hover:shadow-2xl">
         <Card
           style={{
             width: 300,

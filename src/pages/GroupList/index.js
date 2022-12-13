@@ -74,7 +74,7 @@ export default function GroupList() {
                         onSearch={(value) => console.log("Search group", value)}
                     />
                 </div>
-                <div class="flex flex-wrap -mb-4 bg-white">
+                <div className="flex flex-wrap -mb-4 bg-white">
                     {/* <Link to={"/groups/groupid"} > <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>
                     <Link to={"/groups/groupid"}> <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>
                     <Link to={"/groups/groupid"}> <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>

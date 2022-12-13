@@ -21,6 +21,11 @@ export const createSocketWithHandlers = (actions) => {
 
   socket.on('room_updated', (room) => {
     console.log('event: "poll_updated" received', room);
+    actions.room_updated(room);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Disconnected from socket`);
   });
 
   return socket;

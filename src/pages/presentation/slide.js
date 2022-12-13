@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Form, Input, Button, Row, Col, Select } from "antd";
-import { DeleteOutlined, CopyOutlined } from "@ant-design/icons";
+import React from "react";
+import { Input, Button, Col, Select } from "antd";
+import { DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 
@@ -33,17 +33,18 @@ export default function Slide({ index, slide, setSlide }) {
                     <div className="m-1">
                         <Select defaultValue="Header" style={{ width: '100%' }} onChange={(value) => {
                             // slide.type = value
-                            setSlide(slideIndex, { ...slide, type: value })
-                        }}>
-
+                            setSlide(slideIndex, { ...slide, slideType: value })
+                        }} value={slide.slideType}>
                             <Select.Option value="Multiple Choice">Multiple Choice</Select.Option>
+                            <Select.Option value="Heading">Heading</Select.Option>
+                            <Select.Option value="Paragraph">Paragraph</Select.Option>
                         </Select>
                     </div>
                     <div className="m-2 shadow-sm">
                         <Input placeholder="Title" onChange={(value) => {
                             //slide.title = value.target.value
                             setSlide(slideIndex, { ...slide, title: value.target.value })
-                        }} />
+                        }} value={slide.title} />
                     </div>
                     <div className="m-2 shadow-md text-center pb-3">
                         {slide.content.choices.map((choice, index) => (
@@ -56,8 +57,8 @@ export default function Slide({ index, slide, setSlide }) {
                                     const newData = [...slide.content.data];
                                     newData[index].name = value.target.value;
                                     setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
-
-                                }} />
+                                }}
+                                value={slide.content.choices[index]} />
                                 <DeleteOutlined className="ml-3 mt-2 mr-2" onClick={() => {
                                     //remove choice
                                     const newChoices = slide.content.choices.filter((choice, i) => i !== index);

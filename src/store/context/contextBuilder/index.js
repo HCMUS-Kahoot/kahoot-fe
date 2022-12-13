@@ -1,8 +1,9 @@
-import React, { useReducer } from 'react'
+import React, { useReducer, createContext } from 'react'
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default (reducer, actions, initialState) => {
 
-  const Context = React.createContext()
+  const Context = createContext()
 
   const Provider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState)

@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Drawer, Modal, Form, Input, Button, Row, Col, Select } from "antd";
-import { DeleteOutlined, CopyOutlined, DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
+import React, { useState, useContext, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Drawer, Modal, Input, Button, Col, } from "antd";
+import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import { useSelector } from "react-redux";
-
+import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 export default function PresentationShow() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -31,7 +30,7 @@ export default function PresentationShow() {
         slides: [
             {
                 title: "Slide 1",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -43,7 +42,7 @@ export default function PresentationShow() {
             },
             {
                 title: "Slide 2",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -76,19 +75,27 @@ export default function PresentationShow() {
     ])
     const [questionIndex, setQuestionIndex] = useState(0)
 
-    const { initialize_socket, create_room } = useContext(RealtimeContext)
     const user = useSelector((state) => state.auth.login.currentUser);
+
+    const { state, initialize_socket, create_room, updated_room } = useContext(RealtimeContext);
 
     useEffect(() => {
         const handleInitializeRoom = async () => {
-            await initialize_socket()
+            const actions = {
+                connected: (data) => console.log("Connected with socket ID: ", data),
+                error: (data) => console.log("Failed to connect socket: ", data),
+                room_updated: (data) => {
+                    console.log("event: 'room_updated' received: ", data)
+                    updated_room(data)
+                }
+            }
+            await initialize_socket(actions)
             await create_room({
-                hostId: user._id,
+                hostId: user.id,
             })
         }
         handleInitializeRoom()
     }, [])
-
     return (
         <>
             <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
@@ -136,7 +143,7 @@ export default function PresentationShow() {
             </Drawer>
             <Col span={24} className="slide h-[100%] bg-white" >
                 <div className="h-6 text-center font-bold text-gray-400" >
-                    go to https://presentations/asa/using/{presentationId} to answer
+                    go to <a href={`http://127.0.0.1:3000/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
                 </div>
                 <div className="slide-title text-3xl font-bold text-center mb-7">
                     {slide.title}

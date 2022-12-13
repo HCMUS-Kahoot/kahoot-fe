@@ -3,6 +3,7 @@ import axiosClient from "./axiosClient";
 class PresentationApi {
   createPresentation = async (presentation) => {
     try {
+      console.log("This is presentation information: ", presentation);
       const res = await axiosClient.post("/presentations", presentation);
       return res;
     } catch (error) {

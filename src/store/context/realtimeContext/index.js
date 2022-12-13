@@ -2,27 +2,24 @@ import contextBuilder from "../contextBuilder";
 import { createSocketWithHandlers } from "../../../api/realtimeAPI";
 
 let currentSocket = null;
+
 const socketReducer = (state, action) => {
   switch (action.type) {
     case "add_error":
       return { ...state, errorMessage: action.payload };
     case "initialize_socket":
       currentSocket = action.payload;
-      return { errorMessage: "", socket: action.payload };
+      return { ...state, errorMessage: "", socket: action.payload };
+    case "updated_room":
+      return { ...state, errorMessage: "", room: action.payload };
     default:
       return state;
   }
 };
 
-const actions = {
-  connected: (data) => console.log("Connected with socket ID: ", data),
-  error: (data) => console.log("Failed to connect socket: ", data),
-  room_updated: (data) => console.log("event: 'room_updated' received: ", data),
-}
-
 
 const initialize_socket = (dispatch) => {
-  return async () => {
+  return async (actions) => {
     try {
       if (currentSocket) {
         if (currentSocket.connected) {
@@ -66,8 +63,21 @@ const create_room = (dispatch) => {
   };
 };
 
+const updated_room = (dispatch) => {
+  return async (data) => {
+    try {
+      await dispatch({
+        type: "updated_room",
+        payload: data,
+      });
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
 export const { Context, Provider } = contextBuilder(
   socketReducer,
-  { initialize_socket, create_room, join_room },
-  { socket: null, errorMessage: "" }
+  { initialize_socket, create_room, join_room, updated_room },
+  { socket: null, errorMessage: "", room: null }
 );

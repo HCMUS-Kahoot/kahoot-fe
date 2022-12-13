@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Space, Table, Tag, Select, message } from 'antd'; import 'antd/dist/antd.css';
+import { Button, Space, Table, Select, message } from 'antd'; import 'antd/dist/antd.less';
 import groupApi from "../../api/groupAPI";
 
 const handleChangeRole = async (value, record) => {
@@ -71,23 +71,23 @@ const columns = [
         ),
     },
 ];
-const data = [
-    {
-        key: '1',
-        name: 'Tran Dac Toan',
-        role: 'member',
-    },
-    {
-        key: '2',
-        name: 'Dinh Huynh Tien Phu',
-        role: 'co-host',
-    },
-    {
-        key: '3',
-        name: 'Tran Trong Hoang Anh',
-        role: 'member',
-    },
-];
+// const data = [
+//     {
+//         key: '1',
+//         name: 'Tran Dac Toan',
+//         role: 'member',
+//     },
+//     {
+//         key: '2',
+//         name: 'Dinh Huynh Tien Phu',
+//         role: 'co-host',
+//     },
+//     {
+//         key: '3',
+//         name: 'Tran Trong Hoang Anh',
+//         role: 'member',
+//     },
+// ];
 const MemberList = ({ groupId }) => {
 
     const [members, setMembers] = useState([]);
@@ -110,6 +110,7 @@ const MemberList = ({ groupId }) => {
             }
         };
         getMembers();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (<Table columns={columns} dataSource={members} />)

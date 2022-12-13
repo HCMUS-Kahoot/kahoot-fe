@@ -1,30 +1,18 @@
-import React, { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
-import { Modal, Form, Input, Button, Row, Col, Select } from "antd";
-import { DeleteOutlined, CopyOutlined, DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled } from "@ant-design/icons";
+import React, { useContext, useState } from "react";
+import { Button, Col, } from "antd";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-
+import { useParams } from "react-router";
+import { useEffect } from "react";
+import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 
 export default function PresentationChoose() {
     //todo: let member to submit questions and comments
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const showModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const handleOk = () => {
-        setIsModalOpen(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalOpen(false);
-    };
     const presentation = {
         slides: [
             {
                 title: "Slide 1",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -36,7 +24,7 @@ export default function PresentationChoose() {
             },
             {
                 title: "Slide 2",
-                type: "Multiple Choice",
+                slideType: "Multiple Choice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -53,21 +41,33 @@ export default function PresentationChoose() {
     const [slides, setSlides] = useState(presentationData.slides)
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
-    const presentationId = useParams().id
-    const navigate = useNavigate();
-    const [showBar, setShowBar] = useState(false)
-    const [questions, setQuestions] = useState([
-        {
-            question: "Question 1",
-        },
-        {
-            question: "Question 2",
-        },
-        {
-            question: "Question 3",
-        },
-    ])
-    const [questionIndex, setQuestionIndex] = useState(0)
+
+    const { state, initialize_socket, updated_room, join_room } = useContext(RealtimeContext);
+    const params = useParams();
+
+    useEffect(() => {
+        const handleJoinRoom = async () => {
+            try {
+                const actions = {
+                    connected: (data) => console.log("Connected with socket ID: ", data),
+                    error: (data) => console.log("Failed to connect socket: ", data),
+                    room_updated: (data) => {
+                        console.log("event: 'room_updated' received: ", data)
+                        updated_room(data)
+                    }
+                }
+                await initialize_socket(actions)
+                await join_room({
+                    pin: params.id,
+                    name: "member 1",
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        handleJoinRoom();
+    }, [])
+
     return (
         <>
 
@@ -98,9 +98,6 @@ export default function PresentationChoose() {
                                 <Button className="w-64 mx-3 my-1" > Option 1 </Button>
                                 <Button className="w-64 mx-3 my-1" > Option 1 </Button>
                                 <Button className="w-64 mx-3 my-1" > Option 1 </Button>
-
-
-
                             </div >
                         </div>
                         <Button className="mt-5" type="primary" >Submit</Button>

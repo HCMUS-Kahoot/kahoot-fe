@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Input, Menu, Modal, Button, message, Row, Col } from "antd";
+import { Input, Modal, message, Row, Col } from "antd";
 import "antd/dist/antd.min.css";
 import PresentationChild from "./presentationChild";
-import PresentationChildAdd from "./PresentationChildAdd";
 import CreatePresentationForm from "./CreatePresentationForm";
 import presentationApi from "../../api/presentationAPI";
+import { useSelector } from "react-redux";
 
 export default function PresentationList() {
+    const user = useSelector((state) => state.auth.login.currentUser);
+    useEffect(()=>{
+        console.log("this is user: ", user)
+    },[])
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [presentations, setPresentations] = useState([]);
     const showModal = () => {
@@ -18,8 +22,9 @@ export default function PresentationList() {
         setIsModalOpen(false);
     };
     const createPresentation = async (values) => {
+        console.log("This is value to submit new presentation: ", values)
         try {
-            console.log(values)
+            values.owner=user.id
             if (values.presentationname === "") {
                 message.error("Presentation name can't be empty");
                 return;
@@ -87,19 +92,21 @@ export default function PresentationList() {
                         </Row>
                     </div>
 
+                    {/* <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
                     <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
                     <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
-                    <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
-                    <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
+                    <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link> */}
 
-                    {/* {presentations.map((presentation) => (
-                        <Link to={`/presentations/${presentation._id}`}>
+                    {presentations.map((presentation) => (
+                        <Link to={`/presentations/${presentation._id}`} className="w-full">
                             <PresentationChild
                                 presentationName={presentation.name}
                                 presentationDescription={presentation.description}
+                                modified={presentation.lastEdit}
+                                created={presentation.createdDate}
                             />
                         </Link>
-                    ))} */}
+                    ))}
                     <button className="w-full py-1 shadow-md bg-[#f4f4f4] font-bold text-black "// mx-56 mb-4 rounded-sm hover:bg-sky-700"
                         onClick={() => {
                             showModal();
