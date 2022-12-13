@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
-import { Button, Col, } from "antd";
+import { Button, Col, message } from "antd";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useParams } from "react-router";
 import { useEffect } from "react";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
+import { useSelector } from "react-redux";
+import PresentationFilter from './PresentationFilter';
 
 export default function PresentationChoose() {
     //todo: let member to submit questions and comments
@@ -42,9 +44,23 @@ export default function PresentationChoose() {
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
 
-    const { state, initialize_socket, updated_room, join_room } = useContext(RealtimeContext);
-    const params = useParams();
+    const user = useSelector((state) => state.auth.login.currentUser);
 
+    const { state, initialize_socket, updated_room, join_room, submit_answer } = useContext(RealtimeContext);
+    const params = useParams();
+    const handleSubmit = async (choice) => {
+        try {
+            await submit_answer({
+                roomId: state.room.id,
+                answer: choice,
+                slideIndex
+            })
+            message.success("Submitted")
+        }
+        catch (error) {
+            message.error("Failed to submit")
+        }
+    }
     useEffect(() => {
         const handleJoinRoom = async () => {
             try {
@@ -54,12 +70,13 @@ export default function PresentationChoose() {
                     room_updated: (data) => {
                         console.log("event: 'room_updated' received: ", data)
                         updated_room(data)
+                        PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
                     }
                 }
                 await initialize_socket(actions)
                 await join_room({
                     pin: params.id,
-                    name: "member 1",
+                    name: `${user.firstName} ${user.lastName}`,
                 });
             } catch (error) {
                 console.log(error);
@@ -94,10 +111,15 @@ export default function PresentationChoose() {
                     <div>
                         <div className="flex justify-center items-center w-full">
                             <div className="flex flex-wrap flex-row items-center w-[60%]">
-                                <Button className="w-64 mx-3 my-1" > Option 1 </Button>
-                                <Button className="w-64 mx-3 my-1" > Option 1 </Button>
-                                <Button className="w-64 mx-3 my-1" > Option 1 </Button>
-                                <Button className="w-64 mx-3 my-1" > Option 1 </Button>
+                                <Button className="w-64 mx-3 my-1"
+                                    onClick={() => handleSubmit("Choice 1")}
+                                > Option 1 </Button>
+                                <Button className="w-64 mx-3 my-1"
+                                    onClick={() => handleSubmit("Choice 2")} > Option 2 </Button>
+                                <Button className="w-64 mx-3 my-1"
+                                    onClick={() => handleSubmit("Choice 3")} > Option 3 </Button>
+                                <Button className="w-64 mx-3 my-1"
+                                    onClick={() => handleSubmit("Choice 4")}> Option 4 </Button>
                             </div >
                         </div>
                         <Button className="mt-5" type="primary" >Submit</Button>

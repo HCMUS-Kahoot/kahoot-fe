@@ -6,16 +6,9 @@
   "configurations": [
     {
       "type": "chrome",
-      "request": "attach",
-      "name": "Attach to Chrome",
-      "port": 9222,
-      "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Attach to Chrome",
-      "port": 9222,
-      "request": "attach",
-      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome",
+      "url": "http://127.0.0.1:3000",
       "webRoot": "${workspaceFolder}"
     }
   ]

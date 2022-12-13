@@ -6,6 +6,8 @@ import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useSelector } from "react-redux";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
+import PresentationFilter from './PresentationFilter';
+
 export default function PresentationShow() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const showModal = () => {
@@ -35,7 +37,7 @@ export default function PresentationShow() {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
                         { name: "Choice 1", pv: 2400, amt: 2400 },
-                        { name: "Choice 2", pv: 1398, amt: 2210 },
+                        { name: "Choice 2", pv: 1398, amt: 1110 },
                         { name: "Choice 3", pv: 9800, amt: 2290 },
                     ]
                 }
@@ -77,7 +79,7 @@ export default function PresentationShow() {
 
     const user = useSelector((state) => state.auth.login.currentUser);
 
-    const { state, initialize_socket, create_room, updated_room } = useContext(RealtimeContext);
+    const { state, initialize_socket, create_room, updated_room, change_slide } = useContext(RealtimeContext);
 
     useEffect(() => {
         const handleInitializeRoom = async () => {
@@ -87,14 +89,18 @@ export default function PresentationShow() {
                 room_updated: (data) => {
                     console.log("event: 'room_updated' received: ", data)
                     updated_room(data)
+                    PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
                 }
             }
             await initialize_socket(actions)
             await create_room({
                 hostId: user.id,
+                presentationId
             })
         }
         handleInitializeRoom()
+        return () =>
+            state?.socket?.disconnect();
     }, [])
     return (
         <>
@@ -172,12 +178,22 @@ export default function PresentationShow() {
                         </Button>
 
                         <Button className="m-1" type="primary" shape="circle" icon={<LeftCircleFilled />} onClick={() => {
-                            setSlideIndex(slideIndex - 1)
-                            setSlide(slides[slideIndex - 1])
+                            const nextSlideIndex = slideIndex - 1 >= 0 ? slideIndex - 1 : 0;
+                            change_slide({
+                                roomId: state.room.id,
+                                slide: nextSlideIndex
+                            })
+                            setSlideIndex(nextSlideIndex)
+                            setSlide(slides[nextSlideIndex])
                         }} />
                         <Button className="m-1" type="primary" shape="circle" icon={<RightCircleFilled />} onClick={() => {
-                            setSlideIndex(slideIndex + 1)
-                            setSlide(slides[slideIndex + 1])
+                            const nextSlideIndex = slideIndex + 1 < slides.length ? slideIndex + 1 : slides.length - 1;
+                            change_slide({
+                                roomId: state.room.id,
+                                slide: nextSlideIndex
+                            })
+                            setSlideIndex(nextSlideIndex)
+                            setSlide(slides[nextSlideIndex])
                         }} />
                     </div>
                     <div className="m-1"

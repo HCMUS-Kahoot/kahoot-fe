@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-
+import { message } from "antd";
 export const socketIOUrl = process.env.REACT_APP_SOCKET_IO_URL;
 export const createSocketWithHandlers = (actions) => {
   console.log(`Creating socket `);
@@ -14,13 +14,13 @@ export const createSocketWithHandlers = (actions) => {
     actions.connected(socket.id);
   });
 
-  socket.on('realtime_error', () => {
+  socket.on('realtime_error', (data) => {
     console.log(`Failed to connect socket`);
-
+    message.error(data);
   });
 
   socket.on('room_updated', (room) => {
-    console.log('event: "poll_updated" received', room);
+    console.log('event: "room_updated" received', room);
     actions.room_updated(room);
   });
 

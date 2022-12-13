@@ -76,8 +76,31 @@ const updated_room = (dispatch) => {
   };
 };
 
+const submit_answer = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("submitAnswer", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
+const change_slide = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("changeSlide", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
 export const { Context, Provider } = contextBuilder(
   socketReducer,
-  { initialize_socket, create_room, join_room, updated_room },
+  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide },
   { socket: null, errorMessage: "", room: null }
 );
