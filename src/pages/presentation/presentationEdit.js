@@ -50,7 +50,7 @@ export default function PresentationEdit() {
             }
             else {
                 setSlides([{
-                    slideType: "Multiple Choice",
+                    slideType: "MultipleChoice",
                     title: "Slide 1",
                     content: {
                         data: [
@@ -114,14 +114,17 @@ export default function PresentationEdit() {
     }
     const handleSaveEditSlide = async () => {
         let sentData = getSentData()
-        deleteSlides.current.forEach(async (slide) => {
-            console.log()
-            if(slide._id)
-            {
-                await slideApi.deleteSlide(slide._id)
-            }
-        });
-        deleteSlides=[]
+        if(deleteSlides.current.length!==0)
+        {
+            deleteSlides.current.forEach(async (slide) => {
+                console.log()
+                if(slide._id)
+                {
+                    await slideApi.deleteSlide(slide._id)
+                }
+            });
+            deleteSlides.current=[]
+        }
         await slideApi.saveSlidesChange(presentationId, sentData)
     }
 
@@ -152,7 +155,7 @@ export default function PresentationEdit() {
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
                                 () => {
                                     setSlides([...slides, {
-                                        slideType: "Multiple Choice",
+                                        slideType: "MultipleChoice",
                                         title: `Slide ${slides.length + 1}`,
                                         content: {
                                             data: [
