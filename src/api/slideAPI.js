@@ -22,6 +22,16 @@ class SlideApi {
         return error;
     }
   }
+  deleteSlide = async (id) => {
+    try {
+      console.log("This has been triggered")
+      const res = await axiosClient.delete(`/slides/${id}`);
+      console.log(res);
+    } catch (error) {
+      console.log("Delete slide error", error);
+      return error;
+    }
+  };
 }
 const slideApi = new SlideApi();
 export default slideApi;
