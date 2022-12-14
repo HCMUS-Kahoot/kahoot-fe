@@ -31,7 +31,7 @@ export default function Slide({ index, slide, setSlide }) {
             <Col span={6} className="slide -violet-700 h-[100%]" >
                 <div className="slide-info-editor mt-3 px-3">
                     <div className="m-1">
-                        <Select defaultValue="Multiple Choice" style={{ width: '100%' }} onChange={(value) => {
+                        <Select defaultValue="MultipleChoice" style={{ width: '100%' }} onChange={(value) => {
                             // slide.type = value
                             setSlide(slideIndex, { ...slide, slideType: value })
                         }} value={slide?.slideType}>
@@ -47,7 +47,7 @@ export default function Slide({ index, slide, setSlide }) {
                         }} value={slide?.title} />
                     </div>
                     <div className="m-2 shadow-md text-center pb-3">
-                        {slide?.content.choices.map((choice, index) => (
+                        {slide?.content?.choices?.map((choice, index) => (
                             <div className="m-2  flex flex-row justify-center">
                                 <Input placeholder="Choice" onChange={(value) => {
                                     // slide.content.choices[index] = value.target.value

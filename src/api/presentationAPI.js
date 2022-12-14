@@ -76,6 +76,34 @@ class PresentationApi {
       return error;
     }
   }
+  updatePresentation = async (id, data) => {
+    try {
+      const res = await axiosClient.put(`/presentations/${id}`, data);
+      return res;
+    }
+    catch (error) {
+      console.log("Update presentation error", error);
+      return error;
+    }
+  }
+  getPresentationById = async (id) => {
+    try {
+      const res = await axiosClient.get(`/presentations/${id}`);
+      return res;
+    } catch (error) {
+      console.log("Get presentation by id error", error);
+      return error;
+    }
+  }
+  updatePresentationName = async (id, name) => {
+    try {
+      const res = await axiosClient.post(`/presentations/name/${id}/${name}`);
+      return res;
+    } catch (error) {
+      console.log("Update presentation name error", error);
+      return error;
+    }
+  }
 }
 
 const presentationApi = new PresentationApi();

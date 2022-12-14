@@ -3,6 +3,7 @@ import { Row, Col, Button, Dropdown, Space, message, Modal, Input } from "antd";
 import { SettingOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { Link, useNavigate } from "react-router-dom";
+import presentationApi from "../../api/presentationAPI";
 
 export default function PresentationChild({
     presentationName,
@@ -10,6 +11,7 @@ export default function PresentationChild({
     modified,
     created,
     presentationId,
+    getPresentations
 }) {
     const navigation = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,8 +19,11 @@ export default function PresentationChild({
     const showModal = () => {
         setIsModalOpen(true);
     };
-    const handleOk = () => {
+    const handleOk = async () => {
+        const res = await presentationApi.updatePresentationName(presentationId, newPresentationName);
         message.success(`Rename button clicked, id${presentationId},new name is ${newPresentationName}'`);
+        console.log("resrename", res);
+        getPresentations();
         setIsModalOpen(false);
     };
     const handleCancel = () => {
@@ -39,8 +44,11 @@ export default function PresentationChild({
             key: '4',
             danger: true,
             label: <span
-                onClick={() => {
-                    message.warning(`Delete button clicked,id${presentationId}'`);
+                onClick={async () => {
+                    const res = await presentationApi.deletePresentation(presentationId);
+                    console.log("res delete", res);
+                    message.success(`Delete success'`);
+                    getPresentations();
                 }}
             >Delete</span>,
         },
