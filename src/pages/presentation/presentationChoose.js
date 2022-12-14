@@ -43,7 +43,7 @@ export default function PresentationChoose() {
     const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
-
+    const [isCanChoose, setIsCanChoose] = useState(true);
     const user = useSelector((state) => state.auth.login.currentUser);
 
     const { state, initialize_socket, updated_room, join_room, submit_answer } = useContext(RealtimeContext);
@@ -56,6 +56,7 @@ export default function PresentationChoose() {
                 slideIndex
             })
             message.success("Submitted")
+            setIsCanChoose(false)
         }
         catch (error) {
             message.error("Failed to submit")
@@ -112,18 +113,20 @@ export default function PresentationChoose() {
                 <div className="slide-info-editor mt-3 absolute bottom-[0px] border-t-2 border-gray-300 shadow-inner w-full h-52 bg-white flex flex-col justify-center" >
                     <div>
                         <div className="flex justify-center items-center w-full">
-                            <div className="flex flex-wrap flex-row items-center w-[60%]">
-                                {
-                                    slide?.content?.choices?.map((choice, index) => {
-                                        return (
-                                            <Button className="w-64 mx-3 my-1"
-                                                onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
-                                        )
-                                    })
-                                }
-                            </div >
+                            {
+                                isCanChoose && (<div className="flex flex-wrap flex-row items-center w-[60%]">
+                                    {
+                                        slide?.content?.choices?.map((choice, index) => {
+                                            return (
+                                                <Button className="w-64 mx-3 my-1"
+                                                    onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
+                                            )
+                                        })
+                                    }
+                                </div >)
+                            }
                         </div>
-                        <Button className="mt-5" type="primary" >Submit</Button>
+                        {/* <Button className="mt-5" type="primary" >Submit</Button> */}
                     </div>
 
                 </div>
