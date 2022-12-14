@@ -75,11 +75,6 @@ export default function GroupList() {
                     />
                 </div>
                 <div className="flex flex-wrap -mb-4 bg-white">
-                    {/* <Link to={"/groups/groupid"} > <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>
-                    <Link to={"/groups/groupid"}> <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>
-                    <Link to={"/groups/groupid"}> <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>
-                    <Link to={"/groups/groupid"}> <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link>
-                    <Link to={"/groups/groupid"}> <GroupChild groupName={"Group name"} groupDescription={"Group description will be here"} /></Link> */}
                     {groups.map((group) => (
                         <Link to={`/groups/${group._id}`}>
                             <GroupChild
