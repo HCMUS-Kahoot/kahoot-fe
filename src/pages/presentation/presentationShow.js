@@ -149,7 +149,8 @@ export default function PresentationShow() {
             </Drawer>
             <Col span={24} className="slide h-[100%] bg-white" >
                 <div className="h-6 text-center font-bold text-gray-400" >
-                    go to <a href={`http://127.0.0.1:3000/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
+                    go to <a href={`https://kahoothcmus.netlify.app/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
+                    or input pin: {state?.room?.pin || 'abcd'}
                 </div>
                 <div className="slide-title text-3xl font-bold text-center mb-7">
                     {slide?.title}
