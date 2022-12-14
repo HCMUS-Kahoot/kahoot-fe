@@ -13,6 +13,7 @@ import PresentationEdit from "../../pages/presentation/presentationEdit";
 import PresentationList from "../../pages/presentationList";
 import PresentationShow from "../../pages/presentation/presentationShow";
 import PresentationChoose from "../../pages/presentation/presentationChoose";
+import PresentationPinInput from "../../pages/presentation/presentationPinInput";
 const { Content } = Layout;
 
 function PrivateRouter() {
@@ -37,6 +38,7 @@ function PrivateRouter() {
           <Route exact path="/presentations/:id" element={<PresentationEdit />} />
           <Route exact path="/presentations/:id/show" element={<PresentationShow />} />
           <Route exact path="/presentations/:id/choose" element={<PresentationChoose />} />
+          <Route exact path="/presentations/pin" element={<PresentationPinInput />} />
         </Routes>
       </Content>
       <Footer />

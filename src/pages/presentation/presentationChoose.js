@@ -14,7 +14,7 @@ export default function PresentationChoose() {
         slides: [
             {
                 title: "Slide 1",
-                slideType: "Multiple Choice",
+                slideType: "MultipleChoice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -26,7 +26,7 @@ export default function PresentationChoose() {
             },
             {
                 title: "Slide 2",
-                slideType: "Multiple Choice",
+                slideType: "MultipleChoice",
                 content: {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
@@ -111,7 +111,15 @@ export default function PresentationChoose() {
                     <div>
                         <div className="flex justify-center items-center w-full">
                             <div className="flex flex-wrap flex-row items-center w-[60%]">
-                                <Button className="w-64 mx-3 my-1"
+                                {
+                                    slide.content.choices.map((choice, index) => {
+                                        return (
+                                            <Button className="w-64 mx-3 my-1"
+                                                onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
+                                        )
+                                    })
+                                }
+                                {/* <Button className="w-64 mx-3 my-1"
                                     onClick={() => handleSubmit("Choice 1")}
                                 > Option 1 </Button>
                                 <Button className="w-64 mx-3 my-1"
@@ -119,7 +127,7 @@ export default function PresentationChoose() {
                                 <Button className="w-64 mx-3 my-1"
                                     onClick={() => handleSubmit("Choice 3")} > Option 3 </Button>
                                 <Button className="w-64 mx-3 my-1"
-                                    onClick={() => handleSubmit("Choice 4")}> Option 4 </Button>
+                                    onClick={() => handleSubmit("Choice 4")}> Option 4 </Button> */}
                             </div >
                         </div>
                         <Button className="mt-5" type="primary" >Submit</Button>
