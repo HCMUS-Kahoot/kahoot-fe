@@ -102,7 +102,6 @@ export default function PresentationShow() {
         return () =>
             state?.socket?.disconnect();
     }, [])
-    console.log("state: ", slides, slideIndex);
     return (
         <>
             <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
