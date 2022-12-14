@@ -13,36 +13,35 @@ export default function PresentationEdit() {
     const presentationId = useParams().id;
     const navigation = useNavigate();
     const [slides, setSlides] = useState([]);
-    
-    function getSentDate(){
-        return slides.map(data=>{
-            const dataItem=data
+
+    function getSentDate() {
+        return slides.map(data => {
+            const dataItem = data
             delete dataItem.content.data
-            dataItem.content.detail=[]
-            dataItem.content.choices.map(choiceData=>{
-                dataItem.content.detail.push({choiceContent: choiceData})
+            dataItem.content.detail = []
+            dataItem.content.choices.map(choiceData => {
+                dataItem.content.detail.push({ choiceContent: choiceData })
             })
             delete dataItem.content.choices
-            dataItem.content.correctAnswer=1;
+            dataItem.content.correctAnswer = 1;
             return dataItem
         })
     }
 
-    function convertResDataToSlides(resData)
-    {
-        return resData.map((data)=>{
-            const dataItem=data;
-            dataItem.content.choices=[]
-            data.content.data=[]
-            dataItem.content.detail.map((choiceData,index)=>{
+    function convertResDataToSlides(resData) {
+        return resData.map((data) => {
+            const dataItem = data;
+            dataItem.content.choices = []
+            data.content.data = []
+            dataItem.content.detail.map((choiceData, index) => {
                 dataItem.content.choices.push(choiceData.choiceContent)
-                dataItem.content.data.push({name: choiceData.choiceContent, pv: index})
+                dataItem.content.data.push({ name: choiceData.choiceContent, pv: index })
             })
             delete dataItem.content.detail
             return dataItem
         })
     }
-    useEffect(()=>{
+    useEffect(() => {
         const getData = async () => {
             const presentationData = await slideApi.getSlideByPresentationId(presentationId)
             // console.log("This is resData: ", resData)
@@ -51,10 +50,9 @@ export default function PresentationEdit() {
             {
                 setSlides([...presentationData])
             }
-            else
-            {
+            else {
                 setSlides([{
-                    slideType: "header",
+                    slideType: "Multiple Choice",
                     title: "Slide 1",
                     content: {
                         data: [
@@ -68,12 +66,14 @@ export default function PresentationEdit() {
                                 name: 'Choice 3', pv: 12,
                             },
                         ],
-                        choices: ["Choice 1", "Choice 2", "Choice 3"]}}])
+                        choices: ["Choice 1", "Choice 2", "Choice 3"]
+                    }
+                }])
             }
-            
+
         }
         getData();
-    },[])
+    }, [])
     const [selectedSlide, setSelectedSlide] = useState(0);
     const RemoveSlide = (index) => {
         console.log("delete is index: ", index);
@@ -110,8 +110,8 @@ export default function PresentationEdit() {
         navigation("/presentations")
     }
     const handleSaveEditSlide = async () => {
-        let sentData=getSentDate()
-        await slideApi.saveSlidesChange(presentationId,sentData)
+        let sentData = getSentDate()
+        await slideApi.saveSlidesChange(presentationId, sentData)
     }
 
 
@@ -127,7 +127,7 @@ export default function PresentationEdit() {
                     </Button>
                     <Button className="float-left m-2 w-28 justify-self-end" type="primary" onClick={() => {
                         document.body.style.overflow = "auto";
-                        navigation("/presentations/as/show");
+                        navigation(`/presentations/${presentationId}/show`);
                     }}>Present</Button>
                     <Button className="float-left m-2 w-28 justify-self-end" onClick={handleSaveEditSlide}><CheckOutlined className="relative bottom-[4px]" />Save</Button>
                 </div>
@@ -140,7 +140,7 @@ export default function PresentationEdit() {
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
                                 () => {
                                     setSlides([...slides, {
-                                        slideType: "header",
+                                        slideType: "Multiple Choice",
                                         title: `Slide ${slides.length + 1}`,
                                         content: {
                                             data: [

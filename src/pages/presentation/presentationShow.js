@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Drawer, Modal, Input, Button, Col, } from "antd";
+import { Drawer, Modal, Input, Button, Col, message } from "antd";
 import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
@@ -150,12 +150,22 @@ export default function PresentationShow() {
                         </Button>
 
                         <Button className="m-1" type="primary" shape="circle" icon={<LeftCircleFilled />} onClick={() => {
-                            setSlideIndex(slideIndex - 1)
-                            setSlide(slides[slideIndex - 1])
+                            if (slideIndex - 1 >= 0) {
+                                setSlideIndex(slideIndex - 1)
+                                setSlide(slides[slideIndex - 1])
+                            }
+                            else {
+                                message.info("No more slides to go back")
+                            }
                         }} />
                         <Button className="m-1" type="primary" shape="circle" icon={<RightCircleFilled />} onClick={() => {
-                            setSlideIndex(slideIndex + 1)
-                            setSlide(slides[slideIndex + 1])
+                            if (slideIndex + 1 < slides.length) {
+                                setSlideIndex(slideIndex + 1)
+                                setSlide(slides[slideIndex + 1])
+                            }
+                            else {
+                                message.info("No more slides to go forward")
+                            }
                         }} />
                     </div>
                     <div className="m-1"
