@@ -49,16 +49,16 @@ export default function PresentationList() {
         }
 
     };
+    const getPresentations = async () => {
+        try {
+            const res = await presentationApi.getPresentations();
+            console.log(res);
+            setPresentations(res);
+        } catch (error) {
+            console.log("Get current user GROUP error", error);
+        }
+    };
     useEffect(() => {
-        const getPresentations = async () => {
-            try {
-                const res = await presentationApi.getPresentations();
-                console.log(res);
-                setPresentations(res);
-            } catch (error) {
-                console.log("Get current user GROUP error", error);
-            }
-        };
         getPresentations();
     }, []);
 
@@ -105,6 +105,7 @@ export default function PresentationList() {
                                 modified={presentation.lastEdit}
                                 created={presentation.createdDate}
                                 presentationId={presentation._id}
+                                getPresentations={getPresentations}
                             />
                         </span>
                     ))}
