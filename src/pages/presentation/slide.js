@@ -31,7 +31,7 @@ export default function Slide({ index, slide, setSlide }) {
             <Col span={6} className="slide -violet-700 h-[100%]" >
                 <div className="slide-info-editor mt-3">
                     <div className="m-1">
-                        <Select defaultValue="Header" style={{ width: '100%' }} onChange={(value) => {
+                        <Select defaultValue="Multiple Choice" style={{ width: '100%' }} onChange={(value) => {
                             // slide.type = value
                             setSlide(slideIndex, { ...slide, slideType: value })
                         }} value={slide.slideType}>
@@ -58,7 +58,7 @@ export default function Slide({ index, slide, setSlide }) {
                                     newData[index].name = value.target.value;
                                     setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
                                 }}
-                                value={slide.content.choices[index]} />
+                                    value={slide.content.choices[index]} />
                                 <DeleteOutlined className="ml-3 mt-2 mr-2" onClick={() => {
                                     //remove choice
                                     const newChoices = slide.content.choices.filter((choice, i) => i !== index);
