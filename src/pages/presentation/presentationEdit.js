@@ -43,15 +43,13 @@ export default function PresentationEdit() {
     }
     useEffect(() => {
         const getData = async () => {
-            const resData = await slideApi.getSlideByPresentationId(presentationId)
-            const presentationData = convertResDataToSlides(resData)
-            console.log("This is presentationData: ", presentationData)
+            const presentationData = await slideApi.getSlideByPresentationId(presentationId)
             if (presentationData.length) {
                 setSlides([...presentationData])
             }
             else {
                 setSlides([{
-                    slideType: "header",
+                    slideType: "Multiple Choice",
                     title: "Slide 1",
                     content: {
                         data: [
@@ -140,7 +138,7 @@ export default function PresentationEdit() {
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
                                 () => {
                                     setSlides([...slides, {
-                                        slideType: "header",
+                                        slideType: "Multiple Choice",
                                         title: `Slide ${slides.length + 1}`,
                                         content: {
                                             data: [

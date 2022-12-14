@@ -14,11 +14,11 @@ export default function Slide({ index, slide, setSlide }) {
                     <div className="slide w-[90%] h-[80%] bg-white text-center">
                         <div className="bg-gray-200 h-16" />
                         <div className="slide-title text-3xl font-bold text-center mb-7">
-                            {slide.title}
+                            {slide?.title}
                         </div>
                         <div className="slide-content -gray-600 w-[100%] h-[70%]">
                             <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={slide.content.data}>
+                                <BarChart data={slide?.content.data}>
                                     <XAxis dataKey="name" />
                                     <YAxis />
                                     <Bar dataKey="pv" fill="#8884d8" />
@@ -29,12 +29,12 @@ export default function Slide({ index, slide, setSlide }) {
                 </div>
             </Col>
             <Col span={6} className="slide -violet-700 h-[100%]" >
-                <div className="slide-info-editor mt-3">
+                <div className="slide-info-editor mt-3 px-3">
                     <div className="m-1">
-                        <Select defaultValue="Header" style={{ width: '100%' }} onChange={(value) => {
+                        <Select defaultValue="Multiple Choice" style={{ width: '100%' }} onChange={(value) => {
                             // slide.type = value
                             setSlide(slideIndex, { ...slide, slideType: value })
-                        }} value={slide.slideType}>
+                        }} value={slide?.slideType}>
                             <Select.Option value="MultipleChoice">Multiple Choice</Select.Option>
                             <Select.Option value="Heading">Heading</Select.Option>
                             <Select.Option value="Paragraph">Paragraph</Select.Option>
@@ -44,10 +44,10 @@ export default function Slide({ index, slide, setSlide }) {
                         <Input placeholder="Title" onChange={(value) => {
                             //slide.title = value.target.value
                             setSlide(slideIndex, { ...slide, title: value.target.value })
-                        }} value={slide.title} />
+                        }} value={slide?.title} />
                     </div>
                     <div className="m-2 shadow-md text-center pb-3">
-                        {slide.content.choices.map((choice, index) => (
+                        {slide?.content.choices.map((choice, index) => (
                             <div className="m-2  flex flex-row justify-center">
                                 <Input placeholder="Choice" onChange={(value) => {
                                     // slide.content.choices[index] = value.target.value
@@ -58,7 +58,7 @@ export default function Slide({ index, slide, setSlide }) {
                                     newData[index].name = value.target.value;
                                     setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
                                 }}
-                                value={slide.content.choices[index]} />
+                                    value={slide.content.choices[index]} />
                                 <DeleteOutlined className="ml-3 mt-2 mr-2" onClick={() => {
                                     //remove choice
                                     const newChoices = slide.content.choices.filter((choice, i) => i !== index);

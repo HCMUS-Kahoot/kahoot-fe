@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Drawer, Modal, Input, Button, Col, } from "antd";
+import { Drawer, Modal, Input, Button, Col, message } from "antd";
 import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
@@ -102,6 +102,7 @@ export default function PresentationShow() {
         return () =>
             state?.socket?.disconnect();
     }, [])
+    console.log("state: ", slides, slideIndex);
     return (
         <>
             <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
@@ -177,7 +178,7 @@ export default function PresentationShow() {
 
                         </Button>
 
-                        <Button className="m-1" type="primary" shape="circle" icon={<LeftCircleFilled />} onClick={() => {
+                        {slideIndex !== 0 && <Button className="m-1" type="primary" shape="circle" icon={<LeftCircleFilled />} onClick={() => {
                             const nextSlideIndex = slideIndex - 1 >= 0 ? slideIndex - 1 : 0;
                             change_slide({
                                 roomId: state.room.id,
@@ -185,16 +186,16 @@ export default function PresentationShow() {
                             })
                             setSlideIndex(nextSlideIndex)
                             setSlide(slides[nextSlideIndex])
-                        }} />
-                        <Button className="m-1" type="primary" shape="circle" icon={<RightCircleFilled />} onClick={() => {
-                            const nextSlideIndex = slideIndex + 1 < slides.length ? slideIndex + 1 : slides.length - 1;
+                        }} />}
+                        {slideIndex < slides.length && <Button className="m-1" type="primary" shape="circle" icon={<RightCircleFilled />} onClick={() => {
+                            const nextSlideIndex = slideIndex + 1 < slides.length ? slideIndex + 1 : 0;
                             change_slide({
                                 roomId: state.room.id,
                                 slide: nextSlideIndex
                             })
                             setSlideIndex(nextSlideIndex)
                             setSlide(slides[nextSlideIndex])
-                        }} />
+                        }} />}
                     </div>
                     <div className="m-1"
                         style={{ display: showBar ? "block" : "none" }}
