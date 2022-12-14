@@ -9,13 +9,18 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage";
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import storage from 'redux-persist/lib/storage'
 import authReducer from "./auth";
+
+
 const persistConfig = {
-  key: "root",
-  version: 1,
+  key: 'root',
   storage,
+
 };
+
+
 const rootReducer = combineReducers({
   auth: authReducer,
 });

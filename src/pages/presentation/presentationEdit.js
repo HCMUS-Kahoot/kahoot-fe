@@ -44,10 +44,7 @@ export default function PresentationEdit() {
     useEffect(() => {
         const getData = async () => {
             const presentationData = await slideApi.getSlideByPresentationId(presentationId)
-            // console.log("This is resData: ", resData)
-            // const presentationData=convertResDataToSlides(resData)
-            if(presentationData.length)
-            {
+            if (presentationData.length) {
                 setSlides([...presentationData])
             }
             else {
@@ -136,7 +133,8 @@ export default function PresentationEdit() {
                         <div className="list-slides-container overflow-auto h-[100%]">
                             {slides.length && slides.map((slide, index) => (
                                 <PresentationMinimize SelectSlide={SelectSlide} DuplicateSlide={DuplicateSlide} RemoveSlide={RemoveSlide} key={index} index={index} type={slide.slideType} title={slide.title ? slide.title : "test"} content={slide.content} selectedIndex={selectedSlide} />
-                            ))}
+                            ))
+                            }
                             <div className="m-5 shadow-md rounded-md text-7xl text-center cursor-pointer bg-white" onClick={
                                 () => {
                                     setSlides([...slides, {
@@ -161,11 +159,11 @@ export default function PresentationEdit() {
                             }>
                                 <PlusOutlined className="relative bottom-2" />
                             </div>
-                        </div>
-                    </Col>
+                        </div >
+                    </Col >
                     {slides.length && <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />}
-                </Row>
-            </div>
+                </Row >
+            </div >
         </>
     );
 }

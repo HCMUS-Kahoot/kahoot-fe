@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Drawer, Modal, Input, Button, Col, message } from "antd";
 import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-
+import { useSelector } from "react-redux";
+import { Context as RealtimeContext } from "../../store/context/realtimeContext";
+import PresentationFilter from './PresentationFilter';
 
 export default function PresentationShow() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,7 +37,7 @@ export default function PresentationShow() {
                     choices: ["Choice 1", "Choice 2", "Choice 3"],
                     data: [
                         { name: "Choice 1", pv: 2400, amt: 2400 },
-                        { name: "Choice 2", pv: 1398, amt: 2210 },
+                        { name: "Choice 2", pv: 1398, amt: 1110 },
                         { name: "Choice 3", pv: 9800, amt: 2290 },
                     ]
                 }
@@ -56,7 +58,7 @@ export default function PresentationShow() {
     }
 
     const presentationData = presentation
-    const [slides, setSlides] = useState(presentationData.slides)
+    const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
     const presentationId = useParams().id
@@ -74,6 +76,33 @@ export default function PresentationShow() {
         },
     ])
     const [questionIndex, setQuestionIndex] = useState(0)
+
+    const user = useSelector((state) => state.auth.login.currentUser);
+
+    const { state, initialize_socket, create_room, updated_room, change_slide } = useContext(RealtimeContext);
+
+    useEffect(() => {
+        const handleInitializeRoom = async () => {
+            const actions = {
+                connected: (data) => console.log("Connected with socket ID: ", data),
+                error: (data) => console.log("Failed to connect socket: ", data),
+                room_updated: (data) => {
+                    console.log("event: 'room_updated' received: ", data)
+                    updated_room(data)
+                    PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
+                }
+            }
+            await initialize_socket(actions)
+            await create_room({
+                hostId: user.id,
+                presentationId
+            })
+        }
+        handleInitializeRoom()
+        return () =>
+            state?.socket?.disconnect();
+    }, [])
+    console.log("state: ", slides, slideIndex);
     return (
         <>
             <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
@@ -91,7 +120,7 @@ export default function PresentationShow() {
                             }} />
                         </div>
                         <h1>
-                            {questions[questionIndex].question}
+                            {questions[questionIndex]?.question}
                         </h1>
                         <div className="text-center w-full">
                             <Button className="bg-slate-300" icon={<DownCircleFilled />} onClick={() => {
@@ -121,14 +150,14 @@ export default function PresentationShow() {
             </Drawer>
             <Col span={24} className="slide h-[100%] bg-white" >
                 <div className="h-6 text-center font-bold text-gray-400" >
-                    go to https://presentations/asa/using/{presentationId} to answer
+                    go to <a href={`http://127.0.0.1:3000/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
                 </div>
                 <div className="slide-title text-3xl font-bold text-center mb-7">
-                    {slide.title}
+                    {slide?.title}
                 </div>
                 <div className="slide-content -gray-600 w-[100%] h-[70%]">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={slide.content.data}>
+                        <BarChart data={slide?.content.data}>
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Bar dataKey="pv" fill="#8884d8" />
@@ -149,24 +178,24 @@ export default function PresentationShow() {
 
                         </Button>
 
-                        <Button className="m-1" type="primary" shape="circle" icon={<LeftCircleFilled />} onClick={() => {
-                            if (slideIndex - 1 >= 0) {
-                                setSlideIndex(slideIndex - 1)
-                                setSlide(slides[slideIndex - 1])
-                            }
-                            else {
-                                message.info("No more slides to go back")
-                            }
-                        }} />
-                        <Button className="m-1" type="primary" shape="circle" icon={<RightCircleFilled />} onClick={() => {
-                            if (slideIndex + 1 < slides.length) {
-                                setSlideIndex(slideIndex + 1)
-                                setSlide(slides[slideIndex + 1])
-                            }
-                            else {
-                                message.info("No more slides to go forward")
-                            }
-                        }} />
+                        {slideIndex !== 0 && <Button className="m-1" type="primary" shape="circle" icon={<LeftCircleFilled />} onClick={() => {
+                            const nextSlideIndex = slideIndex - 1 >= 0 ? slideIndex - 1 : 0;
+                            change_slide({
+                                roomId: state.room.id,
+                                slide: nextSlideIndex
+                            })
+                            setSlideIndex(nextSlideIndex)
+                            setSlide(slides[nextSlideIndex])
+                        }} />}
+                        {slideIndex < slides.length && <Button className="m-1" type="primary" shape="circle" icon={<RightCircleFilled />} onClick={() => {
+                            const nextSlideIndex = slideIndex + 1 < slides.length ? slideIndex + 1 : 0;
+                            change_slide({
+                                roomId: state.room.id,
+                                slide: nextSlideIndex
+                            })
+                            setSlideIndex(nextSlideIndex)
+                            setSlide(slides[nextSlideIndex])
+                        }} />}
                     </div>
                     <div className="m-1"
                         style={{ display: showBar ? "block" : "none" }}

@@ -4,6 +4,8 @@ import Routes from "./router";
 import { useDispatch, useSelector } from "react-redux";
 import authApi from "./api/authAPI";
 import { loginSucess } from "./store/auth";
+import { Provider as RealtimeProvider } from "./store/context/realtimeContext";
+
 
 let first = true;
 function App() {
@@ -26,9 +28,11 @@ function App() {
   }, [user]);
 
   return (
-    <BrowserRouter>
-      <Routes user={user} />
-    </BrowserRouter>
+    <RealtimeProvider>
+      <BrowserRouter>
+        <Routes user={user} />
+      </BrowserRouter>
+    </RealtimeProvider>
   );
 }
 export default App;
