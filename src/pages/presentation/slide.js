@@ -31,7 +31,7 @@ export default function Slide({ index, slide, setSlide }) {
             <Col span={6} className="slide -violet-700 h-[100%]" >
                 <div className="slide-info-editor mt-3 px-3">
                     <div className="m-1">
-                        <Select defaultValue="Multiple Choice" style={{ width: '100%' }} onChange={(value) => {
+                        <Select defaultValue="MultipleChoice" style={{ width: '100%' }} onChange={(value) => {
                             // slide.type = value
                             setSlide(slideIndex, { ...slide, slideType: value })
                         }} value={slide?.slideType}>
