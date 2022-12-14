@@ -47,7 +47,7 @@ export default function Slide({ index, slide, setSlide }) {
                         }} value={slide?.title} />
                     </div>
                     <div className="m-2 shadow-md text-center pb-3">
-                        {slide?.content.choices.map((choice, index) => (
+                        {slide?.content?.choices?.map((choice, index) => (
                             <div className="m-2  flex flex-row justify-center">
                                 <Input placeholder="Choice" onChange={(value) => {
                                     // slide.content.choices[index] = value.target.value

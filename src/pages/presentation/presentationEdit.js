@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { Button, Row, Col, } from "antd";
+import { Button, Row, Col, message } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import "./presentationEdit.css";
 import "antd/dist/antd.min.css";
@@ -126,6 +126,9 @@ export default function PresentationEdit() {
             deleteSlides.current=[]
         }
         await slideApi.saveSlidesChange(presentationId, sentData)
+        // navigation(`/presentations/${presentationId}`)
+        // window.location.reload();
+        message.success("Save success")
     }
 
 
