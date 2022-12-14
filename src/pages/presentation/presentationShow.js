@@ -58,7 +58,7 @@ export default function PresentationShow() {
     }
 
     const presentationData = presentation
-    const [slides, setSlides] = useState(presentationData.slides)
+    const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
     const presentationId = useParams().id
@@ -119,7 +119,7 @@ export default function PresentationShow() {
                             }} />
                         </div>
                         <h1>
-                            {questions[questionIndex].question}
+                            {questions[questionIndex]?.question}
                         </h1>
                         <div className="text-center w-full">
                             <Button className="bg-slate-300" icon={<DownCircleFilled />} onClick={() => {
@@ -152,11 +152,11 @@ export default function PresentationShow() {
                     go to <a href={`http://127.0.0.1:3000/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
                 </div>
                 <div className="slide-title text-3xl font-bold text-center mb-7">
-                    {slide.title}
+                    {slide?.title}
                 </div>
                 <div className="slide-content -gray-600 w-[100%] h-[70%]">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={slide.content.data}>
+                        <BarChart data={slide?.content.data}>
                             <XAxis dataKey="name" />
                             <YAxis />
                             <Bar dataKey="pv" fill="#8884d8" />

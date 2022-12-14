@@ -18,9 +18,9 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
   }, newData)
   const finalData = []
   for (const [key, value] of Object.entries(newData)) {
-    console.log(`${key}: ${value}`);
     finalData.push({ name: key, pv: value })
   }
-  const newSlide = slides[newSlideIndex]
+  const newSlide = slides[newSlideIndex] || data.presentation?.presentation[newSlideIndex]
+
   setSlide({ ...newSlide, content: { ...newSlide.content, data: finalData } })
 }

@@ -40,7 +40,7 @@ export default function PresentationChoose() {
     }
 
     const presentationData = presentation
-    const [slides, setSlides] = useState(presentationData.slides)
+    const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
 
@@ -83,6 +83,8 @@ export default function PresentationChoose() {
             }
         };
         handleJoinRoom();
+        return () =>
+            state?.socket?.disconnect();
     }, [])
 
     return (
@@ -95,11 +97,11 @@ export default function PresentationChoose() {
                         select answer and click submit
                     </div>
                     <div className="slide-title text-3xl font-bold text-center mb-7 bg-white">
-                        {slide.title}
+                        {slide?.title}
                     </div>
                     <div className="slide-content -gray-600 w-[90%] h-[60%] bg-white">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={slide.content.data}>
+                            <BarChart data={slide?.content.data}>
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <Bar dataKey="pv" fill="#8884d8" />
@@ -112,22 +114,13 @@ export default function PresentationChoose() {
                         <div className="flex justify-center items-center w-full">
                             <div className="flex flex-wrap flex-row items-center w-[60%]">
                                 {
-                                    slide.content.choices.map((choice, index) => {
+                                    slide?.content?.choices?.map((choice, index) => {
                                         return (
                                             <Button className="w-64 mx-3 my-1"
                                                 onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
                                         )
                                     })
                                 }
-                                {/* <Button className="w-64 mx-3 my-1"
-                                    onClick={() => handleSubmit("Choice 1")}
-                                > Option 1 </Button>
-                                <Button className="w-64 mx-3 my-1"
-                                    onClick={() => handleSubmit("Choice 2")} > Option 2 </Button>
-                                <Button className="w-64 mx-3 my-1"
-                                    onClick={() => handleSubmit("Choice 3")} > Option 3 </Button>
-                                <Button className="w-64 mx-3 my-1"
-                                    onClick={() => handleSubmit("Choice 4")}> Option 4 </Button> */}
                             </div >
                         </div>
                         <Button className="mt-5" type="primary" >Submit</Button>
