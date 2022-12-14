@@ -44,9 +44,9 @@ export default function PresentationEdit() {
     }
     useEffect(()=>{
         const getData = async () => {
-            const resData = await slideApi.getSlideByPresentationId(presentationId)
-            const presentationData=convertResDataToSlides(resData)
-            console.log("This is presentationData: ", presentationData)
+            const presentationData = await slideApi.getSlideByPresentationId(presentationId)
+            // console.log("This is resData: ", resData)
+            // const presentationData=convertResDataToSlides(resData)
             if(presentationData.length)
             {
                 setSlides([...presentationData])
