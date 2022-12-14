@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button, Row, Col, } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import "./presentationEdit.css";
@@ -13,8 +13,9 @@ export default function PresentationEdit() {
     const presentationId = useParams().id;
     const navigation = useNavigate();
     const [slides, setSlides] = useState([]);
+    const deleteSlides=useRef([])
 
-    function getSentDate() {
+    function getSentData() {
         return slides.map(data => {
             const dataItem = data
             delete dataItem.content.data
@@ -75,6 +76,11 @@ export default function PresentationEdit() {
     const RemoveSlide = (index) => {
         console.log("delete is index: ", index);
         console.log("selectedSlide: ", selectedSlide)
+        
+        if(slides[index]._id)
+        {
+            deleteSlides.current.push(slides[index])
+        }
 
         if (selectedSlide === index) {
             SelectSlide(index - 1 >= 0 ? index - 1 : 0);
@@ -107,7 +113,15 @@ export default function PresentationEdit() {
         navigation("/presentations")
     }
     const handleSaveEditSlide = async () => {
-        let sentData = getSentDate()
+        let sentData = getSentData()
+        deleteSlides.current.forEach(async (slide) => {
+            console.log()
+            if(slide._id)
+            {
+                await slideApi.deleteSlide(slide._id)
+            }
+        });
+        deleteSlides=[]
         await slideApi.saveSlidesChange(presentationId, sentData)
     }
 
