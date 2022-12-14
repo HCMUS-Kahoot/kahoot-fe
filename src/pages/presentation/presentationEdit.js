@@ -13,7 +13,7 @@ export default function PresentationEdit() {
     const presentationId = useParams().id;
     const navigation = useNavigate();
     const [slides, setSlides] = useState([]);
-    const deleteSlides=useRef([])
+    const deleteSlides = useRef([])
 
     function getSentData() {
         return slides.map(data => {
@@ -76,9 +76,8 @@ export default function PresentationEdit() {
     const RemoveSlide = (index) => {
         console.log("delete is index: ", index);
         console.log("selectedSlide: ", selectedSlide)
-        
-        if(slides[index]._id)
-        {
+
+        if (slides[index]._id) {
             deleteSlides.current.push(slides[index])
         }
 
@@ -114,20 +113,18 @@ export default function PresentationEdit() {
     }
     const handleSaveEditSlide = async () => {
         let sentData = getSentData()
-        if(deleteSlides.current.length!==0)
-        {
+        if (deleteSlides.current.length !== 0) {
             deleteSlides.current.forEach(async (slide) => {
                 console.log()
-                if(slide._id)
-                {
+                if (slide._id) {
                     await slideApi.deleteSlide(slide._id)
                 }
             });
-            deleteSlides.current=[]
+            deleteSlides.current = []
         }
         await slideApi.saveSlidesChange(presentationId, sentData)
         // navigation(`/presentations/${presentationId}`)
-        // window.location.reload();
+        window.location.reload();
         message.success("Save success")
     }
 

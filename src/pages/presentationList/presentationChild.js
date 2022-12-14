@@ -44,8 +44,11 @@ export default function PresentationChild({
             key: '4',
             danger: true,
             label: <span
-                onClick={() => {
-                    message.warning(`Delete button clicked,id${presentationId}'`);
+                onClick={async () => {
+                    const res = await presentationApi.deletePresentation(presentationId);
+                    console.log("res delete", res);
+                    message.success(`Delete success'`);
+                    getPresentations();
                 }}
             >Delete</span>,
         },
