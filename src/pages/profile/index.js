@@ -112,12 +112,7 @@ export default function Profile() {
                 <Form.Item label="Workplace" name="workplace" initialValue={profile?.workplace}>
                   <Input />
                 </Form.Item>
-                {/* <Form.Item label="Type" name="type">
-                <Select defaultValue="Student">
-                  <Select.Option value="Student">Student</Select.Option>
-                  <Select.Option value="Teacher">Teacher</Select.Option>
-                </Select>
-              </Form.Item> */}
+
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Save
