@@ -178,7 +178,7 @@ export default function PresentationEdit() {
                             </div>
                         </div >
                     </Col >
-                    {slides.length && <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />}
+                    <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />
                 </Row >
             </div >
         </>
