@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button, Space, Table, Select, message } from 'antd'; import 'antd/dist/antd.less';
 import groupApi from "../../api/groupAPI";
+import { useNavigate } from "react-router-dom";
+
 
 const handleChangeRole = async (value, record) => {
     try {
@@ -63,8 +65,12 @@ const columns = [
         render: (_, record) => (
             <Space size="middle">
                 <Button onClick={
-                    () => {
-                        console.log("del:", record);
+                    async () => {
+                        const res = await groupApi.deleteUserInGroup(record.groupId, record.email);
+                        console.log(res);
+                        message.success("Delete member successfully");
+                        record.removeMember(record.groupId, record.email);
+                        
                     }
                 } >Delete</Button>
             </Space>
@@ -91,6 +97,16 @@ const columns = [
 const MemberList = ({ groupId }) => {
 
     const [members, setMembers] = useState([]);
+    const navigate = useNavigate();
+    const groupIdFromParam = groupId.id;
+
+    const removeMember = async (groupId, email) => {
+        try {
+            setMembers(members.filter((member) => member.email !== email));
+        } catch (error) {
+            console.log("Remove member error", error);
+        }
+    };
 
     useEffect(() => {
         const getMembers = async () => {
@@ -102,7 +118,12 @@ const MemberList = ({ groupId }) => {
                     email: data.email,
                     name: (data.firstName || "") + " " + (data.lastName || ""),
                     role: data.role,
-                    groupId: groupId.id
+                    groupId: groupId.id,
+                    refresh: () => {
+                        navigate(`/groups/${groupId.id}`);
+                        //message.success("refreshh");
+                    },
+                    removeMember: removeMember,
                 }));
                 setMembers(data);
             } catch (error) {

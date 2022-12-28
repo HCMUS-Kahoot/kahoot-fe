@@ -100,6 +100,15 @@ class GroupApi {
       return error;
     }
   }
+  deleteUserInGroup = async (groupId,memberEmail) => {
+    try {
+      const res = await axiosClient.get(`/group-members/delete/${groupId}/${memberEmail}`);
+      return res;
+    } catch (error) {
+      console.log("Delete member error", error);
+      return error;
+    }
+  }
 }
 
 const groupApi = new GroupApi();
