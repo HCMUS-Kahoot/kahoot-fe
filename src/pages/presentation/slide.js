@@ -17,13 +17,33 @@ export default function Slide({ index, slide, setSlide }) {
                             {slide?.title}
                         </div>
                         <div className="slide-content -gray-600 w-[100%] h-[70%]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={slide?.content.data}>
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Bar dataKey="pv" fill="#8884d8" />
-                                </BarChart>
-                            </ResponsiveContainer>
+                            {slide?.slideType === "MultipleChoice" &&
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={slide?.content.data}>
+                                        <XAxis dataKey="name" />
+                                        <YAxis />
+                                        <Bar dataKey="pv" fill="#8884d8" />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            }
+                            {
+                                slide?.slideType === "Heading" && <>
+                                    <div className="text-7xl font-bold text-center mt-52">
+                                        {slide?.content.heading}
+                                    </div>
+                                </>
+                            }
+                            {
+                                slide?.slideType === "Paragraph" && <>
+                                    <div className="text-2xl text-center mx-40 border h-[100%] p-6 shadow-md">
+                                        {slide?.content.paragraph.split('\n\n').map(paragraph =>
+                                            <p>
+                                                {paragraph.split('\n').reduce((total, line) => [total, <br />, line])}
+                                            </p>
+                                        )}
+                                    </div>
+                                </>
+                            }
                         </div>
                     </div>
                 </div>
@@ -46,34 +66,52 @@ export default function Slide({ index, slide, setSlide }) {
                             setSlide(slideIndex, { ...slide, title: value.target.value })
                         }} value={slide?.title} />
                     </div>
-                    <div className="m-2 shadow-md text-center pb-3">
-                        {slide?.content?.choices?.map((choice, index) => (
-                            <div className="m-2  flex flex-row justify-center">
-                                <Input placeholder="Choice" onChange={(value) => {
-                                    // slide.content.choices[index] = value.target.value
-                                    // slide.content.data[index].name = value.target.value
-                                    const newChoices = [...slide.content.choices];
-                                    newChoices[index] = value.target.value;
-                                    const newData = [...slide.content.data];
-                                    newData[index].name = value.target.value;
-                                    setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
-                                }}
-                                    value={slide.content.choices[index]} />
-                                <DeleteOutlined className="ml-3 mt-2 mr-2" onClick={() => {
-                                    //remove choice
-                                    const newChoices = slide.content.choices.filter((choice, i) => i !== index);
-                                    const newData = slide.content.data.filter((choice, i) => i !== index);
-                                    setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
-                                }} />
-                            </div>
-                        ))}
-                        <Button onClick={() => {
-                            //add choice
-                            const newChoices = [...slide.content.choices, ""];
-                            const newData = [...slide.content.data, { name: "", pv: 0 }];
-                            setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
-                        }}>Add Choice</Button>
-                    </div>
+                    {slide?.slideType === "MultipleChoice" &&
+                        <div className="m-2 shadow-md text-center pb-3">
+                            {slide?.content?.choices?.map((choice, index) => (
+                                <div className="m-2  flex flex-row justify-center">
+                                    <Input placeholder="Choice" onChange={(value) => {
+                                        // slide.content.choices[index] = value.target.value
+                                        // slide.content.data[index].name = value.target.value
+                                        const newChoices = [...slide.content.choices];
+                                        newChoices[index] = value.target.value;
+                                        const newData = [...slide.content.data];
+                                        newData[index].name = value.target.value;
+                                        setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
+                                    }}
+                                        value={slide.content.choices[index]} />
+                                    <DeleteOutlined className="ml-3 mt-2 mr-2" onClick={() => {
+                                        //remove choice
+                                        const newChoices = slide.content.choices.filter((choice, i) => i !== index);
+                                        const newData = slide.content.data.filter((choice, i) => i !== index);
+                                        setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
+                                    }} />
+                                </div>
+                            ))}
+                            <Button onClick={() => {
+                                //add choice
+                                const newChoices = [...slide.content.choices, ""];
+                                const newData = [...slide.content.data, { name: "", pv: 0 }];
+                                setSlide(slideIndex, { ...slide, content: { ...slide.content, choices: newChoices, data: newData } })
+                            }}>Add Choice</Button>
+                        </div>
+                    }
+                    {
+                        slide?.slideType === "Heading" && <div className="m-2 shadow-md text-center pb-3">
+                            <Input placeholder="Heading" onChange={(value) => {
+                                //slide.content = value.target.value
+                                setSlide(slideIndex, { ...slide, content: { ...slide.content, heading: value.target.value } })
+                            }} value={slide?.content.heading} />
+                        </div>
+                    }
+                    {
+                        slide?.slideType === "Paragraph" && <div className="m-2 shadow-md text-center pb-3">
+                            <Input.TextArea placeholder="Paragraph" onChange={(value) => {
+                                //slide.content = value.target.value
+                                setSlide(slideIndex, { ...slide, content: { ...slide.content, paragraph: value.target.value } })
+                            }} value={slide?.content.paragraph} />
+                        </div>
+                    }
                 </div>
             </Col>
         </>

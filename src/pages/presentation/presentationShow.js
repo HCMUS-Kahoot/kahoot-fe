@@ -42,18 +42,22 @@ export default function PresentationShow() {
           ]
         }
       },
+
       {
-        title: "Slide 2",
-        slideType: "MultipleChoice",
+        title: "Slide 4",
+        slideType: "Paragraph",
         content: {
-          choices: ["Choice 1", "Choice 2", "Choice 3"],
-          data: [
-            { name: "Choice 1", pv: 2400, amt: 2400 },
-            { name: "Choice 2", pv: 1398, amt: 2210 },
-            { name: "Choice 3", pv: 9800, amt: 2290 },
-          ]
+          paragraph: "This is the paragraph, lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         }
       },
+      {
+        title: "Slide 3",
+        slideType: "Heading",
+        content: {
+          heading: "This is the heading"
+        }
+      },
+
     ]
   }
 
@@ -90,6 +94,7 @@ export default function PresentationShow() {
           console.log("event: 'room_updated' received: ", data)
           updated_room(data)
           PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
+          //setSlides(presentation.slides);
         }
       }
       await initialize_socket(actions)
@@ -102,7 +107,6 @@ export default function PresentationShow() {
     return () =>
       state?.socket?.disconnect();
   }, [])
-
 
   return (
     <>
@@ -158,13 +162,33 @@ export default function PresentationShow() {
           {slide?.title}
         </div>
         <div className="slide-content -gray-600 w-[100%] h-[70%]">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={slide?.content.data}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Bar dataKey="pv" fill="#8884d8" />
-            </BarChart>
-          </ResponsiveContainer>
+          {slide?.slideType === "MultipleChoice"&&
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={slide?.content.data}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Bar dataKey="pv" fill="#8884d8" />
+              </BarChart>
+            </ResponsiveContainer>
+          }
+          { 
+            slide?.slideType === "Heading" && <>
+              <div className="text-7xl font-bold text-center mt-60">
+                {slide?.content.heading}
+              </div>
+            </>
+          }
+          {
+            slide?.slideType === "Paragraph" && <>
+              <div className="text-2xl text-center mx-40 border h-[100%] p-6 shadow-md">
+                {slide?.content.paragraph.split('\n\n').map(paragraph =>
+                  <p>
+                    {paragraph.split('\n').reduce((total, line) => [total, <br />, line])}
+                  </p>
+                )}
+              </div>
+            </>
+          }
         </div>
         <div className="slide-info-editor mt-3 absolute bottom-[-30px] w-full flex justify-between h-10"
           onMouseOver={() => setShowBar(true)}
