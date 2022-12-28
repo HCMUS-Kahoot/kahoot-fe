@@ -26,7 +26,10 @@ function PrivateRouter() {
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route exact path="/profile" element={<Profile />} />
-          <Route exact path="/groups" element={<GroupList />} />
+          <Route exact path="/groups" element={<GroupList tab="myGroup" />} />
+          <Route exact path="/groups/admin" element={<GroupList tab="groupImAdmin" />} />
+          <Route exact path="/groups/co-owner" element={<GroupList tab="groupImCoOwner" />} />
+          <Route exact path="/groups/member" element={<GroupList tab="groupImIn" />} />
           <Route exact path="/groups/:id" element={<GroupDetail />} />
           <Route exact path="/groups/:id/invitation" element={<Invitation />} />
           <Route exact path="/groups/:id/posts" element={<GroupDetail tab='posts' />} />

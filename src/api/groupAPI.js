@@ -10,15 +10,40 @@ class GroupApi {
       return error;
     }
   };
-  getGroups = async () => {
+  // getGroups = async () => {
+  //   try {
+  //     const res = await axiosClient.get("/groups/current-user-groups");
+  //     return res;
+  //   } catch (error) {
+  //     console.log("Get groups error", error);
+  //     return error;
+  //   }
+  // };
+  getGroupsWithTab = async (tab) => {
     try {
-      const res = await axiosClient.get("/groups/current-user-groups");
-      return res;
+      if (tab === "myGroup") {
+        const res = await axiosClient.get("/groups/current-user-groups");
+        return res;
+      }
+      else if (tab === "groupImAdmin") {
+        const res = await axiosClient.get("/groups/group-that-im-admin");
+        return res;
+      }
+      else if (tab === "groupImCoOwner") {
+        const res = await axiosClient.get("/groups/group-that-im-co-owner");
+        return res;
+      }
+      else if (tab === "groupImIn"){
+        const res = await axiosClient.get("/groups/group-that-im-member");
+        return res;
+      }
     } catch (error) {
       console.log("Get groups error", error);
       return error;
     }
   };
+
+
   updateGroup = async (id, group) => {
     try {
       const res = await axiosClient.put(`/groups/${id}`, group);
