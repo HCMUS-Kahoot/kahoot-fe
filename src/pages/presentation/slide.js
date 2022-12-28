@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Button, Col, Select } from "antd";
+import { Input, Button, Col, Select,message } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
@@ -35,8 +35,8 @@ export default function Slide({ index, slide, setSlide }) {
                             }
                             {
                                 slide?.slideType === "Paragraph" && <>
-                                    <div className="text-2xl text-center mx-40 border h-[100%] p-6 shadow-md">
-                                        {slide?.content.paragraph.split('\n\n').map(paragraph =>
+                                    <div className="text-2xl text-left mx-16 border h-[100%] p-6 shadow-md">
+                                        {slide?.content?.paragraph?.split('\n\n').map(paragraph =>
                                             <p>
                                                 {paragraph.split('\n').reduce((total, line) => [total, <br />, line])}
                                             </p>
@@ -99,7 +99,11 @@ export default function Slide({ index, slide, setSlide }) {
                     {
                         slide?.slideType === "Heading" && <div className="m-2 shadow-md text-center pb-3">
                             <Input placeholder="Heading" onChange={(value) => {
-                                //slide.content = value.target.value
+                                if (value.target.value === "" || value.target.value === null) { 
+                                    value.target.value = "Heading"
+                                    message.error("Heading cannot be empty")
+                                }
+
                                 setSlide(slideIndex, { ...slide, content: { ...slide.content, heading: value.target.value } })
                             }} value={slide?.content.heading} />
                         </div>
@@ -107,7 +111,10 @@ export default function Slide({ index, slide, setSlide }) {
                     {
                         slide?.slideType === "Paragraph" && <div className="m-2 shadow-md text-center pb-3">
                             <Input.TextArea placeholder="Paragraph" onChange={(value) => {
-                                //slide.content = value.target.value
+                                if (value.target.value === "" || value.target.value === null) {
+                                    value.target.value = "Paragraph"
+                                    message.error("Paragraph cannot be empty")
+                                }
                                 setSlide(slideIndex, { ...slide, content: { ...slide.content, paragraph: value.target.value } })
                             }} value={slide?.content.paragraph} />
                         </div>
