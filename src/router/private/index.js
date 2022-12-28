@@ -14,6 +14,8 @@ import PresentationList from "../../pages/presentationList";
 import PresentationShow from "../../pages/presentation/presentationShow";
 import PresentationChoose from "../../pages/presentation/presentationChoose";
 import PresentationPinInput from "../../pages/presentation/presentationPinInput";
+import EmailInput from "../../pages/forgotpassword/emailInput";
+import ResetPasword from "../../pages/forgotpassword/resetpassword";
 const { Content } = Layout;
 
 function PrivateRouter() {
@@ -39,6 +41,8 @@ function PrivateRouter() {
           <Route exact path="/presentations/:id/show" element={<PresentationShow />} />
           <Route exact path="/presentations/:id/choose" element={<PresentationChoose />} />
           <Route exact path="/presentations/pin" element={<PresentationPinInput />} />
+          <Route exact path="/forgotpassword" element={<EmailInput />} />
+          <Route exact path="/forgotpassword/resetpassword" element={<ResetPasword />} />
         </Routes>
       </Content>
       <Footer />

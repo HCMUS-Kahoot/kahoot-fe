@@ -132,7 +132,7 @@ export default function Login() {
               Register
             </Link>
             <Link
-              to="/forgot-password"
+              to="/forgotpassword"
               className="text-blue-500 underline mx-2"
             >
               Forgot Password
