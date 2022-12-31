@@ -9,8 +9,8 @@ export default function CreatePresentationForm({ handleSubmit }) {
         <Form layout="vertical" name="basic" onFinish={
           handleSubmit
         }>
-          <Form.Item label="Presentation Name" name="name" initialValue={""} >
-            <Input placeholder="Presentation Name" />
+          <Form.Item label="Presentation Name" name="name" initialValue={""} required>
+            <Input placeholder="Presentation Name" required/>
           </Form.Item>
           <Button type="primary" htmlType="submit" style={{
             width: "100%",
