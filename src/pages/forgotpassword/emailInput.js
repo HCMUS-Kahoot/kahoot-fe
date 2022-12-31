@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Form, Input, Button,message} from "antd";
-import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import "antd/dist/antd.min.css";
-import { FacebookFilled, GoogleOutlined } from "@ant-design/icons";
-import authApi from "../../api/authAPI";
 
 const schema = Yup.object().shape({
     email: Yup.string()
@@ -21,7 +18,6 @@ export default function EmailInput() {
     });
 
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     function handleChange(event) {
         setFormData((prevFormData) => ({
             ...prevFormData,
@@ -32,17 +28,12 @@ export default function EmailInput() {
     const handleSubmit = async () => {
         try {
             //TODO
-            //await authApi.forgotPassword(formData, dispatch, navigate);
             message.success("Email sent successfully, please check your email");
             navigate("/forgotpassword/resetpassword");
         } catch (error) {
             console.log("Login error", error);
         }
     };
-    const handleTest = async () => {
-        await authApi.protectedTest();
-    };
-
     //disble scroll on body
     document.body.style.overflow = "hidden";
 

@@ -40,8 +40,7 @@ export default function PresentationChoose() {
             },
         ]
     }
-
-    const presentationData = presentation
+    
     const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])

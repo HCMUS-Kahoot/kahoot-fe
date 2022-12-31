@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { Input, Modal, message, Row, Col } from "antd";
 import "antd/dist/antd.min.css";
 import PresentationChild from "./presentationChild";
@@ -34,10 +33,6 @@ export default function PresentationList() {
                 return;
             }
             const res = await presentationApi.createPresentation(values);
-            console.log(res);
-            // if (res.status === 400) {
-            //     message.error("Create presentation failed");
-            // } else {
             message.success("Create presentation successfully");
             setIsModalOpen(false);
             const newPresentations = [...presentations];
@@ -92,11 +87,6 @@ export default function PresentationList() {
                         </Row>
                     </div>
 
-                    {/* <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
-                    <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
-                    <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link>
-                    <Link className="w-full" to={"/presentations/presentationid"} > <PresentationChild presentationName={"Presentation name"} created={"12-23-2001 12:12"} modified={"12-23-2001 12:12"} owner={"me"} /></Link> */}
-
                     {presentations.map((presentation) => (
                         <span className="w-full">
                             <PresentationChild
@@ -109,7 +99,7 @@ export default function PresentationList() {
                             />
                         </span>
                     ))}
-                    <button className="w-full py-1 shadow-md bg-[#f4f4f4] font-bold text-black "// mx-56 mb-4 rounded-sm hover:bg-sky-700"
+                    <button className="w-full py-1 shadow-md bg-[#f4f4f4] font-bold text-black "
                         onClick={() => {
                             showModal();
                         }}

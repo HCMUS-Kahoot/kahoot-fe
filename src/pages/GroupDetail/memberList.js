@@ -98,7 +98,6 @@ const MemberList = ({ groupId }) => {
 
     const [members, setMembers] = useState([]);
     const navigate = useNavigate();
-    const groupIdFromParam = groupId.id;
 
     const removeMember = async (groupId, email) => {
         try {

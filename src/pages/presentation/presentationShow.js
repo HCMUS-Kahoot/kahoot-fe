@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Drawer, Modal, Input, Button, Col, message } from "antd";
+import { Drawer, Modal, Input, Button, Col } from "antd";
 import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
@@ -61,7 +61,6 @@ export default function PresentationShow() {
     ]
   }
 
-  const presentationData = presentation
   const [slides, setSlides] = useState([])
   const [slideIndex, setSlideIndex] = useState(0)
   const [slide, setSlide] = useState(slides[slideIndex])
@@ -94,7 +93,6 @@ export default function PresentationShow() {
           console.log("event: 'room_updated' received: ", data)
           updated_room(data)
           PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
-          //setSlides(presentation.slides);
         }
       }
       await initialize_socket(actions)
