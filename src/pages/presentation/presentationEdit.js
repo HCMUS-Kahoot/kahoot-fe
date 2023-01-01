@@ -163,13 +163,16 @@ export default function PresentationEdit() {
                                                     name: 'Choice A', pv: 1
                                                 },
                                                 {
-                                                    name: 'Choice B', pv: 2,
+                                                    name: 'Choice B', pv: 1,
                                                 },
                                                 {
-                                                    name: 'Choice C', pv: 3,
+                                                    name: 'Choice C', pv: 1,
                                                 },
                                             ],
-                                            choices: ["Choice 1", "Choice 2", "Choice 3"]
+                                            choices: ["Choice 1", "Choice 2", "Choice 3"],
+                                            heading: "Heading",
+                                            paragraph: "Your paragraph here"
+
                                         }
                                     }])
                                 }
@@ -178,7 +181,7 @@ export default function PresentationEdit() {
                             </div>
                         </div >
                     </Col >
-                    {slides.length && <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />}
+                    <Slide index={selectedSlide} slide={slides[selectedSlide]} setSlide={setSlide} />
                 </Row >
             </div >
         </>

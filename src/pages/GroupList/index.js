@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { Input, Menu, Modal, Button, message } from "antd";
 import "antd/dist/antd.min.css";
 import GroupChild from "./GroupChild";
@@ -7,9 +7,11 @@ import GroupChildAdd from "./GroupChildAdd";
 import CreateGroupForm from "./CreateGroupForm";
 import groupApi from "../../api/groupAPI";
 
-export default function GroupList() {
+export default function GroupList({ tab }) {
+    const navigate = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [groups, setGroups] = useState([]);
+    const [loaded, setLoaded] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -47,24 +49,42 @@ export default function GroupList() {
     useEffect(() => {
         const getGroups = async () => {
             try {
-                const res = await groupApi.getGroups();
+                const res = await groupApi.getGroupsWithTab(tab);
                 console.log(res);
                 setGroups(res);
+                setLoaded(true);
             } catch (error) {
                 console.log("Get current user GROUP error", error);
             }
         };
         getGroups();
-    }, []);
+    }, [tab]);
 
     return (
         <>
             <div className="m-4 mx-14">
                 <div className="my-navbar">
-                    <Menu mode="horizontal" defaultActiveFirst>
-                        <Menu.Item key="mail"></Menu.Item>
-                        <Menu.Item key="myGroup">My Groups</Menu.Item>
-                        <Menu.Item key="groupImIn">Groups I'm in</Menu.Item>
+                    <Menu mode="horizontal" defaultActiveFirst selectedKeys={tab} >
+                        <Menu.Item key="hidden"></Menu.Item>
+                        <Menu.Item onClick={() => { 
+                            setLoaded(false);
+                            navigate("/groups")
+                        }} key="myGroup">All my groups</Menu.Item>
+                        <Menu.Item onClick={() => {
+                            setLoaded(false);
+
+                            navigate("/groups/admin")
+                        }} key="groupImAdmin">Groups I'm Admin</Menu.Item>
+                        <Menu.Item onClick={() => {
+                            setLoaded(false);
+
+                            navigate("/groups/co-owner")
+                        }} key="groupImCoOwner">Groups I'm co-owner</Menu.Item>
+                        <Menu.Item onClick={() => {
+                            setLoaded(false);
+
+                            navigate("/groups/member")
+                        }} key="groupImIn">Groups I'm member</Menu.Item>
                     </Menu>
                 </div>
                 <div className="mx-10 my-5 text-center">
@@ -75,7 +95,10 @@ export default function GroupList() {
                     />
                 </div>
                 <div className="flex flex-wrap -mb-4 bg-white">
-                    {groups.map((group) => (
+                    { 
+                        !loaded && <div className="w-full text-center font-bold text-3xl">Loading...</div>
+                    }
+                    {loaded && groups?.map((group) => (
                         <Link to={`/groups/${group._id}`}>
                             <GroupChild
                                 groupName={group.name}
@@ -83,14 +106,19 @@ export default function GroupList() {
                             />
                         </Link>
                     ))}
-                    <button
-                        onClick={() => {
-                            showModal();
-                        }}
-                    >
-                        {" "}
-                        <GroupChildAdd />
-                    </button>
+                    {(tab === "myGroup" || tab ==="groupImAdmin") &&
+                        <button
+                            onClick={() => {
+                                showModal();
+                            }}
+                        >
+                            {" "}
+                            <GroupChildAdd />
+                        </button>
+                    }
+                    {
+                        groups?.length === 0 && loaded && <div className="w-full text-center font-bold text-3xl py-20">No group found</div>
+                    }
                 </div>
             </div>
             <Modal

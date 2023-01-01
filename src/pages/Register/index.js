@@ -62,6 +62,10 @@ export default function Register() {
                     required: true,
                     message: "Please input your email!",
                   },
+                  {
+                    type: "email",
+                    message: "Please input a valid email!",
+                  },
                 ]}
               >
                 <Input
@@ -79,6 +83,18 @@ export default function Register() {
                     required: true,
                     message: "Please input your password!",
                   },
+                  { min: 8, message: "Password must be at least 8 characters" },
+                  // {
+                  //   validator: (_, value) => {
+                  //     //must contain at least one uppercase letter
+                  //     if (!value || /[A-Z]/.test(value)) {
+                  //       return Promise.resolve();
+                  //     }
+                  //     return Promise.reject(
+                  //       new Error("Password must contain at least one uppercase letter")
+                  //     );
+                  //   }
+                  // }
                 ]}
               >
                 <Input.Password
@@ -95,6 +111,16 @@ export default function Register() {
                     required: true,
                     message: "Please input your password!",
                   },
+                  {
+                    validator: (_, value) => {
+                      if (!value || formData.password === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject(
+                        new Error("The two passwords that you entered do not match!")
+                      );
+                    },
+                  }
                 ]}
               >
                 <Input.Password
@@ -112,6 +138,7 @@ export default function Register() {
                     required: true,
                     message: "Please input your firstName!",
                   },
+                  { min: 6, message: "First name must be at least 6 characters" }
                 ]}
               >
                 <Input
@@ -129,6 +156,7 @@ export default function Register() {
                     required: true,
                     message: "Please input your lastName!",
                   },
+                  { min: 6, message: "Last name must be at least 6 characters"}
                 ]}
               >
                 <Input

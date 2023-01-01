@@ -6,16 +6,20 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
   setSlideIndex(newSlideIndex)
 
   const newData = {}
+<<<<<<< HEAD
   data.users?.reduce((acc, user) => {
     user?.answer.reduce((acc, answer) => {
+=======
+  data.users?.forEach((user) => {
+    user?.answer.forEach((answer) => {
+>>>>>>> 54f13b780f9a503ef16a112ee5c038daaa5b0c2a
       if (answer.slideIndex === newSlideIndex) {
-        if (!acc[answer.choice])
-          acc[answer.choice] = 0
-        acc[answer.choice] += 1
+        if (!newData[answer.choice])
+          newData[answer.choice] = 0
+        newData[answer.choice] += 1
       }
-      return acc;
-    }, acc)
-  }, newData)
+    })
+  })
 
   const newSlide = slides[newSlideIndex] || data.presentation?.presentation[newSlideIndex]
 

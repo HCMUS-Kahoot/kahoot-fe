@@ -25,15 +25,17 @@ export default function PresentationChoose() {
                 }
             },
             {
-                title: "Slide 2",
-                slideType: "MultipleChoice",
+                title: "Slide 4",
+                slideType: "Paragraph",
                 content: {
-                    choices: ["Choice 1", "Choice 2", "Choice 3"],
-                    data: [
-                        { name: "Choice 1", pv: 2400, amt: 2400 },
-                        { name: "Choice 2", pv: 1398, amt: 2210 },
-                        { name: "Choice 3", pv: 9800, amt: 2290 },
-                    ]
+                    paragraph: "This is the paragraph, lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                }
+            },
+            {
+                title: "Slide 3",
+                slideType: "Heading",
+                content: {
+                    heading: "This is the heading"
                 }
             },
         ]
@@ -101,34 +103,55 @@ export default function PresentationChoose() {
                         {slide?.title}
                     </div>
                     <div className="slide-content -gray-600 w-[90%] h-[60%] bg-white">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={slide?.content.data}>
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Bar dataKey="pv" fill="#8884d8" />
-                            </BarChart>
-                        </ResponsiveContainer>
+                        {slide?.slideType === "MultipleChoice" &&
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={slide?.content.data}>
+                                    <XAxis dataKey="name" />
+                                    <YAxis />
+                                    <Bar dataKey="pv" fill="#8884d8" />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        }
+                        {
+                            slide?.slideType === "Heading" && <>
+                                <div className="text-7xl font-bold text-center mt-60">
+                                    {slide?.content.heading}
+                                </div>
+                            </>
+                        }
+                        {
+                            slide?.slideType === "Paragraph" && <>
+                                <div className="text-2xl text-center mx-40 border h-[100%] p-6 shadow-md">
+                                    {slide?.content.paragraph.split('\n\n').map(paragraph =>
+                                        <p>
+                                            {paragraph.split('\n').reduce((total, line) => [total, <br />, line])}
+                                        </p>
+                                    )}
+                                </div>
+                            </>
+                        }
                     </div>
                 </div>
                 <div className="slide-info-editor mt-3 absolute bottom-[0px] border-t-2 border-gray-300 shadow-inner w-full h-52 bg-white flex flex-col justify-center" >
-                    <div>
-                        <div className="flex justify-center items-center w-full">
+                    {slide?.slideType === "MultipleChoice" &&
+                        <div>
+                            <div className="flex justify-center items-center w-full">
 
-                            <div className="flex flex-wrap flex-row items-center w-[60%]">
-                                {
-                                    slide?.content?.choices?.map((choice, index) => {
-                                        return (
-                                            <Button className="w-64 mx-3 my-1"
-                                                onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
-                                        )
-                                    })
-                                }
-                            </div >
+                                <div className="flex flex-wrap flex-row items-center w-[60%]">
+                                    {
+                                        slide?.content?.choices?.map((choice, index) => {
+                                            return (
+                                                <Button className="w-64 mx-3 my-1"
+                                                    onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
+                                            )
+                                        })
+                                    }
+                                </div >
 
+                            </div>
+                            {/* <Button className="mt-5" type="primary" >Submit</Button> */}
                         </div>
-                        {/* <Button className="mt-5" type="primary" >Submit</Button> */}
-                    </div>
-
+                    }
                 </div>
             </Col>
         </>
