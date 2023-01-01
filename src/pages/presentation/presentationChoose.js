@@ -1,14 +1,34 @@
-import React, { useContext, useState } from "react";
-import { Button, Col, message } from "antd";
+import React, { useContext, useState, useEffect } from "react";
+import { Drawer, Button, Col, message, Input } from "antd";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import { useParams } from "react-router";
-import { useEffect } from "react";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import { useSelector } from "react-redux";
 import PresentationFilter from './PresentationFilter';
+import ChatModel from "./components/chats";
 
 export default function PresentationChoose() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    const [openDrawer, setOpenDrawer] = useState(false);
+    const showDrawer = () => {
+        setOpenDrawer(true);
+    };
+    const onClose = () => {
+        setOpenDrawer(false);
+    };
     //todo: let member to submit questions and comments
     const presentation = {
         slides: [
@@ -46,13 +66,18 @@ export default function PresentationChoose() {
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
     // const [isCanChoose, setIsCanChoose] = useState(true);
+    const [questions, setQuestions] = useState([])
+    const [chats, setChats] = useState([])
+    const [showBar, setShowBar] = useState(false)
+
     const user = useSelector((state) => state.auth.login.currentUser);
 
-    const { state, initialize_socket, updated_room, join_room, submit_answer } = useContext(RealtimeContext);
+    const { state, initialize_socket, updated_room, public_chat, submit_answer, join_room } = useContext(RealtimeContext);
     const params = useParams();
     const handleSubmit = async (choice) => {
         try {
             await submit_answer({
+                userId: user.id,
                 roomId: state.room.id,
                 answer: choice,
                 slideIndex
@@ -73,11 +98,12 @@ export default function PresentationChoose() {
                     room_updated: (data) => {
                         console.log("event: 'room_updated' received: ", data)
                         updated_room(data)
-                        PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
+                        PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide, setChats, setQuestions })
                     }
                 }
                 await initialize_socket(actions)
                 await join_room({
+                    id: user.id,
                     pin: params.id,
                     name: `${user.firstName} ${user.lastName}`,
                 });
@@ -86,14 +112,18 @@ export default function PresentationChoose() {
             }
         };
         handleJoinRoom();
+
         return () =>
             state?.socket?.disconnect();
     }, [])
-
     return (
         <>
+            <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
 
-            <Col span={24} className="slide h-[100%] bg-gray-200 text-center flex justify-center flex-row " >
+            <Col span={24} className="slide h-[100%] bg-gray-200 text-center flex justify-center flex-row "
+                onMouseOver={() => setShowBar(true)}
+                onMouseLeave={() => setShowBar(false)}
+            >
                 <div className="h-6" />
                 <div className=" border-2 border-gray-400 h-[60%] w-[60%] ml-[20%] bg-white">
                     <div className="h-6 text-center font-bold text-gray-400" >
@@ -152,6 +182,20 @@ export default function PresentationChoose() {
                             {/* <Button className="mt-5" type="primary" >Submit</Button> */}
                         </div>
                     }
+                </div>
+                <div className="m-1"
+                    style={{ display: showBar ? "block" : "none" }}
+                >
+                    <Button className="m-1" type="primary" shape="circle" icon={<MessageOutlined />} onClick={
+                        () => {
+                            showDrawer()
+                        }
+                    } />
+                    <Button className="m-1" type="primary" shape="circle" icon={<QuestionCircleOutlined />} onClick={
+                        () => {
+                            showModal()
+                        }
+                    } />
                 </div>
             </Col>
         </>

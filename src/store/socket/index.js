@@ -42,7 +42,12 @@ const socketSlice = createSlice({
     },
     updateRoom: (state, action) => {
       state.room = action.payload;
-    }
+    },
+    publicChat: (state, action) => {
+      if (state.socket) {
+        state.socket.emit("publicChat", action.payload);
+      }
+    },
   }
 });
 
@@ -53,6 +58,7 @@ export const {
   submitAnswer,
   changeSlide,
   updateRoom,
+  publicChat,
 } = socketSlice.actions;
 
 export default socketSlice.reducer;

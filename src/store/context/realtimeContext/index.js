@@ -99,8 +99,21 @@ const change_slide = (dispatch) => {
     }
   };
 };
+
+const public_chat = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("publicChat", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
 export const { Context, Provider } = contextBuilder(
   socketReducer,
-  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide },
+  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide, public_chat },
   { socket: null, errorMessage: "", room: null }
 );

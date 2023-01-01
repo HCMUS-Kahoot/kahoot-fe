@@ -7,7 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useSelector } from "react-redux";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import PresentationFilter from './PresentationFilter';
-
+import ChatModel from "./components/chats";
 export default function PresentationShow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -64,7 +64,7 @@ export default function PresentationShow() {
   const presentationData = presentation
   const [slides, setSlides] = useState([])
   const [slideIndex, setSlideIndex] = useState(0)
-  const [slide, setSlide] = useState(slides[slideIndex])
+  const [slide, setSlide] = useState(slides[slideIndex] || {})
   const presentationId = useParams().id
   const navigate = useNavigate();
   const [showBar, setShowBar] = useState(false)
@@ -79,11 +79,12 @@ export default function PresentationShow() {
       question: "Question 3",
     },
   ])
+  const [chats, setChats] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0)
 
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const { state, initialize_socket, create_room, updated_room, change_slide } = useContext(RealtimeContext);
+  const { state, initialize_socket, create_room, updated_room, change_slide, public_chat } = useContext(RealtimeContext);
 
   useEffect(() => {
     const handleInitializeRoom = async () => {
@@ -93,7 +94,7 @@ export default function PresentationShow() {
         room_updated: (data) => {
           console.log("event: 'room_updated' received: ", data)
           updated_room(data)
-          PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
+          PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide, setQuestions, setChats })
           //setSlides(presentation.slides);
         }
       }
@@ -142,27 +143,17 @@ export default function PresentationShow() {
           </Button>
         </div>
       </Modal>
-      <Drawer title="Messages" placement="right" onClose={onClose} open={openDrawer}>
-        <div className="shadow-md bg-white rounded-lg p-3 my-2">
-          sadasdasd
-        </div>
-        <div className="shadow-md bg-white rounded-lg p-3 my-2">
-          lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-        </div>
-        <div className="flex justify-evenly w-full absolute bottom-3">
-          <Input placeholder="Comment" className="relative right-3" style={{ width: "70%" }} /> <Button className="bg-slate-300" icon={<SendOutlined />} />
-        </div>
-      </Drawer>
+      <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
       <Col span={24} className="slide h-[100%] bg-white" >
         <div className="h-6 text-center font-bold text-gray-400" >
-          go to <a href={`https://kahoothcmus.netlify.app/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
+          go to <a href={`${process.env.REACT_APP_USER_URL}/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
           or input pin: {state?.room?.pin || 'abcd'}
         </div>
         <div className="slide-title text-3xl font-bold text-center mb-7">
           {slide?.title}
         </div>
         <div className="slide-content -gray-600 w-[100%] h-[70%]">
-          {slide?.slideType === "MultipleChoice"&&
+          {slide?.slideType === "MultipleChoice" &&
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={slide?.content.data}>
                 <XAxis dataKey="name" />
@@ -171,7 +162,7 @@ export default function PresentationShow() {
               </BarChart>
             </ResponsiveContainer>
           }
-          { 
+          {
             slide?.slideType === "Heading" && <>
               <div className="text-7xl font-bold text-center mt-60">
                 {slide?.content.heading}
