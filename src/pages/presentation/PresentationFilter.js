@@ -5,7 +5,7 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
   const newSlideIndex = data.presentation.slide;
   setSlideIndex(newSlideIndex)
 
-  let newData = {}
+  const newData = {}
   data.users?.reduce((acc, user) => {
     user?.answer.reduce((acc, answer) => {
       if (answer.slideIndex === newSlideIndex) {
@@ -19,7 +19,7 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
 
   const newSlide = slides[newSlideIndex] || data.presentation?.presentation[newSlideIndex]
 
-  let finalData = []
+  const finalData = []
   if (Object.keys(newData).length === 0) {
     newSlide.content.choices.reduce((acc, choice) => {
       acc[choice] = 0
