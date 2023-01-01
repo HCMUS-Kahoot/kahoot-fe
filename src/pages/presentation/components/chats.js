@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 
 import { Context as RealtimeContext } from "../../../store/context/realtimeContext";
-import { Drawer, Input, Button } from "antd";
+import { Drawer, Input, Button, notification } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
@@ -9,6 +9,21 @@ function ChatModel({ chats, openDrawer, onClose }) {
   const [chatInput, setChatInput] = useState('');
   const user = useSelector((state) => state.auth.login.currentUser);
   const { state, public_chat } = useContext(RealtimeContext);
+  const openNotification = ({ name, message }) => {
+    notification.open({
+      message: `${name}`,
+      description: `${message}`,
+      placement: "bottomRight",
+    });
+  };
+  useEffect(() => {
+    if (chats.length > 0) {
+      const lastChat = chats[chats.length - 1];
+      if (lastChat.userId !== user.id) {
+        openNotification(lastChat)
+      }
+    }
+  }, [chats])
   return (
     <Drawer title="Messages" placement="right" onClose={onClose} open={openDrawer}>
       {

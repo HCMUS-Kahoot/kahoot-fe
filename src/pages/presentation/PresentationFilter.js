@@ -39,7 +39,7 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
 
   data.host?.chats.forEach((chat) => {
     allChat.push({
-      userId: data.host.clientId,
+      userId: data.host.hostId,
       name: "Host",
       message: chat.message,
       time: chat.time,
@@ -47,7 +47,7 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
   })
   data.host?.questions.forEach((question) => {
     allQuestions.push({
-      userId: data.host.clientId,
+      userId: data.host.HostId,
       name: "Host",
       question: question.question,
       time: question.time,
