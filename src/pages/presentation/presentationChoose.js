@@ -8,6 +8,7 @@ import { Context as RealtimeContext } from "../../store/context/realtimeContext"
 import { useSelector } from "react-redux";
 import PresentationFilter from './PresentationFilter';
 import ChatModel from "./components/chats";
+import Questions from "./components/questions";
 
 export default function PresentationChoose() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -65,8 +66,9 @@ export default function PresentationChoose() {
     const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
-    // const [isCanChoose, setIsCanChoose] = useState(true);
     const [questions, setQuestions] = useState([])
+    const [questionIndex, setQuestionIndex] = useState(0)
+    const [question, setQuestion] = useState()
     const [chats, setChats] = useState([])
     const [showBar, setShowBar] = useState(false)
 
@@ -82,8 +84,6 @@ export default function PresentationChoose() {
                 answer: choice,
                 slideIndex
             })
-            message.success("Submitted")
-            // setIsCanChoose(false)
         }
         catch (error) {
             message.error("Failed to submit")
@@ -98,7 +98,26 @@ export default function PresentationChoose() {
                     room_updated: (data) => {
                         console.log("event: 'room_updated' received: ", data)
                         updated_room(data)
-                        PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide, setChats, setQuestions })
+                        const { newSlide, newSlideIndex, newSlides, allChats, allQuestions } =
+                            PresentationFilter({ data, slides, user })
+
+                        if (newSlide) {
+                            setSlide(newSlide)
+                        }
+                        if (newSlideIndex) {
+                            setSlideIndex(newSlideIndex)
+                        }
+                        if (newSlides) {
+                            setSlides(newSlides)
+                            // updateSubmitted()
+                        }
+                        if (allChats) {
+                            setChats(allChats)
+                        }
+                        if (allQuestions) {
+                            setQuestions(allQuestions)
+                        }
+
                     }
                 }
                 await initialize_socket(actions)
@@ -119,7 +138,12 @@ export default function PresentationChoose() {
     return (
         <>
             <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
-
+            <Questions
+                questions={questions} setQuestions={setQuestions}
+                questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}
+                isModalOpen={isModalOpen} handleCancel={handleCancel}
+                handleOk={handleOk}
+            />
             <Col span={24} className="slide h-[100%] bg-gray-200 text-center flex justify-center flex-row "
                 onMouseOver={() => setShowBar(true)}
                 onMouseLeave={() => setShowBar(false)}
@@ -169,12 +193,14 @@ export default function PresentationChoose() {
 
                                 <div className="flex flex-wrap flex-row items-center w-[60%]">
                                     {
-                                        slide?.content?.choices?.map((choice, index) => {
-                                            return (
-                                                <Button className="w-64 mx-3 my-1"
-                                                    onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
-                                            )
-                                        })
+                                        (slide?.submitted) ?
+                                            null :
+                                            slide?.content?.choices?.map((choice, index) => {
+                                                return (
+                                                    <Button className="w-64 mx-3 my-1"
+                                                        onClick={() => handleSubmit(choice)} key={index}> {choice} </Button>
+                                                )
+                                            })
                                     }
                                 </div >
 

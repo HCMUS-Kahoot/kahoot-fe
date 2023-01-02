@@ -1,12 +1,15 @@
-export default function PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide, setQuestions, setChats }) {
+export default function PresentationFilter({ data, slides, user: currentUser }) {
+  let newSlides = {}
   if (data.presentation.presentation && slides.length === 0) {
-    setSlides(() => data.presentation.presentation)
+    // setSlides(() => data.presentation.presentation)
+    newSlides = data.presentation.presentation;
   }
   const newSlideIndex = data.presentation.slide;
-  setSlideIndex(() => newSlideIndex)
+  // setSlideIndex(() => newSlideIndex)
 
   const newData = {}
-  let allChat = []
+  let submitted = false
+  let allChats = []
   let allQuestions = []
   data.users?.forEach((user) => {
     user?.answer.forEach((answer) => {
@@ -14,13 +17,14 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
         if (!newData[answer.choice])
           newData[answer.choice] = 0
         newData[answer.choice] += 1
+        if (currentUser.id === user.id)
+          submitted = true
       }
     })
     const { name, id: userId, chats, questions } = user
-    console.log("user: ", userId, name)
 
     chats.forEach((chat) => {
-      allChat.push({
+      allChats.push({
         userId: userId,
         name: name,
         message: chat.message,
@@ -38,7 +42,7 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
   })
 
   data.host?.chats.forEach((chat) => {
-    allChat.push({
+    allChats.push({
       userId: data.host.hostId,
       name: "Host",
       message: chat.message,
@@ -53,20 +57,20 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
       time: question.time,
     })
   })
-  allChat.sort((a, b) => {
+  allChats.sort((a, b) => {
     return a.time - b.time
   })
   allQuestions.sort((a, b) => {
     return a.time - b.time
   })
-  setChats(() => allChat)
-  setQuestions(() => allQuestions)
+  // setChats(() => allChat)
+  // setQuestions(() => allQuestions)
 
-  const newSlide = slides[newSlideIndex] || data.presentation?.presentation[newSlideIndex]
+  const newSlideRaw = newSlides[newSlideIndex] || data.presentation?.presentation[newSlideIndex]
 
   const finalData = []
   if (Object.keys(newData).length === 0) {
-    newSlide.content.choices.reduce((acc, choice) => {
+    newSlideRaw.content.choices.reduce((acc, choice) => {
       acc[choice] = 0
       return acc
     }, newData)
@@ -76,5 +80,8 @@ export default function PresentationFilter({ data, slides, setSlides, setSlideIn
     finalData.push({ name: key, pv: value })
   }
 
-  setSlide(() => ({ ...newSlide, content: { ...newSlide.content, data: finalData } }))
+  // setSlide(() => ({ ...newSlideRaw, content: { ...newSlideRaw.content, data: finalData } }))
+  let newSlide = { ...newSlideRaw, content: { ...newSlideRaw.content, data: finalData }, submitted }
+
+  return ({ newSlide, newSlideIndex, newSlides, allChats, allQuestions })
 }

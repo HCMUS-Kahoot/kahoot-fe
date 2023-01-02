@@ -111,9 +111,19 @@ const public_chat = (dispatch) => {
     }
   };
 };
-
+const add_question = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("addQuestion", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
 export const { Context, Provider } = contextBuilder(
   socketReducer,
-  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide, public_chat },
+  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide, public_chat, add_question },
   { socket: null, errorMessage: "", room: null }
 );

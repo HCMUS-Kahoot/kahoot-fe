@@ -24,6 +24,20 @@ function ChatModel({ chats, openDrawer, onClose }) {
       }
     }
   }, [chats])
+  const handleSubmitMessage = () => {
+    public_chat({
+      userId: user.id,
+      message: chatInput,
+      roomId: state?.room?.id
+    })
+    setChatInput('')
+  }
+
+  const handleSubmitMessageByEnter = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmitMessage()
+    }
+  }
   return (
     <Drawer title="Messages" placement="right" onClose={onClose} open={openDrawer}>
       {
@@ -39,16 +53,10 @@ function ChatModel({ chats, openDrawer, onClose }) {
         <Input placeholder="Comment" className="relative right-3" style={{ width: "70%" }}
           onChange={(e) => setChatInput(e.target.value)}
           value={chatInput}
+          onKeyDown={(e) => handleSubmitMessageByEnter(e)}
         />
         <Button className="bg-slate-300" icon={<SendOutlined />}
-          onClick={() => {
-            public_chat({
-              userId: user.id,
-              message: chatInput,
-              roomId: state?.room?.id
-            })
-            setChatInput('')
-          }}
+          onClick={() => handleSubmitMessage()}
         />
       </div>
     </Drawer>

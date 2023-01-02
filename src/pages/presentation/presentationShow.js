@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import PresentationFilter from './PresentationFilter';
 import ChatModel from "./components/chats";
+import Questions from "./components/questions";
 export default function PresentationShow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -84,7 +85,7 @@ export default function PresentationShow() {
 
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const { state, initialize_socket, create_room, updated_room, change_slide, public_chat } = useContext(RealtimeContext);
+  const { state, initialize_socket, create_room, updated_room, change_slide } = useContext(RealtimeContext);
 
   useEffect(() => {
     const handleInitializeRoom = async () => {
@@ -94,8 +95,23 @@ export default function PresentationShow() {
         room_updated: (data) => {
           console.log("event: 'room_updated' received: ", data)
           updated_room(data)
-          PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide, setQuestions, setChats })
-          //setSlides(presentation.slides);
+          const { newSlide, newSlideIndex, newSlides, allChats, allQuestions } = PresentationFilter({ data, slides, user })
+
+          if (newSlide) {
+            setSlide(newSlide)
+          }
+          if (newSlideIndex) {
+            setSlideIndex(newSlideIndex)
+          }
+          if (newSlides) {
+            setSlides(newSlides)
+          }
+          if (allChats) {
+            setChats(allChats)
+          }
+          if (allQuestions) {
+            setQuestions(allQuestions)
+          }
         }
       }
       await initialize_socket(actions)
@@ -111,38 +127,12 @@ export default function PresentationShow() {
 
   return (
     <>
-      <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
-        width: "1800px",
-        height: "1000px",
-      }}
-        footer={[]}
-
-      >
-        <div className="text-center">
-          <div className="h-[300px] flex flex-col justify-between">
-            <div className="text-center w-full">
-              <Button className="bg-slate-300" icon={<UpCircleFilled />} onClick={() => {
-                setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
-              }} />
-            </div>
-            <h1>
-              {questions[questionIndex]?.question}
-            </h1>
-            <div className="text-center w-full">
-              <Button className="bg-slate-300" icon={<DownCircleFilled />} onClick={() => {
-                setQuestionIndex(questionIndex + 1 < questions.length ? questionIndex + 1 : questions.length - 1)
-              }} />
-            </div>
-          </div>
-          <Button className="bg-slate-300 mt-8" type="primary" onClick={() => {
-            //remove question
-            setQuestions(questions.filter((question, index) => index !== questionIndex))
-            setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
-          }}>
-            Mark as answered
-          </Button>
-        </div>
-      </Modal>
+      <Questions
+        questions={questions} setQuestions={setQuestions}
+        questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}
+        isModalOpen={isModalOpen} handleCancel={handleCancel}
+        handleOk={handleOk}
+      />
       <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
       <Col span={24} className="slide h-[100%] bg-white" >
         <div className="h-6 text-center font-bold text-gray-400" >
