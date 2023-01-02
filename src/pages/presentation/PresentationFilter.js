@@ -1,5 +1,6 @@
 export default function PresentationFilter({ data, slides, user: currentUser }) {
   let newSlides = {}
+  console.log("data", data)
   if (data.presentation.presentation && slides.length === 0) {
     // setSlides(() => data.presentation.presentation)
     newSlides = data.presentation.presentation;

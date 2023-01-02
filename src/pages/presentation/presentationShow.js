@@ -62,10 +62,9 @@ export default function PresentationShow() {
     ]
   }
 
-  const presentationData = presentation
   const [slides, setSlides] = useState([])
   const [slideIndex, setSlideIndex] = useState(0)
-  const [slide, setSlide] = useState(slides[slideIndex] || {})
+  const [slide, setSlide] = useState()
   const presentationId = useParams().id
   const navigate = useNavigate();
   const [showBar, setShowBar] = useState(false)
@@ -85,24 +84,27 @@ export default function PresentationShow() {
 
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const { state, initialize_socket, create_room, updated_room, change_slide } = useContext(RealtimeContext);
+  const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket } = useContext(RealtimeContext);
 
   useEffect(() => {
     const handleInitializeRoom = async () => {
       const actions = {
         connected: (data) => console.log("Connected with socket ID: ", data),
         error: (data) => console.log("Failed to connect socket: ", data),
-        room_updated: (data) => {
+        room_updated: async (data) => {
           console.log("event: 'room_updated' received: ", data)
-          updated_room(data)
+          await updated_room(data)
           const { newSlide, newSlideIndex, newSlides, allChats, allQuestions } = PresentationFilter({ data, slides, user })
 
+          console.log("newSlide: ", newSlide)
           if (newSlide) {
+            console.log("newSlide: ", newSlide)
             setSlide(newSlide)
           }
           if (newSlideIndex) {
             setSlideIndex(newSlideIndex)
           }
+          console.log("newSlides: ", newSlides)
           if (newSlides) {
             setSlides(newSlides)
           }
@@ -121,10 +123,15 @@ export default function PresentationShow() {
       })
     }
     handleInitializeRoom()
-    return () =>
-      state?.socket?.disconnect();
+    return () => {
+      console.log("disconnecting socket")
+      disconnect_socket()
+    }
   }, [])
-
+  useEffect(() => {
+    console.log("state: ", slide)
+    console.log("states: ", slides)
+  }, [slide, slides])
   return (
     <>
       <Questions

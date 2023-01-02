@@ -7,7 +7,6 @@ import { SendOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
 function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestions, questionIndex, setQuestionIndex }) {
-  console.log("questions: ", questions)
   const [questionInput, setQuestionInput] = useState('');
   const user = useSelector((state) => state.auth.login.currentUser);
   const { state, add_question } = useContext(RealtimeContext);
