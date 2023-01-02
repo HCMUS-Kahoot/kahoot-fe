@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { Modal, Button, Input } from 'antd'
-import { DownCircleFilled, UpCircleFilled } from "@ant-design/icons";
+import { DownCircleFilled, UpCircleFilled, LikeFilled } from "@ant-design/icons";
 
 import { Context as RealtimeContext } from "../../../store/context/realtimeContext";
 import { SendOutlined } from "@ant-design/icons";
@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestions, questionIndex, setQuestionIndex }) {
   const [questionInput, setQuestionInput] = useState('');
   const user = useSelector((state) => state.auth.login.currentUser);
-  const { state, add_question } = useContext(RealtimeContext);
+  const { state, add_question, vote_question } = useContext(RealtimeContext);
   const handleSubmitQuestion = () => {
     add_question({
       userId: user.id,
@@ -24,6 +24,15 @@ function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestion
       handleSubmitQuestion()
     }
   }
+  const handleVote = (question) => {
+    vote_question({
+      questionId: question.questionId,
+      userId: question.userId,
+      roomId: state?.room?.id,
+      userIdVote: user.id
+    })
+  }
+  console.log("questions", questions)
   return (
     <>
       <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
@@ -39,9 +48,18 @@ function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestion
                 setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
               }} />
             </div>
-            <h1>
-              {questions[questionIndex]?.question}
-            </h1>
+            <div className="text-center w-full">
+              {questions[questionIndex] && (<><h1>
+                {questions[questionIndex]?.question}
+              </h1><Button className="bg-slate-300" icon={
+                questions[questionIndex]?.voted?.includes(user.id) ?
+                  <LikeFilled style={{ color: "blue" }} /> :
+                  <LikeFilled />
+              }
+                onClick={() => handleVote(questions[questionIndex])} />
+                <h1>{questions[questionIndex]?.voted?.length}</h1>
+              </>)}
+            </div>
             <div className="text-center w-full">
               <Button className="bg-slate-300" icon={<DownCircleFilled />} onClick={() => {
                 setQuestionIndex(questionIndex + 1 < questions.length ? questionIndex + 1 : questions.length - 1)

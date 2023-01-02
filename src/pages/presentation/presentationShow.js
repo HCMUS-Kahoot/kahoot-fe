@@ -96,15 +96,12 @@ export default function PresentationShow() {
           await updated_room(data)
           const { newSlide, newSlideIndex, newSlides, allChats, allQuestions } = PresentationFilter({ data, slides, user })
 
-          console.log("newSlide: ", newSlide)
           if (newSlide) {
-            console.log("newSlide: ", newSlide)
             setSlide(newSlide)
           }
           if (newSlideIndex) {
             setSlideIndex(newSlideIndex)
           }
-          console.log("newSlides: ", newSlides)
           if (newSlides) {
             setSlides(newSlides)
           }
@@ -128,10 +125,7 @@ export default function PresentationShow() {
       disconnect_socket()
     }
   }, [])
-  useEffect(() => {
-    console.log("state: ", slide)
-    console.log("states: ", slides)
-  }, [slide, slides])
+
   return (
     <>
       <Questions

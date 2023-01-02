@@ -68,13 +68,12 @@ export default function PresentationChoose() {
     const [slide, setSlide] = useState(slides[slideIndex])
     const [questions, setQuestions] = useState([])
     const [questionIndex, setQuestionIndex] = useState(0)
-    const [question, setQuestion] = useState()
     const [chats, setChats] = useState([])
     const [showBar, setShowBar] = useState(false)
 
     const user = useSelector((state) => state.auth.login.currentUser);
 
-    const { state, initialize_socket, updated_room, public_chat, submit_answer, join_room } = useContext(RealtimeContext);
+    const { state, initialize_socket, updated_room, submit_answer, join_room } = useContext(RealtimeContext);
     const params = useParams();
     const handleSubmit = async (choice) => {
         try {

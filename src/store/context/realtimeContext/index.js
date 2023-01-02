@@ -139,8 +139,27 @@ const disconnect_socket = (dispatch) => {
     }
   };
 };
+
+const vote_question = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("voteQuestion", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
 export const { Context, Provider } = contextBuilder(
   socketReducer,
-  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide, public_chat, add_question, disconnect_socket },
+  {
+    initialize_socket, vote_question,
+    create_room, join_room,
+    updated_room, submit_answer,
+    change_slide, public_chat,
+    add_question, disconnect_socket
+  },
   { socket: null, errorMessage: "", room: null }
 );

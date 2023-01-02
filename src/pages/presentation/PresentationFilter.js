@@ -38,6 +38,8 @@ export default function PresentationFilter({ data, slides, user: currentUser }) 
       name: name,
       question: question.question,
       time: question.time,
+      voted: question.voted,
+      questionId: question.questionId,
     })
     )
   })
@@ -52,10 +54,12 @@ export default function PresentationFilter({ data, slides, user: currentUser }) 
   })
   data.host?.questions.forEach((question) => {
     allQuestions.push({
-      userId: data.host.HostId,
+      userId: data.host.hostId,
       name: "Host",
       question: question.question,
       time: question.time,
+      voted: question.voted,
+      questionId: question.questionId,
     })
   })
   allChats.sort((a, b) => {
