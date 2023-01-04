@@ -14,6 +14,7 @@ export default function PresentationEdit() {
     const navigation = useNavigate();
     const [slides, setSlides] = useState([]);
     const deleteSlides = useRef([])
+    const [useEffectTrigger, setUseEffectTrigger] = useState(false);
 
     function getSentData() {
         console.log("result before convert: ", slides)
@@ -81,7 +82,7 @@ export default function PresentationEdit() {
 
         }
         getData();
-    }, [])
+    }, [useEffectTrigger])
     const [selectedSlide, setSelectedSlide] = useState(0);
     const RemoveSlide = (index) => {
         console.log("delete is index: ", index);
@@ -136,6 +137,7 @@ export default function PresentationEdit() {
         //navigation(`/presentations/${presentationId}`)
         //window.location.reload();
         message.success("Save success")
+        setUseEffectTrigger(!useEffectTrigger)
     }
 
 
