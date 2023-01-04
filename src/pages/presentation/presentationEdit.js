@@ -43,7 +43,7 @@ export default function PresentationEdit() {
                 const paragraph = Object.assign({}, dataItem.content?.paragraph)
                 dataItem.content.detail = [dataItem.content?.paragraph]
             }
-           // dataItem.slideIndex = index
+            dataItem.slideIndex = index
             return dataItem
         })  
         console.log("result after convert: ", result)
