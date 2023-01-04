@@ -20,39 +20,49 @@ export default function PresentationEdit() {
         console.log("result before convert: ", slides)
         //create new array to avoid change original data
         const slides2 = Object.assign([], slides);
-        const result = slides2.map(function(slide){
+        const result = slides2.map(function(slide,index){
             //create new object to avoid change original data
             const dataItem = Object.assign({}, slide);
             dataItem.content = Object.assign({}, dataItem.content)
             dataItem.content.data = { ...dataItem.content.data }
             delete dataItem.content.data
             dataItem.content.detail = []
-            const choices = Object.assign([], dataItem.content.choices)
-            dataItem.content.choices = choices.map(choiceData =>
-            {
-                dataItem.content.detail.push({ choiceContent: choiceData })
-            })
-            delete dataItem.content.choices
             dataItem.content.correctAnswer = 1;
+            if (dataItem.slideType === "MultipleChoice") {
+                const choices = Object.assign([], dataItem.content?.choices)
+                dataItem.content.choices = choices.map(choiceData => {
+                    dataItem.content.detail.push({ choiceContent: choiceData })
+                })
+                delete dataItem.content.choices
+            }
+            else if (dataItem.slideType === "Heading") {
+                const heading = Object.assign({}, dataItem.content?.heading)
+                dataItem.content.detail = [dataItem.content?.heading]
+            }
+            else if (dataItem.slideType === "Paragraph") { 
+                const paragraph = Object.assign({}, dataItem.content?.paragraph)
+                dataItem.content.detail = [dataItem.content?.paragraph]
+            }
+           // dataItem.slideIndex = index
             return dataItem
         })  
         console.log("result after convert: ", result)
         return result;
     }
 
-    function convertResDataToSlides(resData) {
-        return resData.map((data) => {
-            const dataItem = data;
-            dataItem.content.choices = []
-            data.content.data = []
-            dataItem.content.detail.map((choiceData, index) => {
-                dataItem.content.choices.push(choiceData.choiceContent)
-                dataItem.content.data.push({ name: choiceData.choiceContent, pv: index })
-            })
-            delete dataItem.content.detail
-            return dataItem
-        })
-    }
+    // function convertResDataToSlides(resData) {
+    //     return resData.map((data) => {
+    //         const dataItem = data;
+    //         dataItem.content.choices = []
+    //         data.content.data = []
+    //         dataItem.content.detail.map((choiceData, index) => {
+    //             dataItem.content.choices.push(choiceData.choiceContent)
+    //             dataItem.content.data.push({ name: choiceData.choiceContent, pv: index })
+    //         })
+    //         delete dataItem.content.detail
+    //         return dataItem
+    //     })
+    // }
     useEffect(() => {
         const getData = async () => {
             const presentationData = await slideApi.getSlideByPresentationId(presentationId)
@@ -137,7 +147,7 @@ export default function PresentationEdit() {
         //navigation(`/presentations/${presentationId}`)
         //window.location.reload();
         message.success("Save success")
-        setUseEffectTrigger(!useEffectTrigger)
+        //setUseEffectTrigger(!useEffectTrigger)
     }
 
 
