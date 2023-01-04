@@ -16,17 +16,27 @@ export default function PresentationEdit() {
     const deleteSlides = useRef([])
 
     function getSentData() {
-        return slides.map(data => {
-            const dataItem = data
+        console.log("result before convert: ", slides)
+        //create new array to avoid change original data
+        const slides2 = Object.assign([], slides);
+        const result = slides2.map(function(slide){
+            //create new object to avoid change original data
+            const dataItem = Object.assign({}, slide);
+            dataItem.content = Object.assign({}, dataItem.content)
+            dataItem.content.data = { ...dataItem.content.data }
             delete dataItem.content.data
             dataItem.content.detail = []
-            dataItem.content.choices.map(choiceData => {
+            const choices = Object.assign([], dataItem.content.choices)
+            dataItem.content.choices = choices.map(choiceData =>
+            {
                 dataItem.content.detail.push({ choiceContent: choiceData })
             })
             delete dataItem.content.choices
             dataItem.content.correctAnswer = 1;
             return dataItem
-        })
+        })  
+        console.log("result after convert: ", result)
+        return result;
     }
 
     function convertResDataToSlides(resData) {
@@ -123,8 +133,8 @@ export default function PresentationEdit() {
             deleteSlides.current = []
         }
         await slideApi.saveSlidesChange(presentationId, sentData)
-        // navigation(`/presentations/${presentationId}`)
-        window.location.reload();
+        //navigation(`/presentations/${presentationId}`)
+        //window.location.reload();
         message.success("Save success")
     }
 
