@@ -7,7 +7,8 @@ import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useSelector } from "react-redux";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import PresentationFilter from './PresentationFilter';
-
+import ChatModel from "./components/chats";
+import Questions from "./components/questions";
 export default function PresentationShow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -63,7 +64,7 @@ export default function PresentationShow() {
 
   const [slides, setSlides] = useState([])
   const [slideIndex, setSlideIndex] = useState(0)
-  const [slide, setSlide] = useState(slides[slideIndex])
+  const [slide, setSlide] = useState()
   const presentationId = useParams().id
   const navigate = useNavigate();
   const [showBar, setShowBar] = useState(false)
@@ -78,21 +79,38 @@ export default function PresentationShow() {
       question: "Question 3",
     },
   ])
+  const [chats, setChats] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0)
 
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const { state, initialize_socket, create_room, updated_room, change_slide } = useContext(RealtimeContext);
+  const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket } = useContext(RealtimeContext);
 
   useEffect(() => {
     const handleInitializeRoom = async () => {
       const actions = {
         connected: (data) => console.log("Connected with socket ID: ", data),
         error: (data) => console.log("Failed to connect socket: ", data),
-        room_updated: (data) => {
+        room_updated: async (data) => {
           console.log("event: 'room_updated' received: ", data)
-          updated_room(data)
-          PresentationFilter({ data, slides, setSlides, setSlideIndex, setSlide })
+          await updated_room(data)
+          const { newSlide, newSlideIndex, newSlides, allChats, allQuestions } = PresentationFilter({ data, slides, user })
+
+          if (newSlide) {
+            setSlide(newSlide)
+          }
+          if (newSlideIndex) {
+            setSlideIndex(newSlideIndex)
+          }
+          if (newSlides) {
+            setSlides(newSlides)
+          }
+          if (allChats) {
+            setChats(allChats)
+          }
+          if (allQuestions) {
+            setQuestions(allQuestions)
+          }
         }
       }
       await initialize_socket(actions)
@@ -102,65 +120,31 @@ export default function PresentationShow() {
       })
     }
     handleInitializeRoom()
-    return () =>
-      state?.socket?.disconnect();
+    return () => {
+      console.log("disconnecting socket")
+      disconnect_socket()
+    }
   }, [])
 
   return (
     <>
-      <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
-        width: "1800px",
-        height: "1000px",
-      }}
-        footer={[]}
-
-      >
-        <div className="text-center">
-          <div className="h-[300px] flex flex-col justify-between">
-            <div className="text-center w-full">
-              <Button className="bg-slate-300" icon={<UpCircleFilled />} onClick={() => {
-                setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
-              }} />
-            </div>
-            <h1>
-              {questions[questionIndex]?.question}
-            </h1>
-            <div className="text-center w-full">
-              <Button className="bg-slate-300" icon={<DownCircleFilled />} onClick={() => {
-                setQuestionIndex(questionIndex + 1 < questions.length ? questionIndex + 1 : questions.length - 1)
-              }} />
-            </div>
-          </div>
-          <Button className="bg-slate-300 mt-8" type="primary" onClick={() => {
-            //remove question
-            setQuestions(questions.filter((question, index) => index !== questionIndex))
-            setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
-          }}>
-            Mark as answered
-          </Button>
-        </div>
-      </Modal>
-      <Drawer title="Messages" placement="right" onClose={onClose} open={openDrawer}>
-        <div className="shadow-md bg-white rounded-lg p-3 my-2">
-          sadasdasd
-        </div>
-        <div className="shadow-md bg-white rounded-lg p-3 my-2">
-          lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quod.
-        </div>
-        <div className="flex justify-evenly w-full absolute bottom-3">
-          <Input placeholder="Comment" className="relative right-3" style={{ width: "70%" }} /> <Button className="bg-slate-300" icon={<SendOutlined />} />
-        </div>
-      </Drawer>
+      <Questions
+        questions={questions} setQuestions={setQuestions}
+        questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}
+        isModalOpen={isModalOpen} handleCancel={handleCancel}
+        handleOk={handleOk}
+      />
+      <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
       <Col span={24} className="slide h-[100%] bg-white" >
         <div className="h-6 text-center font-bold text-gray-400" >
-          go to <a href={`https://kahoothcmus.netlify.app/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
+          go to <a href={`${process.env.REACT_APP_USER_URL}/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
           or input pin: {state?.room?.pin || 'abcd'}
         </div>
         <div className="slide-title text-3xl font-bold text-center mb-7">
           {slide?.title}
         </div>
         <div className="slide-content -gray-600 w-[100%] h-[70%]">
-          {slide?.slideType === "MultipleChoice"&&
+          {slide?.slideType === "MultipleChoice" &&
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={slide?.content.data}>
                 <XAxis dataKey="name" />
@@ -169,7 +153,7 @@ export default function PresentationShow() {
               </BarChart>
             </ResponsiveContainer>
           }
-          { 
+          {
             slide?.slideType === "Heading" && <>
               <div className="text-7xl font-bold text-center mt-60">
                 {slide?.content.heading}

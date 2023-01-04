@@ -20,7 +20,6 @@ export const createSocketWithHandlers = (actions) => {
   });
 
   socket.on('room_updated', (room) => {
-    console.log('event: "room_updated" received', room);
     actions.room_updated(room);
   });
 

@@ -12,6 +12,8 @@ const socketReducer = (state, action) => {
       return { ...state, errorMessage: "", socket: action.payload };
     case "updated_room":
       return { ...state, errorMessage: "", room: action.payload };
+    case "disconnect_socket":
+      return { ...state, errorMessage: "", socket: null };
     default:
       return state;
   }
@@ -99,8 +101,65 @@ const change_slide = (dispatch) => {
     }
   };
 };
+
+const public_chat = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("publicChat", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+const add_question = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("addQuestion", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+const disconnect_socket = (dispatch) => {
+  return async () => {
+    try {
+      if (currentSocket) {
+        currentSocket.disconnect();
+        currentSocket = null;
+      }
+      await dispatch({
+        type: "disconnect_socket",
+      });
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
+const vote_question = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("voteQuestion", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
 export const { Context, Provider } = contextBuilder(
   socketReducer,
-  { initialize_socket, create_room, join_room, updated_room, submit_answer, change_slide },
+  {
+    initialize_socket, vote_question,
+    create_room, join_room,
+    updated_room, submit_answer,
+    change_slide, public_chat,
+    add_question, disconnect_socket
+  },
   { socket: null, errorMessage: "", room: null }
 );

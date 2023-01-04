@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, Col, Input, message } from "antd";
 import "antd/dist/antd.min.css";
@@ -7,6 +7,12 @@ import "antd/dist/antd.min.css";
 export default function PresentationPinInput() {
   const [pin, setPin] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+
+  }, [])
+
+
   return (
     <>
 
