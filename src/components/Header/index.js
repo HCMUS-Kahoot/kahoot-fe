@@ -218,7 +218,7 @@ function Header() {
                     }}
                     placement="bottomRight"
                   >
-                    <div className="hover:bg-blue-100 px-3 h-10 mt-6 border-2 border-blue-100 rounded-full">                     
+                    <div className="hover:bg-blue-100 px-3 h-10 mt-6 border-2 border-blue-100 rounded-full cursor-pointer">                     
                       {(profile) &&
                         <h1 className="relative bottom-4"><UserOutlined className="relative bottom-1" /> {profile?.name}  </h1>
                       }
