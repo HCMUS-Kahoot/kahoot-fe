@@ -12,6 +12,7 @@ export default function GroupList({ tab }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [groups, setGroups] = useState([]);
     const [loaded, setLoaded] = useState(false);
+    const [useEffectTrigger , setUseEffectTrigger] = useState(false);
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -58,7 +59,7 @@ export default function GroupList({ tab }) {
             }
         };
         getGroups();
-    }, [tab]);
+    }, [tab, useEffectTrigger]);
 
     return (
         <>
@@ -99,12 +100,13 @@ export default function GroupList({ tab }) {
                         !loaded && <div className="w-full text-center font-bold text-3xl">Loading...</div>
                     }
                     {loaded && groups?.map((group) => (
-                        <Link to={`/groups/${group._id}`}>
-                            <GroupChild
-                                groupName={group.name}
-                                groupDescription={group.description}
-                            />
-                        </Link>
+                        <GroupChild
+                            groupName={group.name}
+                            groupDescription={group.description}
+                            group={group}
+                            useEffectTrigger={useEffectTrigger}
+                            setUseEffectTrigger={setUseEffectTrigger}
+                        />
                     ))}
                     {(tab === "myGroup" || tab ==="groupImAdmin") &&
                         <button
