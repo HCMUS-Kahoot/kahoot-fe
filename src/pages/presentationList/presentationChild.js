@@ -97,7 +97,7 @@ export default function PresentationChild({
             <div className="m-1 hover:bg-gray-200 w-[98%] h-12 pt-2">
                 {/* one row of presentation, with 4 collums to show presentation properties and one play button */}
                 <Row>
-                    <Col span={6} className="text-left pl-24 font-bold text-black">
+                    <Col span={6} className="text-left pl-[5%] font-bold text-black">
                         <Button
                             onClick={() => {
                                 navigation(`/presentations/${presentationId}/show`);

@@ -25,16 +25,17 @@ export default function GroupDetail({ tab = "members" }) {
       <div className="mx-72">
         <div className="my-navbar shadow-sm rounded-md">
           <Menu mode="horizontal" defaultActiveFirst>
-            <Menu.Item key="posts" onClick={() => {
-              navigate(`/groups/${id}/posts`)
-            }} >
-              Posts
-            </Menu.Item>
+            
 
             <Menu.Item key="members" onClick={() => {
               navigate(`/groups/${id}`)
             }} >
               Members
+            </Menu.Item>
+            <Menu.Item key="posts" onClick={() => {
+              navigate(`/groups/${id}/posts`)
+            }} >
+              Presentations
             </Menu.Item>
           </Menu>
         </div>
@@ -49,7 +50,7 @@ export default function GroupDetail({ tab = "members" }) {
             </Col>
             <Col span={18}>
               <div className="m-2 bg-white p-2 shadow-md rounded-md">
-                {tab === "members" ? <MemberList groupId={params} /> : <PostList />}
+                {tab === "members" ? <MemberList groupId={params} /> : <PostList isHavingPresentationNow={true} presentationTitle={"Presentation title"} presentationId={"idofpresentation"} isOwnerOfGroup={true} groupId={id} />}
               </div>
             </Col>
           </Row>
