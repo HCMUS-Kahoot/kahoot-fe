@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Modal, Button, Input } from 'antd'
 import { DownCircleFilled, UpCircleFilled, LikeFilled } from "@ant-design/icons";
 
@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestions, questionIndex, setQuestionIndex }) {
   const [questionInput, setQuestionInput] = useState('');
   const user = useSelector((state) => state.auth.login.currentUser);
-  const { state, add_question, vote_question } = useContext(RealtimeContext);
+  const { state, add_question, vote_question, mark_as_read } = useContext(RealtimeContext);
   const handleSubmitQuestion = () => {
     add_question({
       userId: user.id,
@@ -32,7 +32,13 @@ function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestion
       userIdVote: user.id
     })
   }
-  console.log("questions", questions)
+  const handleMarkAsRead = (question) => {
+    mark_as_read({
+      questionId: question.questionId,
+      roomId: state?.room?.id,
+    })
+  }
+
   return (
     <>
       <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
@@ -68,8 +74,9 @@ function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestion
           </div>
           <Button className="bg-slate-300 mt-8" type="primary" onClick={() => {
             //remove question
-            setQuestions(questions.filter((question, index) => index !== questionIndex))
-            setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
+            // setQuestions(questions.filter((question, index) => index !== questionIndex))
+            // setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
+            handleMarkAsRead(questions[questionIndex])
           }}>
             Mark as answered
           </Button>
