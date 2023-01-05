@@ -68,17 +68,7 @@ export default function PresentationShow() {
   const presentationId = useParams().id
   const navigate = useNavigate();
   const [showBar, setShowBar] = useState(false)
-  const [questions, setQuestions] = useState([
-    {
-      question: "Question 1",
-    },
-    {
-      question: "Question 2",
-    },
-    {
-      question: "Question 3",
-    },
-  ])
+  const [questions, setQuestions] = useState([])
   const [chats, setChats] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0)
 
@@ -106,18 +96,60 @@ export default function PresentationShow() {
             setSlides(newSlides)
           }
           if (allChats) {
+            console.log("allChats: ", allChats)
             setChats(allChats)
           }
           if (allQuestions) {
-            setQuestions(allQuestions)
+            setQuestions(() => {
+              return allQuestions
+                .filter((question) => !question.read)
+                .sort((a, b) => a.time - b.time)
+            })
           }
-        }
+        },
+        public_chat: (data) => {
+          console.log("event: 'public_chat' received: ", data)
+          setChats((prev) => {
+            const newChats = [...prev, data]
+            return newChats.sort((a, b) => a.time - b.time)
+          })
+        },
+        add_question: (data) => {
+          console.log("event: 'add_question' received: ", data)
+          setQuestions((prev) => {
+            const newQuestions = [...prev, data]
+            return newQuestions.sort((a, b) => a.time - b.time)
+          }
+          )
+        },
+        vote_question: (data) => {
+          console.log("event: 'vote_question' received: ", data)
+
+          setQuestions((prev) => {
+            const newQuestions = prev.map((question) => {
+              if (question.id === data.id) {
+                return data
+              }
+              return question
+            })
+            newQuestions.filter((question) => question.read)
+            return newQuestions.sort((a, b) => a.time - b.time)
+          })
+        },
+        mark_as_read_question: (data) => {
+          console.log("event: 'mark_as_read_question' received: ", data)
+          setQuestions((prev) => {
+            const newQuestions = prev.filter((question) => question.id !== data.id)
+            return newQuestions.sort((a, b) => a.time - b.time)
+          })
+        },
       }
       await initialize_socket(actions)
       await create_room({
         hostId: user.id,
         presentationId
       })
+
     }
     handleInitializeRoom()
     return () => {

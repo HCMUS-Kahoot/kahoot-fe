@@ -19,13 +19,36 @@ export const createSocketWithHandlers = (actions) => {
     message.error(data);
   });
 
-  socket.on('room_updated', (room) => {
-    actions.room_updated(room);
+  Object.keys(actions)?.forEach((key) => {
+    console.log(`Registering event ${key} with action ${actions[key].name}`);
+    socket.on(key, (data) => {
+      actions[key](data);
+    });
   });
 
-  socket.on('disconnect', () => {
-    console.log(`Disconnected from socket`);
-  });
+  // socket.on('disconnect', () => {
+  //   console.log(`Disconnected from socket`);
+  // });
+
+  // socket.on('room_updated', (room) => {
+  //   actions.room_updated(room);
+  // });
+
+  // socket.on('public_chat', (data) => {
+  //   actions?.public_chat(data);
+  // });
+
+  // socket.on('add_question', (data) => {
+  //   actions?.add_question(data);
+  // });
+
+  // socket.on('remove_question', (data) => {
+  //   actions?.remove_question(data);
+  // });
+
+  // socket.on('vote_question', (data) => {
+  //   actions?.vote_question(data);
+  // });
 
   return socket;
 };

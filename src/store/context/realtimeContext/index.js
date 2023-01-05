@@ -23,13 +23,6 @@ const socketReducer = (state, action) => {
 const initialize_socket = (dispatch) => {
   return async (actions) => {
     try {
-      if (currentSocket) {
-        if (currentSocket.connected) {
-          return;
-        }
-        currentSocket.connect();
-        return;
-      }
       currentSocket = createSocketWithHandlers(actions);
       await dispatch({
         type: "initialize_socket",
@@ -152,6 +145,17 @@ const vote_question = (dispatch) => {
   };
 };
 
+const mark_as_read = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("markAsReadQuestion", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
 export const { Context, Provider } = contextBuilder(
   socketReducer,
   {
@@ -159,7 +163,8 @@ export const { Context, Provider } = contextBuilder(
     create_room, join_room,
     updated_room, submit_answer,
     change_slide, public_chat,
-    add_question, disconnect_socket
+    add_question, disconnect_socket,
+    mark_as_read
   },
   { socket: null, errorMessage: "", room: null }
 );

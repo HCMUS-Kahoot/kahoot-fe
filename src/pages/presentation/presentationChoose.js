@@ -108,7 +108,6 @@ export default function PresentationChoose() {
                         }
                         if (newSlides) {
                             setSlides(newSlides)
-                            // updateSubmitted()
                         }
                         if (allChats) {
                             setChats(allChats)
@@ -117,7 +116,42 @@ export default function PresentationChoose() {
                             setQuestions(allQuestions)
                         }
 
-                    }
+                    },
+                    public_chat: (data) => {
+                        console.log("event: 'public_chat' received: ", data)
+                        setChats((prev) => {
+                            const newChats = [...prev, data]
+                            return newChats.sort((a, b) => a.time - b.time)
+                        })
+                    },
+                    add_question: (data) => {
+                        console.log("event: 'add_question' received: ", data)
+                        setQuestions((prev) => {
+                            const newQuestions = [...prev, data]
+                            return newQuestions.sort((a, b) => a.time - b.time)
+                        }
+                        )
+                    },
+                    vote_question: (data) => {
+                        console.log("event: 'vote_question' received: ", data)
+
+                        setQuestions((prev) => {
+                            const newQuestions = prev.map((question) => {
+                                if (question.id === data.id) {
+                                    return data
+                                }
+                                return question
+                            })
+                            return newQuestions.sort((a, b) => a.time - b.time)
+                        })
+                    },
+                    mark_as_read_question: (data) => {
+                        console.log("event: 'mark_as_read_question' received: ", data)
+                        setQuestions((prev) => {
+                            const newQuestions = prev.filter((question) => question.id !== data.id)
+                            return newQuestions.sort((a, b) => a.time - b.time)
+                        })
+                    },
                 }
                 await initialize_socket(actions)
                 await join_room({
