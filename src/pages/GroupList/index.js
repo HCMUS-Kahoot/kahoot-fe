@@ -129,7 +129,7 @@ export default function GroupList({ tab }) {
                 onCancel={handleCancel}
                 footer={null}
             >
-                <CreateGroupForm handleSubmit={createGroup} />
+                <CreateGroupForm handleSubmit={createGroup} defaultName={"Group Name"} defaultDescription={"Group description"} />
             </Modal>
         </>
     );

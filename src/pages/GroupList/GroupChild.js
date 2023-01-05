@@ -1,10 +1,12 @@
-import React from "react";
-import { Avatar, Card } from "antd";
+import React,{useState} from "react";
+import { Avatar, Card,Modal,message } from "antd";
 import { EditOutlined, SettingOutlined, DeleteOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { Link } from "react-router-dom";
 import groupApi from "../../api/groupAPI";
+import CreateGroupForm from "./CreateGroupForm";
 const { Meta } = Card;
+
 
 export default function GroupChild({
   groupName,
@@ -15,6 +17,30 @@ export default function GroupChild({
   setUseEffectTrigger,
   useEffectTrigger
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const editGroup = async (values) => {
+    try {
+      console.log("valuse edit gr",values)
+      if (values.groupname === "") {
+        message.error("Group name can't be empty");
+        return;
+      }
+      if (values.groupdes === "") {
+        message.error("Group description can't be empty");
+        return;
+      }
+      const res = await groupApi.updateGroup(group._id,values.name, values.description);
+      console.log(res);
+
+      message.success("Edit group successfully");
+      setIsModalOpen(false);
+      setUseEffectTrigger(!useEffectTrigger);
+
+    } catch (error) {
+      message.error(error.message);
+    }
+
+  };
   return (
     <>
       <div className="m-3 shadow-md hover:shadow-2xl">
@@ -44,7 +70,9 @@ export default function GroupChild({
               }
               
             }} />,
-            <EditOutlined key="edit" />,
+            <EditOutlined key="edit" onClick={() => { 
+              setIsModalOpen(true);
+            }} />,
           ]}
         >
           <Meta
@@ -58,6 +86,14 @@ export default function GroupChild({
             description={groupDescription}
           />
         </Card>
+        <Modal
+          title="Edit group"
+          open={isModalOpen}
+          onCancel={() => setIsModalOpen(false)}
+          footer={null}
+        >
+          <CreateGroupForm handleSubmit={editGroup} defaultName={group.name} defaultDescription={groupDescription} />
+        </Modal>
       </div>
     </>
   );
