@@ -143,7 +143,8 @@ export default function PresentationEdit() {
             });
             deleteSlides.current = []
         }
-        await slideApi.saveSlidesChange(presentationId, sentData)
+        const changeResult = await slideApi.saveSlidesChange(presentationId, sentData)
+        setSlides([...changeResult])
         //navigation(`/presentations/${presentationId}`)
         //window.location.reload();
         message.success("Save success")
