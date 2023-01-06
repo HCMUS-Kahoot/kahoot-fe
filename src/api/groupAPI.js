@@ -109,6 +109,24 @@ class GroupApi {
       return error;
     }
   }
+  deleteGroup = async (groupId) => {
+    try {
+      const res = await axiosClient.delete(`/groups/${groupId}`);
+      return res;
+    } catch (error) {
+      console.log("Delete group error", error);
+      return error;
+    }
+  }
+  updateGroup = async (groupId, groupName, groupDescription) => {
+    try {
+      const res = await axiosClient.get(`/groups/edit/${groupId}/${groupName}/${groupDescription}`);
+      return res;
+    } catch (error) {
+      console.log("Update group error", error);
+      return error;
+    }
+  }
 }
 
 const groupApi = new GroupApi();

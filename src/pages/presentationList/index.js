@@ -6,7 +6,10 @@ import CreatePresentationForm from "./CreatePresentationForm";
 import presentationApi from "../../api/presentationAPI";
 import { useSelector } from "react-redux";
 
-export default function PresentationList() {
+export default function PresentationList({ 
+    groupId = null,
+    shouldShowCreatePresentationButton = true,
+}) {
     const user = useSelector((state) => state.auth.login.currentUser);
     useEffect(() => {
         console.log("this is user: ", user)
@@ -32,7 +35,14 @@ export default function PresentationList() {
                 message.error("Presentation description can't be empty");
                 return;
             }
-            const res = await presentationApi.createPresentation(values);
+            let res= null;
+            if (groupId === null) {
+                res = await presentationApi.createPresentation(values);
+            } else {
+                message.error("TODO: Create presentation in group")
+                //TODO
+                //res = await presentationApi.createPresentationInGroup(values, groupId);
+            }
             message.success("Create presentation successfully");
             setIsModalOpen(false);
             const newPresentations = [...presentations];
@@ -46,9 +56,17 @@ export default function PresentationList() {
     };
     const getPresentations = async () => {
         try {
-            const res = await presentationApi.getPresentations();
-            console.log(res);
-            setPresentations(res);
+            if (groupId === null) {
+                const res = await presentationApi.getPresentations();
+                console.log(res);
+                setPresentations(res);
+            } else {
+                message.error("TODO: Get presentation in group")
+                //TODO
+                // const res = await presentationApi.getPresentationsInGroup(groupId);
+                // console.log(res);
+                // setPresentations(res);
+            }
         } catch (error) {
             console.log("Get current user GROUP error", error);
         }
@@ -59,7 +77,7 @@ export default function PresentationList() {
 
     return (
         <>
-            <div className="m-4 mx-14">
+            <div className="m-4 mx-[2%]">
                 <div className="mx-10 my-5 text-center">
                     <Input.Search
                         placeholder="Search presentations"
@@ -99,14 +117,15 @@ export default function PresentationList() {
                             />
                         </span>
                     ))}
-                    <button className="w-full py-1 shadow-md bg-[#f4f4f4] font-bold text-black "
-                        onClick={() => {
-                            showModal();
-                        }}
-                    >
-                        + New presentation
+                    {shouldShowCreatePresentationButton && (
+                        <button className="w-full py-1 shadow-md bg-[#f4f4f4] font-bold text-black "
+                            onClick={() => {
+                                showModal();
+                            }}
+                        >
+                            + New presentation
 
-                    </button>
+                        </button>)}
                 </div>
             </div>
             <Modal
