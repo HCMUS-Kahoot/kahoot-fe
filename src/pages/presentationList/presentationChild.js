@@ -172,8 +172,6 @@ export default function PresentationChild({
                                     </div>
                                 )
                             })}
-                            
-
                         </div>
                             
                     </Modal>
