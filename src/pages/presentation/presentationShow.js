@@ -71,7 +71,7 @@ export default function PresentationShow() {
   const [questions, setQuestions] = useState([])
   const [chats, setChats] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0)
-
+  const [isNewChat, setIsNewChat] = useState(false)
   const user = useSelector((state) => state.auth.login.currentUser);
 
   const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket } = useContext(RealtimeContext);
@@ -95,11 +95,10 @@ export default function PresentationShow() {
           if (newSlides) {
             setSlides(newSlides)
           }
-          if (allChats) {
-            console.log("allChats: ", allChats)
+          if (allChats && allChats.length > 0 && allChats.length !== chats.length) {
             setChats(allChats)
           }
-          if (allQuestions) {
+          if (allQuestions && allQuestions.length > 0 && allQuestions.length !== questions.length) {
             setQuestions(() => {
               return allQuestions
                 .filter((question) => !question.read)
@@ -113,6 +112,7 @@ export default function PresentationShow() {
             const newChats = [...prev, data]
             return newChats.sort((a, b) => a.time - b.time)
           })
+          setIsNewChat(true)
         },
         add_question: (data) => {
           console.log("event: 'add_question' received: ", data)
@@ -166,7 +166,7 @@ export default function PresentationShow() {
         isModalOpen={isModalOpen} handleCancel={handleCancel}
         handleOk={handleOk}
       />
-      <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
+      <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
       <Col span={24} className="slide h-[100%] bg-white" >
         <div className="h-6 text-center font-bold text-gray-400" >
           go to <a href={`${process.env.REACT_APP_USER_URL}/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer

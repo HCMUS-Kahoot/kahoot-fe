@@ -5,7 +5,7 @@ import { Drawer, Input, Button, notification } from "antd";
 import { SendOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
-function ChatModel({ chats, openDrawer, onClose }) {
+function ChatModel({ chats, openDrawer, onClose, isNewChat, setIsNewChat }) {
   const [chatInput, setChatInput] = useState('');
   const user = useSelector((state) => state.auth.login.currentUser);
   const { state, public_chat } = useContext(RealtimeContext);
@@ -19,11 +19,12 @@ function ChatModel({ chats, openDrawer, onClose }) {
   useEffect(() => {
     if (chats.length > 0) {
       const lastChat = chats[chats.length - 1];
-      if (lastChat.userId !== user.id) {
+      if (lastChat.userId !== user.id && isNewChat) {
         openNotification(lastChat)
+        setIsNewChat(false)
       }
     }
-  }, [chats])
+  }, [chats, isNewChat])
   const handleSubmitMessage = () => {
     public_chat({
       userId: user.id,

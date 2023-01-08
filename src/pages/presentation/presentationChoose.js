@@ -61,7 +61,7 @@ export default function PresentationChoose() {
             },
         ]
     }
-    
+
     const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
@@ -69,7 +69,7 @@ export default function PresentationChoose() {
     const [questionIndex, setQuestionIndex] = useState(0)
     const [chats, setChats] = useState([])
     const [showBar, setShowBar] = useState(false)
-
+    const [isNewChat, setIsNewChat] = useState(false)
     const user = useSelector((state) => state.auth.login.currentUser);
 
     const { state, initialize_socket, updated_room, submit_answer, join_room } = useContext(RealtimeContext);
@@ -108,10 +108,10 @@ export default function PresentationChoose() {
                         if (newSlides) {
                             setSlides(newSlides)
                         }
-                        if (allChats) {
+                        if (allChats && allChats.length > 0 && allChats.length !== chats.length) {
                             setChats(allChats)
                         }
-                        if (allQuestions) {
+                        if (allQuestions && allQuestions.length > 0 && allQuestions.length !== questions.length) {
                             setQuestions(allQuestions)
                         }
 
@@ -122,6 +122,7 @@ export default function PresentationChoose() {
                             const newChats = [...prev, data]
                             return newChats.sort((a, b) => a.time - b.time)
                         })
+                        setIsNewChat(true)
                     },
                     add_question: (data) => {
                         console.log("event: 'add_question' received: ", data)
@@ -169,7 +170,7 @@ export default function PresentationChoose() {
     }, [])
     return (
         <>
-            <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
+            <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
             <Questions
                 questions={questions} setQuestions={setQuestions}
                 questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}

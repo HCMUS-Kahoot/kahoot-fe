@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PresentationList from "../presentationList";
+import sseApi from "../../api/sseAPI";
 
 export default function PostList({
     isHavingPresentationNow,
@@ -9,6 +10,13 @@ export default function PostList({
     groupId,
     isOwnerOfGroup,
 }) {
+    useEffect(() => {
+        const eventListener = sseApi.presentationNotify();
+        console.log(eventListener)
+        return () => {
+            eventListener.close();
+        };
+    }, []);
     const navigate = useNavigate();
     return (
         <div>
@@ -17,7 +25,7 @@ export default function PostList({
                     <h2>Now Presenting...</h2>
                     <h2 className="text-2xl font-bold text-emerald-800">{presentationTitle}</h2>
                     <button className="bg-emerald-500 hover:bg-emerald-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => { 
+                        onClick={() => {
                             navigate(`/presentations/${presentationId}/show`);
                         }}
                     >
