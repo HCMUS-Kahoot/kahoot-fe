@@ -6,6 +6,7 @@ import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFille
 import { useParams } from "react-router";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import PresentationFilter from './PresentationFilter';
 import ChatModel from "./components/chats";
 import Questions from "./components/questions";
@@ -70,6 +71,7 @@ export default function PresentationChoose() {
     const [chats, setChats] = useState([])
     const [showBar, setShowBar] = useState(false)
     const [isNewChat, setIsNewChat] = useState(false)
+    const [isEnd, setIsEnd] = useState(false)
     const user = useSelector((state) => state.auth.login.currentUser);
 
     const { state, initialize_socket, updated_room, submit_answer, join_room } = useContext(RealtimeContext);
@@ -152,6 +154,11 @@ export default function PresentationChoose() {
                             return newQuestions.sort((a, b) => a.time - b.time)
                         })
                     },
+                    end_presentation: (data) => {
+                        console.log("event: 'end_presentation' received: ", data)
+                        setIsEnd(true)
+                    }
+
                 }
                 await initialize_socket(actions)
                 await join_room({
@@ -168,6 +175,18 @@ export default function PresentationChoose() {
         return () =>
             state?.socket?.disconnect();
     }, [])
+    if (isEnd) {
+        return (
+            <div className="h-screen w-screen flex justify-center items-center">
+                <div className="text-3xl font-bold text-center">
+                    Presentation has ended
+                </div>
+                <Link to="/">
+                    <Button className="ml-4" type="primary">Go to Home</Button>
+                </Link>
+            </div>
+        )
+    }
     return (
         <>
             <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />

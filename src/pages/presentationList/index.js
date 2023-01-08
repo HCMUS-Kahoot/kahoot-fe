@@ -39,9 +39,7 @@ export default function PresentationList({
             if (groupId === null) {
                 res = await presentationApi.createPresentation(values);
             } else {
-                message.error("TODO: Create presentation in group")
-                //TODO
-                values.groupId=groupId;
+                values.groupId = groupId;
                 res = await presentationApi.createPresentation(values);
             }
             message.success("Create presentation successfully");
@@ -62,7 +60,6 @@ export default function PresentationList({
                 console.log(res);
                 setPresentations(res);
             } else {
-                message.error("TODO: Get presentation in group")
                 const res = await presentationApi.getPresentationsInGroup(groupId);
                 console.log(res);
                 setPresentations(res);

@@ -74,7 +74,7 @@ export default function PresentationShow() {
   const [isNewChat, setIsNewChat] = useState(false)
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket } = useContext(RealtimeContext);
+  const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket, end_presentation } = useContext(RealtimeContext);
 
   useEffect(() => {
     const handleInitializeRoom = async () => {
@@ -143,6 +143,10 @@ export default function PresentationShow() {
             return newQuestions.sort((a, b) => a.time - b.time)
           })
         },
+        end_presentation: (data) => {
+          console.log("event: 'end_presentation' received: ", data)
+          navigate(`/presentations/${presentationId}`)
+        }
       }
       await initialize_socket(actions)
       await create_room({
@@ -157,7 +161,12 @@ export default function PresentationShow() {
       disconnect_socket()
     }
   }, [])
-
+  const handleEndPresentation = () => {
+    console.log("end presentation", state?.room?.id)
+    end_presentation({
+      roomId: state?.room?.id
+    })
+  }
   return (
     <>
       <Questions
@@ -168,6 +177,9 @@ export default function PresentationShow() {
       />
       <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
       <Col span={24} className="slide h-[100%] bg-white" >
+        <div className="flex justify-between items-center h-12 bg-gray-100">
+          <Button type="primary" onClick={handleEndPresentation} className="ml-4">End Presentation</Button>
+        </div>
         <div className="h-6 text-center font-bold text-gray-400" >
           go to <a href={`${process.env.REACT_APP_USER_URL}/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
           or input pin: {state?.room?.pin || 'abcd'}

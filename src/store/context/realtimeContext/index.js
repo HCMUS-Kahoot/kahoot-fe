@@ -156,6 +156,19 @@ const mark_as_read = (dispatch) => {
     }
   };
 };
+
+const end_presentation = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("endPresentation", data);
+      }
+    } catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  };
+};
+
 export const { Context, Provider } = contextBuilder(
   socketReducer,
   {
@@ -164,7 +177,7 @@ export const { Context, Provider } = contextBuilder(
     updated_room, submit_answer,
     change_slide, public_chat,
     add_question, disconnect_socket,
-    mark_as_read
+    mark_as_read, end_presentation,
   },
   { socket: null, errorMessage: "", room: null }
 );

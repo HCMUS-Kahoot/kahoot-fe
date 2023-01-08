@@ -10,13 +10,6 @@ export default function PostList({
     groupId,
     isOwnerOfGroup,
 }) {
-    useEffect(() => {
-        const eventListener = sseApi.presentationNotify();
-        console.log(eventListener)
-        return () => {
-            eventListener.close();
-        };
-    }, []);
     const navigate = useNavigate();
     return (
         <div>
