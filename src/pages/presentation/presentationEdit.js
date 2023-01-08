@@ -49,20 +49,6 @@ export default function PresentationEdit() {
         console.log("result after convert: ", result)
         return result;
     }
-
-    // function convertResDataToSlides(resData) {
-    //     return resData.map((data) => {
-    //         const dataItem = data;
-    //         dataItem.content.choices = []
-    //         data.content.data = []
-    //         dataItem.content.detail.map((choiceData, index) => {
-    //             dataItem.content.choices.push(choiceData.choiceContent)
-    //             dataItem.content.data.push({ name: choiceData.choiceContent, pv: index })
-    //         })
-    //         delete dataItem.content.detail
-    //         return dataItem
-    //     })
-    // }
     useEffect(() => {
         const getData = async () => {
             const presentationData = await slideApi.getSlideByPresentationId(presentationId)
@@ -143,7 +129,8 @@ export default function PresentationEdit() {
             });
             deleteSlides.current = []
         }
-        await slideApi.saveSlidesChange(presentationId, sentData)
+        const changeResult = await slideApi.saveSlidesChange(presentationId, sentData)
+        setSlides([...changeResult])
         //navigation(`/presentations/${presentationId}`)
         //window.location.reload();
         message.success("Save success")

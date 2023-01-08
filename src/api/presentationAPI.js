@@ -20,6 +20,15 @@ class PresentationApi {
       return error;
     }
   };
+  getPresentationsInGroup = async (groupId) => {
+    try {
+      const res = await axiosClient.get(`/presentations/current-user-presentations-group/${groupId}`);
+      return res;
+    } catch (error) {
+      console.log("Get presentations error", error);
+      return error;
+    }
+  };
   updatePresentation = async (id, presentation) => {
     try {
       const res = await axiosClient.put(`/presentations/${id}`, presentation);

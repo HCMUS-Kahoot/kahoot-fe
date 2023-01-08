@@ -41,7 +41,8 @@ export default function PresentationList({
             } else {
                 message.error("TODO: Create presentation in group")
                 //TODO
-                //res = await presentationApi.createPresentationInGroup(values, groupId);
+                values.groupId=groupId;
+                res = await presentationApi.createPresentation(values);
             }
             message.success("Create presentation successfully");
             setIsModalOpen(false);
@@ -62,10 +63,9 @@ export default function PresentationList({
                 setPresentations(res);
             } else {
                 message.error("TODO: Get presentation in group")
-                //TODO
-                // const res = await presentationApi.getPresentationsInGroup(groupId);
-                // console.log(res);
-                // setPresentations(res);
+                const res = await presentationApi.getPresentationsInGroup(groupId);
+                console.log(res);
+                setPresentations(res);
             }
         } catch (error) {
             console.log("Get current user GROUP error", error);
