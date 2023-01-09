@@ -113,6 +113,32 @@ class PresentationApi {
       return error;
     }
   }
+  addCollaborator = async (ownerId, presentationId, collaboratorEmail) =>{
+    try {
+      const res = await axiosClient.post(`/presentations/addCollaborator`, {
+        ownerId,
+        presentationId,
+        collaboratorEmail
+      });
+      return res;
+    } catch (error) {
+      console.log("Add collaborator presentation error", error);
+      return error;
+    }
+  }
+  deleteCollaborator = async (ownerId, presentationId, collaboratorEmail) =>{
+    try {
+      const res = await axiosClient.post(`/presentations/deleteCollaborator`, {
+        ownerId,
+        presentationId,
+        collaboratorEmail
+      });
+      return res;
+    } catch (error) {
+      console.log("Delete collaborator presentation error", error);
+      return error;
+    }
+  }
 }
 
 const presentationApi = new PresentationApi();
