@@ -68,23 +68,13 @@ export default function PresentationShow() {
   const presentationId = useParams().id
   const navigate = useNavigate();
   const [showBar, setShowBar] = useState(false)
-  const [questions, setQuestions] = useState([
-    {
-      question: "Question 1",
-    },
-    {
-      question: "Question 2",
-    },
-    {
-      question: "Question 3",
-    },
-  ])
+  const [questions, setQuestions] = useState([])
   const [chats, setChats] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0)
-
+  const [isNewChat, setIsNewChat] = useState(false)
   const user = useSelector((state) => state.auth.login.currentUser);
 
-  const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket } = useContext(RealtimeContext);
+  const { state, initialize_socket, create_room, updated_room, change_slide, disconnect_socket, end_presentation } = useContext(RealtimeContext);
 
   useEffect(() => {
     const handleInitializeRoom = async () => {
@@ -105,12 +95,57 @@ export default function PresentationShow() {
           if (newSlides) {
             setSlides(newSlides)
           }
-          if (allChats) {
+          if (allChats && allChats.length > 0 && allChats.length !== chats.length) {
             setChats(allChats)
           }
-          if (allQuestions) {
-            setQuestions(allQuestions)
+          if (allQuestions && allQuestions.length > 0 && allQuestions.length !== questions.length) {
+            setQuestions(() => {
+              return allQuestions
+                .filter((question) => !question.read)
+                .sort((a, b) => a.time - b.time)
+            })
           }
+        },
+        public_chat: (data) => {
+          console.log("event: 'public_chat' received: ", data)
+          setChats((prev) => {
+            const newChats = [...prev, data]
+            return newChats.sort((a, b) => a.time - b.time)
+          })
+          setIsNewChat(true)
+        },
+        add_question: (data) => {
+          console.log("event: 'add_question' received: ", data)
+          setQuestions((prev) => {
+            const newQuestions = [...prev, data]
+            return newQuestions.sort((a, b) => a.time - b.time)
+          }
+          )
+        },
+        vote_question: (data) => {
+          console.log("event: 'vote_question' received: ", data)
+
+          setQuestions((prev) => {
+            const newQuestions = prev.map((question) => {
+              if (question.id === data.id) {
+                return data
+              }
+              return question
+            })
+            newQuestions.filter((question) => question.read)
+            return newQuestions.sort((a, b) => a.time - b.time)
+          })
+        },
+        mark_as_read_question: (data) => {
+          console.log("event: 'mark_as_read_question' received: ", data)
+          setQuestions((prev) => {
+            const newQuestions = prev.filter((question) => question.id !== data.id)
+            return newQuestions.sort((a, b) => a.time - b.time)
+          })
+        },
+        end_presentation: (data) => {
+          console.log("event: 'end_presentation' received: ", data)
+          navigate(`/presentations/${presentationId}`)
         }
       }
       await initialize_socket(actions)
@@ -118,6 +153,7 @@ export default function PresentationShow() {
         hostId: user.id,
         presentationId
       })
+
     }
     handleInitializeRoom()
     return () => {
@@ -125,7 +161,12 @@ export default function PresentationShow() {
       disconnect_socket()
     }
   }, [])
-
+  const handleEndPresentation = () => {
+    console.log("end presentation", state?.room?.id)
+    end_presentation({
+      roomId: state?.room?.id
+    })
+  }
   return (
     <>
       <Questions
@@ -134,8 +175,11 @@ export default function PresentationShow() {
         isModalOpen={isModalOpen} handleCancel={handleCancel}
         handleOk={handleOk}
       />
-      <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
+      <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
       <Col span={24} className="slide h-[100%] bg-white" >
+        <div className="flex justify-between items-center h-12 bg-gray-100">
+          <Button type="primary" onClick={handleEndPresentation} className="ml-4">End Presentation</Button>
+        </div>
         <div className="h-6 text-center font-bold text-gray-400" >
           go to <a href={`${process.env.REACT_APP_USER_URL}/presentations/${state?.room?.pin || 'abcd'}/choose`} target="_blank" rel="noreferrer"> here</a> to answer
           or input pin: {state?.room?.pin || 'abcd'}

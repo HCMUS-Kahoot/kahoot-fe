@@ -10,8 +10,8 @@ export default function PresentationFilter({ data, slides, user: currentUser }) 
 
   const newData = {}
   let submitted = false
-  let allChats = []
-  let allQuestions = []
+  let allChats = data.chats
+  let allQuestions = data.questions
   data.users?.forEach((user) => {
     user?.answer.forEach((answer) => {
       if (answer.slideIndex === newSlideIndex) {
@@ -22,54 +22,7 @@ export default function PresentationFilter({ data, slides, user: currentUser }) 
           submitted = true
       }
     })
-    const { name, id: userId, chats, questions } = user
-
-    chats.forEach((chat) => {
-      allChats.push({
-        userId: userId,
-        name: name,
-        message: chat.message,
-        time: chat.time,
-      })
-    }
-    )
-    questions.forEach((question) => allQuestions.push({
-      userId: userId,
-      name: name,
-      question: question.question,
-      time: question.time,
-      voted: question.voted,
-      questionId: question.questionId,
-    })
-    )
   })
-
-  data.host?.chats.forEach((chat) => {
-    allChats.push({
-      userId: data.host.hostId,
-      name: "Host",
-      message: chat.message,
-      time: chat.time,
-    })
-  })
-  data.host?.questions.forEach((question) => {
-    allQuestions.push({
-      userId: data.host.hostId,
-      name: "Host",
-      question: question.question,
-      time: question.time,
-      voted: question.voted,
-      questionId: question.questionId,
-    })
-  })
-  allChats.sort((a, b) => {
-    return a.time - b.time
-  })
-  allQuestions.sort((a, b) => {
-    return a.time - b.time
-  })
-  // setChats(() => allChat)
-  // setQuestions(() => allQuestions)
 
   const newSlideRaw = newSlides[newSlideIndex] || data.presentation?.presentation[newSlideIndex]
 

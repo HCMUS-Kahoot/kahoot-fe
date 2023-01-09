@@ -6,6 +6,7 @@ import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFille
 import { useParams } from "react-router";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import PresentationFilter from './PresentationFilter';
 import ChatModel from "./components/chats";
 import Questions from "./components/questions";
@@ -61,7 +62,7 @@ export default function PresentationChoose() {
             },
         ]
     }
-    
+
     const [slides, setSlides] = useState([])
     const [slideIndex, setSlideIndex] = useState(0)
     const [slide, setSlide] = useState(slides[slideIndex])
@@ -69,10 +70,11 @@ export default function PresentationChoose() {
     const [questionIndex, setQuestionIndex] = useState(0)
     const [chats, setChats] = useState([])
     const [showBar, setShowBar] = useState(false)
-
+    const [isNewChat, setIsNewChat] = useState(false)
+    const [isEnd, setIsEnd] = useState(false)
     const user = useSelector((state) => state.auth.login.currentUser);
 
-    const { state, initialize_socket, updated_room, submit_answer, join_room } = useContext(RealtimeContext);
+    const { state, initialize_socket, updated_room, submit_answer, join_room, disconnect_socket } = useContext(RealtimeContext);
     const params = useParams();
     const handleSubmit = async (choice) => {
         try {
@@ -107,16 +109,56 @@ export default function PresentationChoose() {
                         }
                         if (newSlides) {
                             setSlides(newSlides)
-                            // updateSubmitted()
                         }
-                        if (allChats) {
+                        if (allChats && allChats.length > 0 && allChats.length !== chats.length) {
                             setChats(allChats)
                         }
-                        if (allQuestions) {
+                        if (allQuestions && allQuestions.length > 0 && allQuestions.length !== questions.length) {
                             setQuestions(allQuestions)
                         }
 
+                    },
+                    public_chat: (data) => {
+                        console.log("event: 'public_chat' received: ", data)
+                        setChats((prev) => {
+                            const newChats = [...prev, data]
+                            return newChats.sort((a, b) => a.time - b.time)
+                        })
+                        setIsNewChat(true)
+                    },
+                    add_question: (data) => {
+                        console.log("event: 'add_question' received: ", data)
+                        setQuestions((prev) => {
+                            const newQuestions = [...prev, data]
+                            return newQuestions.sort((a, b) => a.time - b.time)
+                        }
+                        )
+                    },
+                    vote_question: (data) => {
+                        console.log("event: 'vote_question' received: ", data)
+
+                        setQuestions((prev) => {
+                            const newQuestions = prev.map((question) => {
+                                if (question.id === data.id) {
+                                    return data
+                                }
+                                return question
+                            })
+                            return newQuestions.sort((a, b) => a.time - b.time)
+                        })
+                    },
+                    mark_as_read_question: (data) => {
+                        console.log("event: 'mark_as_read_question' received: ", data)
+                        setQuestions((prev) => {
+                            const newQuestions = prev.filter((question) => question.id !== data.id)
+                            return newQuestions.sort((a, b) => a.time - b.time)
+                        })
+                    },
+                    end_presentation: (data) => {
+                        console.log("event: 'end_presentation' received: ", data)
+                        setIsEnd(true)
                     }
+
                 }
                 await initialize_socket(actions)
                 await join_room({
@@ -130,12 +172,26 @@ export default function PresentationChoose() {
         };
         handleJoinRoom();
 
-        return () =>
-            state?.socket?.disconnect();
+        return () => {
+            console.log("disconnecting socket")
+            disconnect_socket()
+        }
     }, [])
+    if (isEnd) {
+        return (
+            <div className="h-screen w-screen flex justify-center items-center">
+                <div className="text-3xl font-bold text-center">
+                    Presentation has ended
+                </div>
+                <Link to="/">
+                    <Button className="ml-4" type="primary">Go to Home</Button>
+                </Link>
+            </div>
+        )
+    }
     return (
         <>
-            <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} />
+            <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
             <Questions
                 questions={questions} setQuestions={setQuestions}
                 questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}

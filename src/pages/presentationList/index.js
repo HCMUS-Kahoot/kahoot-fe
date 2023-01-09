@@ -6,7 +6,7 @@ import CreatePresentationForm from "./CreatePresentationForm";
 import presentationApi from "../../api/presentationAPI";
 import { useSelector } from "react-redux";
 
-export default function PresentationList({ 
+export default function PresentationList({
     groupId = null,
     shouldShowCreatePresentationButton = true,
 }) {
@@ -35,13 +35,11 @@ export default function PresentationList({
                 message.error("Presentation description can't be empty");
                 return;
             }
-            let res= null;
+            let res = null;
             if (groupId === null) {
                 res = await presentationApi.createPresentation(values);
             } else {
-                message.error("TODO: Create presentation in group")
-                //TODO
-                values.groupId=groupId;
+                values.groupId = groupId;
                 res = await presentationApi.createPresentation(values);
             }
             message.success("Create presentation successfully");
@@ -62,7 +60,6 @@ export default function PresentationList({
                 console.log(res);
                 setPresentations(res);
             } else {
-                message.error("TODO: Get presentation in group")
                 const res = await presentationApi.getPresentationsInGroup(groupId);
                 console.log(res);
                 setPresentations(res);
@@ -74,7 +71,7 @@ export default function PresentationList({
     useEffect(() => {
         getPresentations();
     }, []);
-
+    console.log("This is presentations: ", presentations)
     return (
         <>
             <div className="m-4 mx-[2%]">
