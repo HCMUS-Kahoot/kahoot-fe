@@ -74,7 +74,7 @@ export default function PresentationChoose() {
     const [isEnd, setIsEnd] = useState(false)
     const user = useSelector((state) => state.auth.login.currentUser);
 
-    const { state, initialize_socket, updated_room, submit_answer, join_room } = useContext(RealtimeContext);
+    const { state, initialize_socket, updated_room, submit_answer, join_room, disconnect_socket } = useContext(RealtimeContext);
     const params = useParams();
     const handleSubmit = async (choice) => {
         try {
@@ -172,8 +172,10 @@ export default function PresentationChoose() {
         };
         handleJoinRoom();
 
-        return () =>
-            state?.socket?.disconnect();
+        return () => {
+            console.log("disconnecting socket")
+            disconnect_socket()
+        }
     }, [])
     if (isEnd) {
         return (
