@@ -1,23 +1,30 @@
-import React, { useState } from "react";
-import { Row, Col, Button, Dropdown, Space, message, Modal, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
+import { Row, Col, Button, Dropdown, message, Modal, Input } from "antd";
 import { SettingOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { Link, useNavigate } from "react-router-dom";
 import presentationApi from "../../api/presentationAPI";
-
 export default function PresentationChild({
     presentationName,
     owner,
     modified,
     created,
     presentationId,
-    getPresentations
+    getPresentations,
+    collaborators,
 }) {
     const navigation = useNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isModal2Open, setIsModal2Open] = useState(false);
     const [newPresentationName, setNewPresentationName] = useState(presentationName);
     const [emailToAddCollaborator, setEmailToAddCollaborator] = useState("");
+    const [listOfCollaborators, setListOfCollaborators] = useState(collaborators?collaborators:[]);
+    const user = useSelector((state) => state.auth.login.currentUser);
+    const userId = user?._id || user?.id;
+    useEffect(()=>{
+        console.log("This is collaborator: ",collaborators);
+    },[])
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -63,32 +70,6 @@ export default function PresentationChild({
             >Delete</span>,
         },
         
-    ];
-    const listOfCollaborators = [
-        {
-            _id: "1",
-            name: "Nguyen Van A",
-        },
-        {
-            _id: "2",
-            name: "Nguyen Van B",
-        },
-        {
-            _id: "3",
-            name: "Nguyen Van C",
-        },
-        {
-            _id: "4",
-            name: "Nguyen Van D",
-        },
-        {
-            _id: "5",
-            name: "Nguyen Van E",
-        },
-        {
-            _id: "6",
-            name: "Nguyen Van F",
-        }
     ];
 
 
@@ -153,18 +134,26 @@ export default function PresentationChild({
                         }} />
                         <Button className="mt-2" type="primary" onClick={async () => {
                             console.log("emailToAddCollaborator", emailToAddCollaborator);
-                            //TODO: call api to add collaborator
-
-                            message.success(`Add collaborator success with email ${emailToAddCollaborator}`);
-                            setEmailToAddCollaborator("");
+                            try{
+                                const result = await presentationApi.addCollaborator(userId, presentationId,emailToAddCollaborator);
+                                console.log("This is the result in UI: ", result)
+                                if(result)
+                                {
+                                    message.success(`Add collaborator success with email ${emailToAddCollaborator}`);
+                                    setListOfCollaborators((prevListValue)=>[...prevListValue,{email: emailToAddCollaborator}]);
+                                    setEmailToAddCollaborator("");
+                                }
+                            }catch(error){
+                                message.warning('Cannot add because error: ', error)
+                            }
 
                         }}>Add</Button>
                         <div className="w-full h-96 overflow-y-scroll">
-                            {listOfCollaborators.map((item) => {
+                            {listOfCollaborators.map((item, index) => {
                                 return (
-                                    <div className="flex justify-between items-center p-4 hover:bg-slate-300">
+                                    <div className="flex justify-between items-center p-4 hover:bg-slate-300" key={index}>
                                         <div className="text-left font-bold text-black">
-                                            {item.name}
+                                            {item.email}
                                         </div>
                                         <div className="text-right font-bold text-black">
                                             <Button danger>Remove</Button>
@@ -172,8 +161,7 @@ export default function PresentationChild({
                                     </div>
                                 )
                             })}
-                        </div>
-                            
+                        </div>                            
                     </Modal>
                 </Row>
 

@@ -105,8 +105,8 @@ export default function PresentationList({
                         </Row>
                     </div>
 
-                    {presentations.map((presentation) => (
-                        <span className="w-full">
+                    {presentations.map((presentation, index) => (
+                        <span className="w-full" key={index}>
                             <PresentationChild
                                 presentationName={presentation.name}
                                 presentationDescription={presentation.description}
@@ -114,6 +114,7 @@ export default function PresentationList({
                                 created={presentation.createdDate}
                                 presentationId={presentation._id}
                                 getPresentations={getPresentations}
+                                collaborators={presentation.collaborators}
                             />
                         </span>
                     ))}
