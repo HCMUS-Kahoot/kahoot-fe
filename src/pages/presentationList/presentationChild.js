@@ -38,6 +38,14 @@ export default function PresentationChild({
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    const handleRemove = async (collaboratorEmail) =>{
+        console.log("This is email to remove: ", collaboratorEmail);
+        const res = await presentationApi.deleteCollaborator(userId, presentationId, collaboratorEmail);
+        setListOfCollaborators((prevListValue)=>{
+            return prevListValue.filter(user => user.email !== collaboratorEmail)
+        })
+        return res;
+    }
     const itemMenus = [
         {
             key: '1',
@@ -156,7 +164,7 @@ export default function PresentationChild({
                                             {item.email}
                                         </div>
                                         <div className="text-right font-bold text-black">
-                                            <Button danger>Remove</Button>
+                                            <Button danger onClick={()=>handleRemove(item.email)}>Remove</Button>
                                         </div>
                                     </div>
                                 )
