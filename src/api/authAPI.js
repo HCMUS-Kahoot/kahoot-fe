@@ -49,15 +49,6 @@ class AuthApi {
       return error;
     }
   };
-  protectedTest = async () => {
-    try {
-      const res = await axiosClient.get("/auth/protected");
-      console.log(res);
-    } catch (error) {
-      console.log("Register error", error);
-      return error;
-    }
-  };
   loginWithGoogle = async () => {
     try {
       const res = await axiosClient.get("/auth/google/login");
