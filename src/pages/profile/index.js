@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import "antd/dist/antd.min.css";
 import { UserOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import authApi from "../../api/authAPI";
 
 const schema = Yup.object().shape({
   email: Yup.string()
@@ -34,7 +35,6 @@ export default function Profile() {
     };
     fetchProfile();
   }, [userid]);
-
 
   const props = {
     beforeUpload: (file) => {
@@ -66,6 +66,16 @@ export default function Profile() {
       console.log("Update profile error", error);
     }
   }
+
+  const handleActivateAccount = async () => {
+    try{
+      const res = await authApi.activateEmail();
+      message.success("Please check your mail box for an activate email");
+    }catch(error){
+      console.log("Send activate email fail: ", error);
+    }
+  }
+
   document.body.style.overflow = "hidden";
   if (loaded) {
     return (
@@ -79,6 +89,14 @@ export default function Profile() {
           <div className="login w-full bg-red justify-center flex z-20">
             <div className="login container w-80 h-[560px] text-center justify-center items-center text-lg bg-white p-5 rounded-md shadow-lg">
               <h1 className="text-3xl font-bold">Profile</h1>
+              {
+                !user.isActivated &&
+                <div>
+                  <Button className="mb-5 items-center" onClick={handleActivateAccount}>
+                      Activate account by email now
+                  </Button>
+                </div>
+              }
               <Upload {...props}>
                 <Avatar size={64} icon={<UserOutlined />} />
               </Upload>
@@ -112,7 +130,6 @@ export default function Profile() {
                 <Form.Item label="Workplace" name="workplace" initialValue={profile?.workplace}>
                   <Input />
                 </Form.Item>
-
                 <Form.Item>
                   <Button type="primary" htmlType="submit">
                     Save

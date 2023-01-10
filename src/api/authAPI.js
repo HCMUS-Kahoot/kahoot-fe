@@ -58,6 +58,14 @@ class AuthApi {
       return error;
     }
   };
+  activateEmail = async () => {
+    try{
+      await axiosClient.get("/auth/sendActivateEmail")
+    } catch(error) {
+      console.log("Reset password fail ", error)
+      return error;
+    }
+  }
 }
 const authApi = new AuthApi();
 export default authApi;
