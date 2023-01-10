@@ -3,7 +3,7 @@ import { Drawer, Button, Col, message, Input } from "antd";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Context as RealtimeContext } from "../../store/context/realtimeContext";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -73,7 +73,7 @@ export default function PresentationChoose() {
     const [isNewChat, setIsNewChat] = useState(false)
     const [isEnd, setIsEnd] = useState(false)
     const user = useSelector((state) => state.auth.login.currentUser);
-
+    const navigate = useNavigate();
     const { state, initialize_socket, updated_room, submit_answer, join_room, disconnect_socket } = useContext(RealtimeContext);
     const params = useParams();
     const handleSubmit = async (choice) => {
@@ -157,6 +157,11 @@ export default function PresentationChoose() {
                     end_presentation: (data) => {
                         console.log("event: 'end_presentation' received: ", data)
                         setIsEnd(true)
+                    },
+                    error_join_room: (data) => {
+                        console.log("event: 'error_join_room' received: ", data)
+                        message.error(data.message)
+                        navigate("/")
                     }
 
                 }
@@ -211,7 +216,7 @@ export default function PresentationChoose() {
                         {slide?.title}
                     </div>
                     <div className="slide-content -gray-600 w-[90%] h-[60%] bg-white">
-                        {slide?.slideType === "MultipleChoice" &&
+                        {(slide?.slideType === "MultipleChoice" && slide?.submitted) &&
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={slide?.content.data}>
                                     <XAxis dataKey="name" />

@@ -35,7 +35,7 @@ const profileOption = (handleLogout, handleProfile) => {
 function Header() {
   const user = useSelector((state) => state.auth.login.currentUser);
   const userid = user?._id || user?.id;
-  console.log("userid", userid);
+
   const [profile, setProfile] = React.useState({});
   const [loaded, setLoaded] = React.useState(false);
   const [presentations, setPresentations] = useState([]);
@@ -197,6 +197,11 @@ function Header() {
             <>
               <Space direction="vertical">
                 <Space wrap>
+                  <Link to="/presentations/pin">
+                    <Button className="mr-4" type="primary" size="large">
+                      Join a Presentation
+                    </Button>
+                  </Link>
                   <Dropdown
                     menu={{
                       items: createItemOptions,
@@ -206,7 +211,6 @@ function Header() {
                     <Button className="mr-4" type="primary" size="large">
                       Create
                     </Button>
-
                   </Dropdown>
                 </Space>
               </Space>
@@ -218,7 +222,7 @@ function Header() {
                     }}
                     placement="bottomRight"
                   >
-                    <div className="hover:bg-blue-100 px-3 h-10 mt-6 border-2 border-blue-100 rounded-full cursor-pointer">                     
+                    <div className="hover:bg-blue-100 px-3 h-10 mt-6 border-2 border-blue-100 rounded-full cursor-pointer">
                       {(profile) &&
                         <h1 className="relative bottom-4"><UserOutlined className="relative bottom-1" /> {profile?.name}  </h1>
                       }

@@ -168,7 +168,18 @@ const end_presentation = (dispatch) => {
     }
   };
 };
-
+const check_user_can_join_room = (dispatch) => {
+  return async (data) => {
+    try {
+      if (currentSocket) {
+        currentSocket.emit("checkUserCanJoinRoom", data);
+      }
+    }
+    catch (error) {
+      console.log("ERROR >> ", error.message)
+    }
+  }
+}
 export const { Context, Provider } = contextBuilder(
   socketReducer,
   {
@@ -178,6 +189,7 @@ export const { Context, Provider } = contextBuilder(
     change_slide, public_chat,
     add_question, disconnect_socket,
     mark_as_read, end_presentation,
+    check_user_can_join_room,
   },
   { socket: null, errorMessage: "", room: null }
 );
