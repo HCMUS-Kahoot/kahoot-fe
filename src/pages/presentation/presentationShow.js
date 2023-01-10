@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Drawer, Modal, Input, Button, Col } from "antd";
-import { DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
+import {OrderedListOutlined , DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useSelector } from "react-redux";
@@ -9,6 +9,7 @@ import { Context as RealtimeContext } from "../../store/context/realtimeContext"
 import PresentationFilter from './PresentationFilter';
 import ChatModel from "./components/chats";
 import Questions from "./components/questions";
+import UserSubmit from "./components/usersubmit";
 export default function PresentationShow() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
@@ -29,6 +30,15 @@ export default function PresentationShow() {
   const onClose = () => {
     setOpenDrawer(false);
   };
+
+  const [openDrawer2, setOpenDrawer2] = useState(false);
+  const showDrawer2 = () => {
+    setOpenDrawer2(true);
+  };
+  const onClose2 = () => {
+    setOpenDrawer2(false);
+  };
+
   const presentation = {
     slides: [
       {
@@ -70,6 +80,7 @@ export default function PresentationShow() {
   const [showBar, setShowBar] = useState(false)
   const [questions, setQuestions] = useState([])
   const [chats, setChats] = useState([]);
+  const [userSubmit, setUserSubmit] = useState([]); // for user submit (todo)
   const [questionIndex, setQuestionIndex] = useState(0)
   const [isNewChat, setIsNewChat] = useState(false)
   const user = useSelector((state) => state.auth.login.currentUser);
@@ -176,6 +187,8 @@ export default function PresentationShow() {
         handleOk={handleOk}
       />
       <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
+      <UserSubmit userSubmits={chats} openDrawer={openDrawer2} onClose={onClose2} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
+   
       <Col span={24} className="slide h-[100%] bg-white" >
         <div className="flex justify-between items-center h-12 bg-gray-100">
           <Button type="primary" onClick={handleEndPresentation} className="ml-4">End Presentation</Button>
@@ -260,6 +273,11 @@ export default function PresentationShow() {
             <Button className="m-1" type="primary" shape="circle" icon={<QuestionCircleOutlined />} onClick={
               () => {
                 showModal()
+              }
+            } />
+            <Button className="m-1" type="primary" shape="circle" icon={< OrderedListOutlined/>} onClick={
+              () => {
+                showDrawer2()
               }
             } />
           </div>

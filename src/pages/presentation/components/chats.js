@@ -41,22 +41,24 @@ function ChatModel({ chats, openDrawer, onClose, isNewChat, setIsNewChat }) {
   }
   return (
     <Drawer title="Messages" placement="right" onClose={onClose} open={openDrawer}>
+      <div className=" h-[90%] overflow-scroll overflow-x-hidden">
       {
         chats.map((chat, index) => {
           return (
-            <div key={index} className={`${chat.userId === user.id ? 'bg-cyan-400' : 'bg-white'} shadow-md rounded-lg p-3 my-2 `}>
+            <div clas key={index} className={`${chat.userId === user.id ? 'bg-cyan-400' : 'bg-white'} shadow-md rounded-lg p-3 my-2 w-[90%]`}>
               {chat.name}: {chat.message}
             </div>
           )
         })
-      }
+        }
+      </div>
       <div className="flex justify-evenly w-full absolute bottom-3">
-        <Input placeholder="Comment" className="relative right-3" style={{ width: "70%" }}
+        <Input placeholder="Comment" className="relative right-3 h-16 bottom-2" style={{ width: "70%" }}
           onChange={(e) => setChatInput(e.target.value)}
           value={chatInput}
           onKeyDown={(e) => handleSubmitMessageByEnter(e)}
         />
-        <Button className="bg-slate-300" icon={<SendOutlined />}
+        <Button className="bg-slate-300 mr-[20px]" icon={<SendOutlined />}
           onClick={() => handleSubmitMessage()}
         />
       </div>
