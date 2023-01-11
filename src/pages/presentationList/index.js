@@ -61,7 +61,11 @@ export default function PresentationList({
             if (groupId === null && user.email) {
                 const res = await presentationApi.getPresentations(user.email);
                 console.log(res);
-                setPresentations(res);
+                setPresentations((prev) => {
+                    const newPresentations = [...prev, ...res];
+                    setPresentationsDisplay(newPresentations);
+                    return [...prev, ...res]
+                });
             } else {
                 const res = await presentationApi.getPresentationsInGroup(groupId);
                 console.log(res);
@@ -73,7 +77,7 @@ export default function PresentationList({
     };
     useEffect(() => {
         getPresentations();
-        setPresentationsDisplay(presentations);
+        // setPresentationsDisplay(presentations);
     }, []);
     console.log("This is presentations: ", presentations)
     console.log("This is presentationsDisplay: ", presentationsDisplay)

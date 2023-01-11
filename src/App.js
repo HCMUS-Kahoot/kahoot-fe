@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { BrowserRouter } from "react-router-dom";
 import Routes from "./router";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,13 +7,14 @@ import { loginSucess } from "./store/auth";
 import { Provider as RealtimeProvider } from "./store/context/realtimeContext";
 
 
-let first = true;
+
 function App() {
   const user = useSelector((state) => state.auth.login.currentUser);
   const dispatch = useDispatch();
+  const first = useRef(true);
   useEffect(() => {
-    console.log("User change : ", first, user);
-    if (user === null || first) {
+    console.log("User change : ", first.current, user);
+    if (user === null || first.current) {
       const getUser = async () => {
         try {
           await authApi.getCurrentUser(dispatch);
@@ -22,7 +23,7 @@ function App() {
           dispatch(loginSucess(null));
         }
       };
-      first = false;
+      first.current = false;
       getUser(dispatch);
     }
   }, [user]);

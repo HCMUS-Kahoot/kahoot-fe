@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Form, Input, Button } from "antd";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
@@ -19,7 +19,7 @@ export default function Login() {
     email: "",
     password: "",
   });
-
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   function handleChange(event) {
@@ -31,7 +31,7 @@ export default function Login() {
 
   const handleSubmit = async () => {
     try {
-      await authApi.loginUser(formData, dispatch, navigate);
+      await authApi.loginUser(formData, dispatch, navigate, searchParams.get("returnUrl"));
     } catch (error) {
       console.log("Login error", error);
     }
@@ -58,6 +58,11 @@ export default function Login() {
                 remember: true,
               }}
               validationschema={schema}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit();
+                }
+              }}
             >
               <Form.Item
                 label="Email"
