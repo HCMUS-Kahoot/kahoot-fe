@@ -227,7 +227,7 @@ export default function PresentationChoose() {
                         }
                         {
                             slide?.slideType === "Heading" && <>
-                                <div className="text-7xl font-bold text-center mt-60">
+                                <div className="text-7xl font-bold text-center mt-30">
                                     {slide?.content.heading}
                                 </div>
                             </>
