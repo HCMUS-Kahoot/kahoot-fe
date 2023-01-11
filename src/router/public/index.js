@@ -1,5 +1,5 @@
-import React from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Route, Routes, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "antd";
 import Home from "../../pages/Home";
 import Login from "../../pages/Login";
@@ -14,7 +14,8 @@ import ResetPasword from "../../pages/forgotpassword/resetpassword";
 import Activation from "../../pages/ActiveByEmail";
 const { Content } = Layout;
 
-function PublicRouter() {
+function PublicRouter({ returnUrl }) {
+
   return (
     <Layout>
       <Header />
@@ -28,8 +29,8 @@ function PublicRouter() {
           <Route exact path="/presentation/:id" element={<PresentationEdit />} />
           <Route exact path="/forgotpassword" element={<EmailInput />} />
           <Route exact path="/forgotpassword/resetpassword" element={<ResetPasword />} />
-          <Route  path="/activeByEmail/:token" element={<Activation />} />
-          <Route path="*" element={<Navigate replace to="/login" />} />
+          <Route path="/activeByEmail/:token" element={<Activation />} />
+          <Route path="*" element={<Navigate replace to={`/login?returnUrl=${returnUrl}`} />} />
         </Routes>
       </Content>
       <Footer />
