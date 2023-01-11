@@ -11,9 +11,9 @@ class PresentationApi {
       return error;
     }
   };
-  getPresentations = async () => {
+  getPresentations = async (email) => {
     try {
-      const res = await axiosClient.get("/presentations/current-user-presentations");
+      const res = await axiosClient.get(`/presentations/current-user-presentations/${email}`);
       return res;
     } catch (error) {
       console.log("Get presentations error", error);
@@ -113,7 +113,7 @@ class PresentationApi {
       return error;
     }
   }
-  addCollaborator = async (ownerId, presentationId, collaboratorEmail) =>{
+  addCollaborator = async (ownerId, presentationId, collaboratorEmail) => {
     try {
       const res = await axiosClient.post(`/presentations/addCollaborator`, {
         ownerId,
@@ -126,7 +126,7 @@ class PresentationApi {
       return error;
     }
   }
-  deleteCollaborator = async (ownerId, presentationId, collaboratorEmail) =>{
+  deleteCollaborator = async (ownerId, presentationId, collaboratorEmail) => {
     try {
       const res = await axiosClient.post(`/presentations/deleteCollaborator`, {
         ownerId,
