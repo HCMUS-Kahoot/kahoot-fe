@@ -51,9 +51,9 @@ function Home() {
           <h1 className="font-mono text-8xl mt-36" >Hi there</h1>
           <h1 className="font-mono text-xl mt-[-30px]" >Ready for a mind-blowing experience? </h1>
 
-          <div className="flex justify-start mt-36">
+          <div className="flex justify-start mt-24">
             <Link to="/groups">
-              <div className="mx-8 bg-orange-100  hover:scale-105 shadow-lg hover:relative hover:bottom-10 text-orange-500 font-bold py-2 px-4 rounded">
+              <div className="mx-8 bg-orange-100  hover:scale-125 shadow-lg hover:relative hover:bottom-10 text-orange-500 font-bold py-2 px-4 rounded">
                 <GroupOutlined className="text-6xl font-thin m-10" />
                 <br />
                 Groups
@@ -61,7 +61,7 @@ function Home() {
               </div>
             </Link>
             <Link to="/presentations">
-              <div className="mx-8 bg-blue-100  hover:scale-105 shadow-lg hover:relative hover:bottom-10 text-blue-500 font-bold py-2 px-4 rounded">
+              <div className="mx-8 bg-blue-100  hover:scale-125 shadow-lg hover:relative hover:bottom-10 text-blue-500 font-bold py-2 px-4 rounded">
                 <PicCenterOutlined className="text-6xl font-thin m-10" />
                 <br />
                 Presentations
