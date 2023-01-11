@@ -24,7 +24,6 @@ function UserSubmit({ userSubmits, openDrawer, onClose, slides }) {
                   if (submit.slideIndex === index)
                     return (
                       <div key={index} className=" p-3 border ">
-                        <b className="p-2 text-gray-400 font-serif"> {index + 1}</b>
                         <b>{submit.username}:</b> {submit.choice}
                         <i className="ml-5">       (at {formatDate(new Date(submit.time))})</i>
                       </div>
