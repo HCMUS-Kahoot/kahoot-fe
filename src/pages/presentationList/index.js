@@ -62,14 +62,18 @@ export default function PresentationList({
                 const res = await presentationApi.getPresentations(user.email);
                 console.log(res);
                 setPresentations((prev) => {
-                    const newPresentations = [...prev, ...res];
+                    const newPresentations = [...res];
                     setPresentationsDisplay(newPresentations);
-                    return [...prev, ...res]
+                    return newPresentations
                 });
             } else {
                 const res = await presentationApi.getPresentationsInGroup(groupId);
                 console.log(res);
-                setPresentations(res);
+                setPresentations((prev) => {
+                    const newPresentations = [...res];
+                    setPresentationsDisplay(newPresentations);
+                    return newPresentations
+                });
             }
         } catch (error) {
             console.log("Get current user GROUP error", error);
@@ -77,10 +81,7 @@ export default function PresentationList({
     };
     useEffect(() => {
         getPresentations();
-        // setPresentationsDisplay(presentations);
     }, []);
-    console.log("This is presentations: ", presentations)
-    console.log("This is presentationsDisplay: ", presentationsDisplay)
     const filterPresentations = (filter) => {
         if (filter === "all") {
             setPresentationsDisplay(presentations);

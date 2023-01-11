@@ -29,17 +29,17 @@ function Home() {
               }}>
                 <div className="w-full ">
                   <div className="flex justify-center ">
-                    <Image width={1080} src={require("../../assets/images/home1.png")} />
+                    <Image preview={false} width={1080} src={require("../../assets/images/home1.png")} />
                   </div>
                 </div>
                 <div className="w-full ">
                   <div className="flex justify-center">
-                    <Image width={1080} src={require("../../assets/images/home2.png")} />
+                    <Image preview={false} width={1080} src={require("../../assets/images/home2.png")} />
                   </div>
                 </div>
                 <div className="w-full ">
                   <div className="flex justify-center ">
-                    <Image width={1080} src={require("../../assets/images/home3.png")} />
+                    <Image preview={false} width={1080} src={require("../../assets/images/home3.png")} />
                   </div>
                 </div>
               </Carousel>
