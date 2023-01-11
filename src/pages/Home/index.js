@@ -1,5 +1,7 @@
 import React from "react";
-import { Col, Image, Row, Button } from "antd";
+import { Col, Image, Row, Button, Carousel } from "antd";
+import { PicCenterOutlined, GroupOutlined } from "@ant-design/icons";
+
 import { Link } from "react-router-dom";
 import '../Home/home.css'
 function Home() {
@@ -17,90 +19,57 @@ function Home() {
     },
   ];
   return (
-    <div>
-      <Row justify="space-between">
-        <Col span={4}></Col>
-        <Col span={12}>
-          <section className="bg-white rounded-sm">
-            <p className="font-bold ml-2 text-lg pt-2">Group</p>
-            <hr />
-            <div className="w-4/5 rounded-sm border-2 my-2 m-auto">
-              <div className="w-full flex justify-around">
-                <Image src={require("../../assets/images/Kahoot.png")} />
-                <div>
-                  <h1>{groupList[0].nameGroup}</h1>
-                  <div>
-                    <p>{groupList[0].createdBy}</p>
-                  </div>
-                  <div>
-                    <p>{groupList[0].createdDate}</p>
+    <div  >
+      <Row>
+        <Col span={16}>
+          <div className="homepage-container bg-white text-center">
+            <div className="carousel-container w-[90%] ml-[5%]">
+              <Carousel autoplay className="py-6 mt-14" style={{
+                width: "100%",
+              }}>
+                <div className="w-full ">
+                  <div className="flex justify-center ">
+                    <Image width={1080} src={require("../../assets/images/home1.png")} />
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="text-center">
-              <Link>
-                <p className="font-bold color-[#1368CE]">
-                  <u>See all</u>
-                </p>
-              </Link>
-            </div>
-          </section>
-          <section className="bg-white rounded-sm">
-            <p className="font-bold ml-2 text-lg pt-2">My kahoots</p>
-            <hr />
-            <div className="w-4/5 rounded-sm border-2 my-2 m-auto">
-              <div className="w-full flex justify-around">
-                <Image src={require("../../assets/images/Kahoot.png")} />
-                <div>
-                  <h1>{groupList[0].nameGroup}</h1>
-                  <div>
-                    <p>{groupList[0].createdBy}</p>
-                  </div>
-                  <div>
-                    <p>{groupList[0].createdDate}</p>
+                <div className="w-full ">
+                  <div className="flex justify-center">
+                    <Image width={1080} src={require("../../assets/images/home2.png")} />
                   </div>
                 </div>
-              </div>
+                <div className="w-full ">
+                  <div className="flex justify-center ">
+                    <Image width={1080} src={require("../../assets/images/home3.png")} />
+                  </div>
+                </div>
+              </Carousel>
+
             </div>
-            <div className="text-center">
-              <Link>
-                <p className="font-bold color-[#1368CE]">
-                  <u>See all</u>
-                </p>
-              </Link>
-            </div>
-          </section>
+          </div>
         </Col>
-        <Col span={4}>
-          <Button className="mb-4 w-full boder-2 rounded-md bg-[#1260BE]">
-            Host Kahoot
-          </Button>
-          <section className="bg-white rounded-sm">
-            <p className="font-bold ml-2 text-lg pt-2">Latest repost</p>
-            <hr />
-            <div className="w-4/5 rounded-sm border-2 my-2 m-auto">
-              <div className="w-full flex justify-around">
-                <Image src={require("../../assets/images/Kahoot.png")} />
-                <div>
-                  <h1>{groupList[0].nameGroup}</h1>
-                  <div>
-                    <p>{groupList[0].createdBy}</p>
-                  </div>
-                  <div>
-                    <p>{groupList[0].createdDate}</p>
-                  </div>
-                </div>
+        <Col span={8}>
+          <h1 className="font-mono text-8xl mt-36" >Hi there</h1>
+          <h1 className="font-mono text-xl mt-[-30px]" >Ready for a mind-blowing experience? </h1>
+
+          <div className="flex justify-start mt-36">
+            <Link to="/groups">
+              <div className="mx-8 bg-orange-100  hover:scale-105 shadow-lg hover:relative hover:bottom-10 text-orange-500 font-bold py-2 px-4 rounded">
+                <GroupOutlined className="text-6xl font-thin m-10" />
+                <br />
+                Groups
+                <br />
               </div>
-            </div>
-            <div className="text-center">
-              <Link>
-                <p className="font-bold color-[#1368CE]">
-                  <u>See all</u>
-                </p>
-              </Link>
-            </div>
-          </section>
+            </Link>
+            <Link to="/presentations">
+              <div className="mx-8 bg-blue-100  hover:scale-105 shadow-lg hover:relative hover:bottom-10 text-blue-500 font-bold py-2 px-4 rounded">
+                <PicCenterOutlined className="text-6xl font-thin m-10" />
+                <br />
+                Presentations
+                <br />
+              </div>
+            </Link>
+
+          </div>
         </Col>
       </Row>
     </div>

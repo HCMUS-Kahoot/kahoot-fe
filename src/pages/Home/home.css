@@ -1,3 +1,12 @@
 .ant-layout-header {
     background-color: white !important;
 }
+.body {
+    background-color: white !important;
+}
+.ant-layout-content content {
+    background-color: white !important;
+}
+.ant-layout-content{
+    background-color: white !important;
+}
