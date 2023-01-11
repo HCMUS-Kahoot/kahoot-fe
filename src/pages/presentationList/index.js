@@ -70,6 +70,11 @@ export default function PresentationList({
                 const res = await presentationApi.getPresentationsInGroup(groupId);
                 console.log(res);
                 setPresentations(res);
+                setPresentations((prev) => {
+                    const newPresentations = [...prev, ...res];
+                    setPresentationsDisplay(newPresentations);
+                    return [...prev, ...res]
+                });
             }
         } catch (error) {
             console.log("Get current user GROUP error", error);
