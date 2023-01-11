@@ -49,7 +49,12 @@ export default function PresentationList({
             setIsModalOpen(false);
             const newPresentations = [...presentations];
             newPresentations.push(res);
-            setPresentations(newPresentations);
+            setPresentations((prev) => {
+                const newPresentations = [...prev, res];
+                setPresentationsDisplay(newPresentations);
+                return newPresentations
+            });
+            filterPresentations(filter);
             // }
         } catch (error) {
             message.error(error.message);
@@ -107,14 +112,17 @@ export default function PresentationList({
                     <Menu mode="horizontal" defaultActiveFirst selectedKeys={tab} >
                         <Menu.Item key="hidden"></Menu.Item>
                         <Menu.Item onClick={() => {
+                            setFilter("all");
                             filterPresentations("all");
                             setTab("all");
                         }} key="all">All my Prestntations</Menu.Item>
                         <Menu.Item onClick={() => {
+                            setFilter("owner")
                             filterPresentations("owner");
                             setTab("owner");
                         }} key="owner">Prestntations I'm owner</Menu.Item>
                         <Menu.Item onClick={() => {
+                            setFilter("collaborator")
                             filterPresentations("collaborator");
                             setTab("collaborator");
                         }} key="collaborator">Prestntations I'm a collaborator</Menu.Item>
