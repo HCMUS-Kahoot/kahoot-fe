@@ -5,6 +5,8 @@ import PublicRouter from "./public";
 
 function Routes({ user }) {
   const prevLocation = useLocation();
+  console.log("This is prevLocation: ", prevLocation)
+  console.log("This is pathname window", window.location)
   return user ? <PrivateRouter /> : <PublicRouter returnUrl={prevLocation.pathname} />;
 }
 
