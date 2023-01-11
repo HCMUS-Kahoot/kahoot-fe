@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Drawer, Modal, Input, Button, Col } from "antd";
-import {OrderedListOutlined , DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
+import { OrderedListOutlined, DownCircleFilled, LeftCircleFilled, RightCircleFilled, CloseCircleFilled, MessageOutlined, QuestionCircleOutlined, UpCircleFilled, SendOutlined } from "@ant-design/icons";
 import "antd/dist/antd.min.css";
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { useSelector } from "react-redux";
@@ -95,7 +95,7 @@ export default function PresentationShow() {
         room_updated: async (data) => {
           console.log("event: 'room_updated' received: ", data)
           await updated_room(data)
-          const { newSlide, newSlideIndex, newSlides, allChats, allQuestions } = PresentationFilter({ data, slides, user })
+          const { newSlide, newSlideIndex, newSlides, allChats, allQuestions, userSubmited } = PresentationFilter({ data, slides, user })
 
           if (newSlide) {
             setSlide(newSlide)
@@ -115,6 +115,11 @@ export default function PresentationShow() {
                 .filter((question) => !question.read)
                 .sort((a, b) => a.time - b.time)
             })
+          }
+          console.log("userSubmited: ", userSubmited)
+          if (userSubmited) {
+            console.log("userSubmited: ", userSubmited)
+            setUserSubmit(userSubmited)
           }
         },
         public_chat: (data) => {
@@ -187,8 +192,8 @@ export default function PresentationShow() {
         handleOk={handleOk}
       />
       <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
-      <UserSubmit userSubmits={chats} openDrawer={openDrawer2} onClose={onClose2} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
-   
+      <UserSubmit userSubmits={userSubmit} openDrawer={openDrawer2} onClose={onClose2} slides={slides} />
+
       <Col span={24} className="slide h-[100%] bg-white" >
         <div className="flex justify-between items-center h-12 bg-gray-100">
           <Button type="primary" onClick={handleEndPresentation} className="ml-4">End Presentation</Button>
@@ -275,7 +280,7 @@ export default function PresentationShow() {
                 showModal()
               }
             } />
-            <Button className="m-1" type="primary" shape="circle" icon={< OrderedListOutlined/>} onClick={
+            <Button className="m-1" type="primary" shape="circle" icon={< OrderedListOutlined />} onClick={
               () => {
                 showDrawer2()
               }
