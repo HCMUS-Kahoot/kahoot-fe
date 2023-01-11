@@ -57,7 +57,7 @@ function Header() {
         setLoaded(false);
       }
     };
-    fetchProfile();
+    user && fetchProfile();
   }, [userid]);
   useEffect(() => {
     const getPresentations = async () => {
@@ -69,7 +69,7 @@ function Header() {
         console.log("Get current user GROUP error", error);
       }
     };
-    getPresentations();
+    user && getPresentations();
   }, []);
   useEffect(() => {
     const getGroups = async () => {
@@ -81,7 +81,7 @@ function Header() {
         console.log("Get current user GROUP error", error);
       }
     };
-    getGroups();
+    user && getGroups();
   }, []);
   const createItemOptions = [
     {

@@ -15,7 +15,7 @@ import Activation from "../../pages/ActiveByEmail";
 const { Content } = Layout;
 
 function PublicRouter({ returnUrl }) {
-
+  console.log("return url in public router: ", returnUrl)
   return (
     <Layout>
       <Header />
@@ -24,7 +24,7 @@ function PublicRouter({ returnUrl }) {
           <Route exact path="/" element={<Home />} />
           <Route exact path="/login" element={<Login />} />
           <Route exact path="/register" element={<Register />} />
-          <Route exact path="/groups/:id/invitation" element={<Invitation />} />
+          {/* <Route exact path="/groups/:id/invitation" element={<Invitation />} /> */}
           <Route exact path="/redirectPage/:accessToken/:refreshToken" element={<RedirectPage />} />
           <Route exact path="/presentation/:id" element={<PresentationEdit />} />
           <Route exact path="/forgotpassword" element={<EmailInput />} />
