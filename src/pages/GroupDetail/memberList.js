@@ -70,30 +70,13 @@ const columns = [
                         console.log(res);
                         message.success("Delete member successfully");
                         record.removeMember(record.groupId, record.email);
-                        
+
                     }
                 } >Delete</Button>
             </Space>
         ),
     },
 ];
-// const data = [
-//     {
-//         key: '1',
-//         name: 'Tran Dac Toan',
-//         role: 'member',
-//     },
-//     {
-//         key: '2',
-//         name: 'Dinh Huynh Tien Phu',
-//         role: 'co-host',
-//     },
-//     {
-//         key: '3',
-//         name: 'Tran Trong Hoang Anh',
-//         role: 'member',
-//     },
-// ];
 const MemberList = ({ groupId }) => {
 
     const [members, setMembers] = useState([]);
