@@ -10,15 +10,6 @@ class GroupApi {
       return error;
     }
   };
-  // getGroups = async () => {
-  //   try {
-  //     const res = await axiosClient.get("/groups/current-user-groups");
-  //     return res;
-  //   } catch (error) {
-  //     console.log("Get groups error", error);
-  //     return error;
-  //   }
-  // };
   getGroupsWithTab = async (tab) => {
     try {
       if (tab === "myGroup") {
@@ -33,7 +24,7 @@ class GroupApi {
         const res = await axiosClient.get("/groups/group-that-im-co-owner");
         return res;
       }
-      else if (tab === "groupImIn"){
+      else if (tab === "groupImIn") {
         const res = await axiosClient.get("/groups/group-that-im-member");
         return res;
       }
@@ -43,6 +34,15 @@ class GroupApi {
     }
   };
 
+  invitationByEmail = async (data) => {
+    try {
+      const res = await axiosClient.post("/auth/sendInviteGroupEmail", data);
+      return res;
+    } catch (error) {
+      console.log("Invitation by email error", error);
+      return error;
+    }
+  };
 
   updateGroup = async (id, group) => {
     try {
@@ -100,7 +100,7 @@ class GroupApi {
       return error;
     }
   }
-  deleteUserInGroup = async (groupId,memberEmail) => {
+  deleteUserInGroup = async (groupId, memberEmail) => {
     try {
       const res = await axiosClient.get(`/group-members/delete/${groupId}/${memberEmail}`);
       return res;
