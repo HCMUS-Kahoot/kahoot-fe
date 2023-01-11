@@ -19,12 +19,12 @@ export default function PresentationChild({
     const [isModal2Open, setIsModal2Open] = useState(false);
     const [newPresentationName, setNewPresentationName] = useState(presentationName);
     const [emailToAddCollaborator, setEmailToAddCollaborator] = useState("");
-    const [listOfCollaborators, setListOfCollaborators] = useState(collaborators?collaborators:[]);
+    const [listOfCollaborators, setListOfCollaborators] = useState(collaborators ? collaborators : []);
     const user = useSelector((state) => state.auth.login.currentUser);
     const userId = user?._id || user?.id;
-    useEffect(()=>{
-        console.log("This is collaborator: ",collaborators);
-    },[])
+    useEffect(() => {
+        console.log("This is collaborator: ", collaborators);
+    }, [])
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -38,10 +38,10 @@ export default function PresentationChild({
     const handleCancel = () => {
         setIsModalOpen(false);
     };
-    const handleRemove = async (collaboratorEmail) =>{
+    const handleRemove = async (collaboratorEmail) => {
         console.log("This is email to remove: ", collaboratorEmail);
         const res = await presentationApi.deleteCollaborator(userId, presentationId, collaboratorEmail);
-        setListOfCollaborators((prevListValue)=>{
+        setListOfCollaborators((prevListValue) => {
             return prevListValue.filter(user => user.email !== collaboratorEmail)
         })
         return res;
@@ -71,13 +71,12 @@ export default function PresentationChild({
             label: <span
                 onClick={async () => {
                     const res = await presentationApi.deletePresentation(presentationId);
-                    console.log("res delete", res);
                     message.success(`Delete success'`);
                     getPresentations();
                 }}
             >Delete</span>,
         },
-        
+
     ];
 
 
@@ -131,7 +130,7 @@ export default function PresentationChild({
                             }}
                         />
                     </Modal>
-                    <Modal title="List of collaborators" open={isModal2Open} onOk={() => { setIsModal2Open(false) }} onCancel={() => { setIsModal2Open(false)}}>
+                    <Modal title="List of collaborators" open={isModal2Open} onOk={() => { setIsModal2Open(false) }} onCancel={() => { setIsModal2Open(false) }}>
                         <Input style={
                             {
                                 width: "80%",
@@ -142,16 +141,15 @@ export default function PresentationChild({
                         }} />
                         <Button className="mt-2" type="primary" onClick={async () => {
                             console.log("emailToAddCollaborator", emailToAddCollaborator);
-                            try{
-                                const result = await presentationApi.addCollaborator(userId, presentationId,emailToAddCollaborator);
+                            try {
+                                const result = await presentationApi.addCollaborator(userId, presentationId, emailToAddCollaborator);
                                 console.log("This is the result in UI: ", result)
-                                if(result)
-                                {
+                                if (result) {
                                     message.success(`Add collaborator success with email ${emailToAddCollaborator}`);
-                                    setListOfCollaborators((prevListValue)=>[...prevListValue,{email: emailToAddCollaborator}]);
+                                    setListOfCollaborators((prevListValue) => [...prevListValue, { email: emailToAddCollaborator }]);
                                     setEmailToAddCollaborator("");
                                 }
-                            }catch(error){
+                            } catch (error) {
                                 message.warning('Cannot add because error: ', error)
                             }
 
@@ -164,12 +162,12 @@ export default function PresentationChild({
                                             {item.email}
                                         </div>
                                         <div className="text-right font-bold text-black">
-                                            <Button danger onClick={()=>handleRemove(item.email)}>Remove</Button>
+                                            <Button danger onClick={() => handleRemove(item.email)}>Remove</Button>
                                         </div>
                                     </div>
                                 )
                             })}
-                        </div>                            
+                        </div>
                     </Modal>
                 </Row>
 
