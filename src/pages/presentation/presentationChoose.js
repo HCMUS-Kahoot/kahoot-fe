@@ -150,8 +150,14 @@ export default function PresentationChoose() {
                     mark_as_read_question: (data) => {
                         console.log("event: 'mark_as_read_question' received: ", data)
                         setQuestions((prev) => {
-                            const newQuestions = prev.filter((question) => question.id !== data.id)
+                            const newQuestions = prev.filter((question) => question.questionId !== data.questionId)
                             return newQuestions.sort((a, b) => a.time - b.time)
+                        })
+                        setQuestionIndex((prev) => {
+                            if (prev === 0) {
+                                return 0
+                            }
+                            return prev - 1
                         })
                     },
                     end_presentation: (data) => {

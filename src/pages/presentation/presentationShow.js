@@ -155,8 +155,14 @@ export default function PresentationShow() {
         mark_as_read_question: (data) => {
           console.log("event: 'mark_as_read_question' received: ", data)
           setQuestions((prev) => {
-            const newQuestions = prev.filter((question) => question.id !== data.id)
+            const newQuestions = prev.filter((question) => question.questionId !== data.questionId)
             return newQuestions.sort((a, b) => a.time - b.time)
+          })
+          setQuestionIndex((prev) => {
+            if (prev === 0) {
+              return 0
+            }
+            return prev - 1
           })
         },
         end_presentation: (data) => {
@@ -189,7 +195,7 @@ export default function PresentationShow() {
         questions={questions} setQuestions={setQuestions}
         questionIndex={questionIndex} setQuestionIndex={setQuestionIndex}
         isModalOpen={isModalOpen} handleCancel={handleCancel}
-        handleOk={handleOk}
+        handleOk={handleOk} canMarkAsRead={true}
       />
       <ChatModel chats={chats} openDrawer={openDrawer} onClose={onClose} isNewChat={isNewChat} setIsNewChat={setIsNewChat} />
       <UserSubmit userSubmits={userSubmit} openDrawer={openDrawer2} onClose={onClose2} slides={slides} />

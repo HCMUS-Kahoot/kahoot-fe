@@ -6,7 +6,7 @@ import { Context as RealtimeContext } from "../../../store/context/realtimeConte
 import { SendOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 
-function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestions, questionIndex, setQuestionIndex }) {
+function Questions({ isModalOpen, handleOk, handleCancel, questions, canMarkAsRead = false, questionIndex, setQuestionIndex }) {
   const [questionInput, setQuestionInput] = useState('');
   const user = useSelector((state) => state.auth.login.currentUser);
   const { state, add_question, vote_question, mark_as_read } = useContext(RealtimeContext);
@@ -38,7 +38,7 @@ function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestion
       roomId: state?.room?.id,
     })
   }
-
+  console.log("this is question: ", questions)
   return (
     <>
       <Modal title="Questions" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} style={{
@@ -72,14 +72,11 @@ function Questions({ isModalOpen, handleOk, handleCancel, questions, setQuestion
               }} />
             </div>
           </div>
-          <Button className="bg-slate-300 mt-8" type="primary" onClick={() => {
-            //remove question
-            // setQuestions(questions.filter((question, index) => index !== questionIndex))
-            // setQuestionIndex(questionIndex - 1 >= 0 ? questionIndex - 1 : 0)
+          {canMarkAsRead && <Button className="bg-slate-300 mt-8" type="primary" onClick={() => {
             handleMarkAsRead(questions[questionIndex])
           }}>
             Mark as answered
-          </Button>
+          </Button>}
         </div>
         <div className="flex justify-evenly w-full absolute bottom-3">
           <Input placeholder="Comment" className="relative right-3" style={{ width: "70%" }}
